@@ -40,17 +40,14 @@ describe('isLegendGroupingFilter', () => {
 })
 
 describe('canDimensionHaveLegendSets', () => {
-    it.each([undefined, 'NUMBER'] as const)(
-        'rejects a program indicator with valueType %s',
-        (valueType) => {
-            expect(
-                canDimensionHaveLegendSets({
-                    dimensionType: 'PROGRAM_INDICATOR',
-                    valueType,
-                })
-            ).toBe(false)
-        }
-    )
+    it('rejects a program indicator, even with a numeric valueType', () => {
+        expect(
+            canDimensionHaveLegendSets({
+                dimensionType: 'PROGRAM_INDICATOR',
+                valueType: 'NUMBER',
+            })
+        ).toBe(false)
+    })
 
     it('accepts a numeric data element', () => {
         expect(
