@@ -149,6 +149,7 @@ effects) to load. This is a guideline, not an absolute — the occasional helper
 
 - **Test behavior, not implementation details**: assert on what callers observe, not on private state, internal call sequences, or how a result was produced.
 - **Cover new functionality**: when adding or changing logic, add tests in the same change — including edge cases and error conditions, not just the happy path.
+- **Tests describe the current logic, not its history**: a test asserts what the code does now. When a change removes or simplifies behaviour, delete or rewrite the tests for it. Don't add tests that pin the removed behaviour ("no longer does X", "does not re-add Y"). Only keep a negative assertion if it's a real rule of the current code that a reader would expect to hold. Test names follow the same rule as comments: no "still", "anymore", "previously", "regression test for fix".
 
 #### Unit Tests (Vitest)
 
