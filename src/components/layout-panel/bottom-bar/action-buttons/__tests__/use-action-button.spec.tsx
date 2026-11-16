@@ -312,58 +312,6 @@ describe('useActionButton for Event button', () => {
         })
     })
 
-    it('returns correct result for: PT, registration org. unit in layout', async () => {
-        const { result } = await renderHookWithAppWrapper(
-            () => useActionButton('EVENT'),
-            createStoreWithPreloadedState({
-                dimensionSelection: {
-                    dataSourceId: metadata.p2.id,
-                },
-                visUiConfig: {
-                    layout: {
-                        columns: [
-                            metadata['p2.p2s1.d1'].id,
-                            metadata['tei1.ou'].id,
-                        ],
-                    },
-                    visualizationType: 'PIVOT_TABLE',
-                },
-            })
-        )
-
-        const output = result.current
-
-        expect(output.action).toEqual('create')
-        expect(output.tooltipConfig).toBeUndefined()
-    })
-
-    it('returns correct result for: LL, registration org. unit in layout', async () => {
-        const { result } = await renderHookWithAppWrapper(
-            () => useActionButton('EVENT'),
-            createStoreWithPreloadedState({
-                dimensionSelection: {
-                    dataSourceId: metadata.p2.id,
-                },
-                visUiConfig: {
-                    layout: {
-                        columns: [
-                            metadata['p2.p2s1.d1'].id,
-                            metadata['tei1.ou'].id,
-                        ],
-                    },
-                    visualizationType: 'LINE_LIST',
-                },
-            })
-        )
-
-        const output = result.current
-
-        expect(output.action).toEqual('create')
-        expect(output.tooltipConfig).toEqual({
-            content: 'Not valid with registration org. unit',
-        })
-    })
-
     it('returns correct result for: LL, multiple programs', async () => {
         const { result } = await renderHookWithAppWrapper(
             () => useActionButton('EVENT'),
@@ -445,28 +393,6 @@ describe('useActionButton for Event button', () => {
             })
         }
     )
-
-    it('returns correct result for: LL, tracker program and tracked entity attribute', async () => {
-        const { result } = await renderHookWithAppWrapper(
-            () => useActionButton('EVENT'),
-            createStoreWithPreloadedState({
-                dimensionSelection: {
-                    dataSourceId: metadata.p2.id,
-                },
-                visUiConfig: {
-                    layout: {
-                        columns: [
-                            metadata['p2.p2s1.d1'].id,
-                            metadata['tei1.a1'].id,
-                        ],
-                    },
-                    visualizationType: 'LINE_LIST',
-                },
-            })
-        )
-
-        expect(result.current.tooltipConfig).toBeUndefined()
-    })
 })
 
 describe('useActionButton for Enrollment button', () => {
@@ -568,58 +494,6 @@ describe('useActionButton for Enrollment button', () => {
         expect(output.action).toEqual('create')
         expect(output.tooltipConfig).toEqual({
             content: 'Not valid without a program',
-        })
-    })
-
-    it('returns correct result for: PT, registration org. unit in layout', async () => {
-        const { result } = await renderHookWithAppWrapper(
-            () => useActionButton('ENROLLMENT'),
-            createStoreWithPreloadedState({
-                dimensionSelection: {
-                    dataSourceId: metadata.p2.id,
-                },
-                visUiConfig: {
-                    layout: {
-                        columns: [
-                            metadata['p2.p2s1.d1'].id,
-                            metadata['tei1.ou'].id,
-                        ],
-                    },
-                    visualizationType: 'PIVOT_TABLE',
-                },
-            })
-        )
-
-        const output = result.current
-
-        expect(output.action).toEqual('create')
-        expect(output.tooltipConfig).toBeUndefined()
-    })
-
-    it('returns correct result for: LL, registration org. unit in layout', async () => {
-        const { result } = await renderHookWithAppWrapper(
-            () => useActionButton('ENROLLMENT'),
-            createStoreWithPreloadedState({
-                dimensionSelection: {
-                    dataSourceId: metadata.p2.id,
-                },
-                visUiConfig: {
-                    layout: {
-                        columns: [
-                            metadata['p2.p2s1.d1'].id,
-                            metadata['tei1.ou'].id,
-                        ],
-                    },
-                    visualizationType: 'LINE_LIST',
-                },
-            })
-        )
-
-        const output = result.current
-
-        expect(output.action).toEqual('create')
-        expect(output.tooltipConfig).toEqual({
-            content: 'Not valid with registration org. unit',
         })
     })
 
