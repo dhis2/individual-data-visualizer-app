@@ -872,29 +872,18 @@ describe('MetadataStore — subscriber fan-out for compound key aliases', () => 
         expect(cbAlias).toHaveBeenCalledTimes(1)
     })
 
-    it('notifies subscriber under alias key when canonical item is removed via setVisualizationMetadata', () => {
-        // Set up: load a visualization that contains the compound dimension
+    it('does not notify an alias subscriber when the next visualization keeps its item', () => {
         store.setVisualizationMetadata(
             inpatientVisitVisualization as unknown as SavedVisualization
         )
-
-        // The inpatient visit visualization has stage Zj7UnCAulEk and compound key Zj7UnCAulEk.ou
-        // The program is eBAyeGv0exc (event program / WITHOUT_REGISTRATION) with one stage.
-        // So p1.ou would be an alias for Zj7UnCAulEk.ou IF eBAyeGv0exc was p1.
-        // To test, subscribe to the 3-part alias: eBAyeGv0exc.Zj7UnCAulEk.ou
         const cbAlias = vi.fn()
         store.subscribe('eBAyeGv0exc.Zj7UnCAulEk.ou', cbAlias)
 
-        // Now switch to the inpatient cases visualization — it also has Zj7UnCAulEk.ou,
-        // so that item WON'T be removed. Instead confirm the subscriber is NOT notified.
-        // This validates that the fan-out only fires when something actually changes.
-        cbAlias.mockClear()
+        // Both visualizations hold Zj7UnCAulEk.ou
         store.setVisualizationMetadata(
             inpatientCasesVisualization as unknown as SavedVisualization
         )
 
-        // Zj7UnCAulEk.ou is in both visualizations, so the alias subscriber
-        // should NOT receive a spurious removal notification
         expect(cbAlias).not.toHaveBeenCalled()
     })
 
