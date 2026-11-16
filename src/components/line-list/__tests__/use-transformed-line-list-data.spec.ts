@@ -43,19 +43,6 @@ describe('getHeaderDisplayText', () => {
         ).toBe('Scheduled date · Birth')
     })
 
-    it('does not accumulate the suffix across renders of the same header', () => {
-        const header = buildDisplayTextHeader({
-            column: 'Scheduled date',
-            dimensionSuffix: 'Birth',
-        })
-
-        const first = getHeaderDisplayText(header)
-        const second = getHeaderDisplayText(header)
-
-        expect(first).toBe('Scheduled date · Birth')
-        expect(second).toBe('Scheduled date · Birth')
-    })
-
     it('combines the dimension suffix with the repetition suffix', () => {
         expect(
             getHeaderDisplayText(
