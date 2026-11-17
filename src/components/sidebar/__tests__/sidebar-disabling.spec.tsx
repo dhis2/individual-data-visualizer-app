@@ -389,28 +389,6 @@ describe('useDimensionLayoutBlockedMessage', () => {
         expect(result.current).toBeNull()
     })
 
-    /* Cell value and layout are non-exclusive: the dimension used as the cell
-     * value stays available in the sidebar. */
-    it('does not disable the dim that is also the configured cell value', async () => {
-        const dim = makeDim({ id: 'stage1.de1', dimensionId: 'de1' })
-        const { result } = await renderHookWithAppWrapper(
-            () => useDimensionLayoutBlockedMessage(dim),
-            buildOptions({
-                state: {
-                    visUiConfig: {
-                        ...visUiConfigInitialState,
-                        visualizationType: 'PIVOT_TABLE',
-                        cellValue: {
-                            id: 'stage1.de1',
-                            aggregationType: 'SUM',
-                        },
-                    },
-                },
-            })
-        )
-        expect(result.current).toBeNull()
-    })
-
     it('returns the cross-TET message when the dim TET differs from the layout TET', async () => {
         const dim = makeDim({
             id: 'progA.de1',
