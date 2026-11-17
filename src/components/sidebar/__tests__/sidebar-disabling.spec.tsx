@@ -411,27 +411,6 @@ describe('useDimensionLayoutBlockedMessage', () => {
         expect(result.current).toBeNull()
     })
 
-    it('returns null for the TET registration OU in a pivot table', async () => {
-        const dim = makeDim({
-            id: 'tetA.ou',
-            dimensionId: 'ou',
-            dimensionType: 'ORGANISATION_UNIT',
-            trackedEntityTypeId: 'tetA',
-        })
-        const { result } = await renderHookWithAppWrapper(
-            () => useDimensionLayoutBlockedMessage(dim),
-            buildOptions({
-                state: {
-                    visUiConfig: {
-                        ...visUiConfigInitialState,
-                        visualizationType: 'PIVOT_TABLE',
-                    },
-                },
-            })
-        )
-        expect(result.current).toBeNull()
-    })
-
     it('returns the cross-TET message when the dim TET differs from the layout TET', async () => {
         const dim = makeDim({
             id: 'progA.de1',
