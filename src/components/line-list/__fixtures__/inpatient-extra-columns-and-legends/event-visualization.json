@@ -1,7 +1,7 @@
 {
     "name": "Inpatient: Cases under 5 years female this year (case) additional columns and legends",
     "created": "2026-11-10T14:56:25.782",
-    "lastUpdated": "2026-11-10T14:56:25.782",
+    "lastUpdated": "2026-11-16T11:58:54.296",
     "translations": [],
     "createdBy": {
         "id": "xE7jOejl9FI",
@@ -308,10 +308,6 @@
         {
             "dimensionType": "PROGRAM_INDICATOR",
             "items": [],
-            "legendSet": {
-                "id": "TBxGTceyzwy",
-                "name": "Height in cm"
-            },
             "dimension": "gWxh7DiRmG7"
         },
         {

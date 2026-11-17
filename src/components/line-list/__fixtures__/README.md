@@ -20,8 +20,8 @@ captures from. Three of them (`inpatient-extra-columns-and-legends`, `no-time-di
   legend-grouped columns
 - `inpatient-extra-columns-and-legends` (`Rq4ppYwc4r8`) — "Inpatient: Cases
   under 5 years female this year (case) additional columns and legends": data
-  element and program indicator columns, two of them grouped by legend, plus a
-  by-data-item legend
+  element and program indicator columns, one data element grouped by legend,
+  plus a by-data-item legend
 - `no-time-dimension` (`ETJXkMmCGsK`) — "No time dimension": a line list
   without any time dimension, for the NoTimeDimensionWarning
 - `event-line-list-event-program` (`t6SxiQdVPVs`) — "E2E: Event line list,
