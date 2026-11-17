@@ -335,18 +335,17 @@ dates, statuses). They are built by shared helpers in `src/modules/dimension/fix
 (`getStageFixedDimensions`, `getEnrollmentFixedDimensions`, `getTrackedEntityTypeFixedDimensions`)
 and consumed by both the sidebar cards and the metadata provider.
 
-| Scope      | Dimension ID     | Compound ID notation          | Display name source                                          | Sidebar card |
-| ---------- | ---------------- | ----------------------------- | ------------------------------------------------------------ | ------------ |
-| Stage      | `ou`             | `stageId.ou`                  | `program.displayOrgUnitLabel` or "Event org. unit"           | Stage        |
-| Stage      | `eventDate`      | `stageId.eventDate`           | `stage.displayExecutionDateLabel` or "Event date"            | Stage        |
-| Stage      | `scheduledDate`  | `stageId.scheduledDate`       | `stage.displayDueDateLabel` or "Scheduled date"              | Stage        |
-| Stage      | `eventStatus`    | `stageId.eventStatus`         | "Event status"                                               | Stage        |
-| Enrollment | `ou`             | `programId.ou`                | `program.displayOrgUnitLabel` or "Enrollment org. unit"      | Enrollment   |
-| Enrollment | `enrollmentDate` | `programId.enrollmentDate`    | `program.displayEnrollmentDateLabel` or "Date of enrollment" | Enrollment   |
-| Enrollment | `incidentDate`   | `programId.incidentDate`      | `program.displayIncidentDateLabel` or "Incident date"        | Enrollment   |
-| Enrollment | `programStatus`  | `programId.programStatus`     | "Enrollment status"                                          | Enrollment   |
-| TEI        | `ou`             | `trackedEntityTypeId.ou`      | "Registration org. unit"                                     | Registration |
-| TEI        | `created`        | `trackedEntityTypeId.created` | "Registration date"                                          | Registration |
+| Scope      | Dimension ID     | Compound ID notation       | Display name source                                          | Sidebar card |
+| ---------- | ---------------- | -------------------------- | ------------------------------------------------------------ | ------------ |
+| Stage      | `ou`             | `stageId.ou`               | `program.displayOrgUnitLabel` or "Event org. unit"           | Stage        |
+| Stage      | `eventDate`      | `stageId.eventDate`        | `stage.displayExecutionDateLabel` or "Event date"            | Stage        |
+| Stage      | `scheduledDate`  | `stageId.scheduledDate`    | `stage.displayDueDateLabel` or "Scheduled date"              | Stage        |
+| Stage      | `eventStatus`    | `stageId.eventStatus`      | "Event status"                                               | Stage        |
+| Enrollment | `ou`             | `programId.ou`             | `program.displayOrgUnitLabel` or "Enrollment org. unit"      | Enrollment   |
+| Enrollment | `enrollmentDate` | `programId.enrollmentDate` | `program.displayEnrollmentDateLabel` or "Date of enrollment" | Enrollment   |
+| Enrollment | `incidentDate`   | `programId.incidentDate`   | `program.displayIncidentDateLabel` or "Incident date"        | Enrollment   |
+| Enrollment | `programStatus`  | `programId.programStatus`  | "Enrollment status"                                          | Enrollment   |
+| TEI        | `ou`             | `trackedEntityTypeId.ou`   | "Registration org. unit"                                     | Registration |
 
 Non-fixed dimensions use compound or plain IDs depending on their type:
 
