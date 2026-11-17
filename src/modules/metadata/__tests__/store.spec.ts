@@ -611,11 +611,7 @@ describe('MetadataStore', () => {
         expect(metadataStore.getMetadataItem(id)).toHaveProperty('path', path)
     })
 
-    it('preserves the program-stage-specific org-unit label across visualization reloads', () => {
-        /* The backend's analytics response carries the generic field name
-         * "Organisation unit" keyed by the compound stage-OU id; the program's
-         * displayOrgUnitLabel (or the i18n fallback "Event org. unit") must win
-         * and survive a re-fetch of the same visualization. */
+    it('keeps the stage org unit label when the same visualization is set again', () => {
         const metadataStore = new TestMetadataStore(
             getInitialMetadata(),
             rootOrgUnits
