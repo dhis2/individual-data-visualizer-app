@@ -60,11 +60,6 @@ describe('options', () => {
 
         getColumnHeaderCell().should('have.css', 'position', 'sticky')
         getRowHeaderCell().should('have.css', 'position', 'sticky')
-
-        /* The title row above the column headers scrolls away, so the
-         * column headers need a top border of their own. */
-        cy.getByDataTest('visualization-title').should('exist')
-        getColumnHeaderCell().should('have.css', 'border-top-width', '1px')
     })
 
     it('hides the empty rows of a pivot table', () => {

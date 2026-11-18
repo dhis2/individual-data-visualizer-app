@@ -4,31 +4,3 @@
     block-size: calc(100% - 8px);
     inline-size: calc(100% - 8px);
 }
-
-/* With fixed column headers the pivot table engine draws the table's top border
- * on its first header row only. That is a title row whenever there is a title,
- * subtitle or filter, and a title row scrolls away while the column headers
- * stay. So each title row carries its border on top instead of below, and the
- * first column header row gets a top border that stays with it. */
-.pluginWrapper
-    :global(
-        .pivot-table-container
-            table:is(.fixed-headers, .fixed-column-headers)
-            thead
-            tr:has(> th.title-cell)
-            > th
-    ) {
-    border-block-start-width: 1px;
-    border-block-end-width: 0;
-}
-.pluginWrapper
-    :global(
-        .pivot-table-container
-            table:is(.fixed-headers, .fixed-column-headers)
-            thead
-            tr:has(> th.title-cell)
-            + tr:not(:has(> th.title-cell))
-            > th
-    ) {
-    border-block-start-width: 1px;
-}
