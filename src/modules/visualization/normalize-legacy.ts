@@ -13,6 +13,7 @@ import {
     timeFieldTimeDimensionMap,
 } from '@modules/dimension/time'
 import { isPopulatedString } from '@modules/utils/guards'
+import { normalizeSavedSorting } from '@modules/visualization/sorting'
 import type {
     ApiSavedVisualization,
     DimensionId,
@@ -201,6 +202,9 @@ const normalizeLegacyValue = (
  * - Rename an `ou` with a program and no stage, the enrollment org unit, to
  *   `enrollmentOu`. It does not imply `legacy`: an older app's visualization
  *   is already marked legacy by its top-level program.
+ * - Turn the sort into the header name analytics sorts by, and drop it when it
+ *   names no line list column. This does not imply `legacy`: the Line Listing
+ *   app reads a header name too.
  *
  * Out of scope (handled downstream — these run on every load, not just legacy
  * visualizations, so they do not imply the `legacy` flag):
@@ -298,6 +302,8 @@ export const normalizeApiSavedVisualization = (
     } else if (typeof timeField === 'string') {
         normalizedVis.legacy = true
     }
+
+    normalizedVis.sorting = normalizeSavedSorting(normalizedVis)
 
     if (sortOrder !== 0) {
         normalizedVis.sortOrder = sortOrder
