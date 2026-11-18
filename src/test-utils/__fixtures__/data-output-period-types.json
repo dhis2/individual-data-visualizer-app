@@ -1,0 +1,580 @@
+[
+    {
+        "name": "Daily",
+        "displayName": "Daily",
+        "relativePeriods": {
+            "TODAY": {
+                "defaultName": "Today",
+                "displayName": "Today"
+            },
+            "YESTERDAY": {
+                "defaultName": "Yesterday",
+                "displayName": "Yesterday"
+            },
+            "LAST_3_DAYS": {
+                "defaultName": "Last 3 days",
+                "displayName": "Last 3 days"
+            },
+            "LAST_7_DAYS": {
+                "defaultName": "Last 7 days",
+                "displayName": "Last 7 days"
+            },
+            "LAST_14_DAYS": {
+                "defaultName": "Last 14 days",
+                "displayName": "Last 14 days"
+            },
+            "LAST_30_DAYS": {
+                "defaultName": "Last 30 days",
+                "displayName": "Last 30 days"
+            },
+            "LAST_60_DAYS": {
+                "defaultName": "Last 60 days",
+                "displayName": "Last 60 days"
+            },
+            "LAST_90_DAYS": {
+                "defaultName": "Last 90 days",
+                "displayName": "Last 90 days"
+            },
+            "LAST_180_DAYS": {
+                "defaultName": "Last 180 days",
+                "displayName": "Last 180 days"
+            }
+        }
+    },
+    {
+        "name": "Weekly",
+        "displayName": "Weekly",
+        "relativePeriods": {
+            "THIS_WEEK": {
+                "defaultName": "This week",
+                "displayName": "This week"
+            },
+            "LAST_WEEK": {
+                "defaultName": "Last week",
+                "displayName": "Last week"
+            },
+            "LAST_4_WEEKS": {
+                "defaultName": "Last 4 weeks",
+                "displayName": "Last 4 weeks"
+            },
+            "LAST_12_WEEKS": {
+                "defaultName": "Last 12 weeks",
+                "displayName": "Last 12 weeks"
+            },
+            "LAST_52_WEEKS": {
+                "defaultName": "Last 52 weeks",
+                "displayName": "Last 52 weeks"
+            },
+            "WEEKS_THIS_YEAR": {
+                "defaultName": "Weeks this year",
+                "displayName": "Weeks this year"
+            }
+        }
+    },
+    {
+        "name": "WeeklyWednesday",
+        "displayName": "Weekly Wednesday",
+        "relativePeriods": {
+            "THIS_WEEK": {
+                "defaultName": "This week",
+                "displayName": "This week"
+            },
+            "LAST_WEEK": {
+                "defaultName": "Last week",
+                "displayName": "Last week"
+            },
+            "LAST_4_WEEKS": {
+                "defaultName": "Last 4 weeks",
+                "displayName": "Last 4 weeks"
+            },
+            "LAST_12_WEEKS": {
+                "defaultName": "Last 12 weeks",
+                "displayName": "Last 12 weeks"
+            },
+            "LAST_52_WEEKS": {
+                "defaultName": "Last 52 weeks",
+                "displayName": "Last 52 weeks"
+            },
+            "WEEKS_THIS_YEAR": {
+                "defaultName": "Weeks this year",
+                "displayName": "Weeks this year"
+            }
+        }
+    },
+    {
+        "name": "WeeklyThursday",
+        "displayName": "Weekly Thursday",
+        "relativePeriods": {
+            "THIS_WEEK": {
+                "defaultName": "This week",
+                "displayName": "This week"
+            },
+            "LAST_WEEK": {
+                "defaultName": "Last week",
+                "displayName": "Last week"
+            },
+            "LAST_4_WEEKS": {
+                "defaultName": "Last 4 weeks",
+                "displayName": "Last 4 weeks"
+            },
+            "LAST_12_WEEKS": {
+                "defaultName": "Last 12 weeks",
+                "displayName": "Last 12 weeks"
+            },
+            "LAST_52_WEEKS": {
+                "defaultName": "Last 52 weeks",
+                "displayName": "Last 52 weeks"
+            },
+            "WEEKS_THIS_YEAR": {
+                "defaultName": "Weeks this year",
+                "displayName": "Weeks this year"
+            }
+        }
+    },
+    {
+        "name": "WeeklyFriday",
+        "displayName": "Weekly Friday",
+        "relativePeriods": {
+            "THIS_WEEK": {
+                "defaultName": "This week",
+                "displayName": "This week"
+            },
+            "LAST_WEEK": {
+                "defaultName": "Last week",
+                "displayName": "Last week"
+            },
+            "LAST_4_WEEKS": {
+                "defaultName": "Last 4 weeks",
+                "displayName": "Last 4 weeks"
+            },
+            "LAST_12_WEEKS": {
+                "defaultName": "Last 12 weeks",
+                "displayName": "Last 12 weeks"
+            },
+            "LAST_52_WEEKS": {
+                "defaultName": "Last 52 weeks",
+                "displayName": "Last 52 weeks"
+            },
+            "WEEKS_THIS_YEAR": {
+                "defaultName": "Weeks this year",
+                "displayName": "Weeks this year"
+            }
+        }
+    },
+    {
+        "name": "WeeklySaturday",
+        "displayName": "Weekly Saturday",
+        "relativePeriods": {
+            "THIS_WEEK": {
+                "defaultName": "This week",
+                "displayName": "This week"
+            },
+            "LAST_WEEK": {
+                "defaultName": "Last week",
+                "displayName": "Last week"
+            },
+            "LAST_4_WEEKS": {
+                "defaultName": "Last 4 weeks",
+                "displayName": "Last 4 weeks"
+            },
+            "LAST_12_WEEKS": {
+                "defaultName": "Last 12 weeks",
+                "displayName": "Last 12 weeks"
+            },
+            "LAST_52_WEEKS": {
+                "defaultName": "Last 52 weeks",
+                "displayName": "Last 52 weeks"
+            },
+            "WEEKS_THIS_YEAR": {
+                "defaultName": "Weeks this year",
+                "displayName": "Weeks this year"
+            }
+        }
+    },
+    {
+        "name": "WeeklySunday",
+        "displayName": "Weekly Sunday",
+        "relativePeriods": {
+            "THIS_WEEK": {
+                "defaultName": "This week",
+                "displayName": "This week"
+            },
+            "LAST_WEEK": {
+                "defaultName": "Last week",
+                "displayName": "Last week"
+            },
+            "LAST_4_WEEKS": {
+                "defaultName": "Last 4 weeks",
+                "displayName": "Last 4 weeks"
+            },
+            "LAST_12_WEEKS": {
+                "defaultName": "Last 12 weeks",
+                "displayName": "Last 12 weeks"
+            },
+            "LAST_52_WEEKS": {
+                "defaultName": "Last 52 weeks",
+                "displayName": "Last 52 weeks"
+            },
+            "WEEKS_THIS_YEAR": {
+                "defaultName": "Weeks this year",
+                "displayName": "Weeks this year"
+            }
+        }
+    },
+    {
+        "name": "BiWeekly",
+        "displayName": "Bi-weekly",
+        "relativePeriods": {
+            "THIS_BIWEEK": {
+                "defaultName": "This bi-week",
+                "displayName": "This bi-week"
+            },
+            "LAST_BIWEEK": {
+                "defaultName": "Last bi-week",
+                "displayName": "Last bi-week"
+            },
+            "LAST_4_BIWEEKS": {
+                "defaultName": "Last 4 bi-weeks",
+                "displayName": "Last 4 bi-weeks"
+            }
+        }
+    },
+    {
+        "name": "Monthly",
+        "displayName": "Monthly",
+        "relativePeriods": {
+            "THIS_MONTH": {
+                "defaultName": "This month",
+                "displayName": "This month"
+            },
+            "LAST_MONTH": {
+                "defaultName": "Last month",
+                "displayName": "Last month"
+            },
+            "LAST_3_MONTHS": {
+                "defaultName": "Last 3 months",
+                "displayName": "Last 3 months"
+            },
+            "LAST_6_MONTHS": {
+                "defaultName": "Last 6 months",
+                "displayName": "Last 6 months"
+            },
+            "LAST_12_MONTHS": {
+                "defaultName": "Last 12 months",
+                "displayName": "Last 12 months"
+            },
+            "MONTHS_THIS_YEAR": {
+                "defaultName": "Months this year",
+                "displayName": "Months this year"
+            },
+            "MONTHS_LAST_YEAR": {
+                "defaultName": "Months last year",
+                "displayName": "Months last year"
+            }
+        }
+    },
+    {
+        "name": "BiMonthly",
+        "displayName": "Bi-monthly",
+        "relativePeriods": {
+            "THIS_BIMONTH": {
+                "defaultName": "This bi-month",
+                "displayName": "This bi-month"
+            },
+            "LAST_BIMONTH": {
+                "defaultName": "Last bi-month",
+                "displayName": "Last bi-month"
+            },
+            "LAST_6_BIMONTHS": {
+                "defaultName": "Last 6 bi-months",
+                "displayName": "Last 6 bi-months"
+            },
+            "BIMONTHS_THIS_YEAR": {
+                "defaultName": "Bi-months this year",
+                "displayName": "Bi-months this year"
+            }
+        }
+    },
+    {
+        "name": "Quarterly",
+        "displayName": "Quarterly",
+        "relativePeriods": {
+            "THIS_QUARTER": {
+                "defaultName": "This quarter",
+                "displayName": "This quarter"
+            },
+            "LAST_QUARTER": {
+                "defaultName": "Last quarter",
+                "displayName": "Last quarter"
+            },
+            "LAST_4_QUARTERS": {
+                "defaultName": "Last 4 quarters",
+                "displayName": "Last 4 quarters"
+            },
+            "QUARTERS_THIS_YEAR": {
+                "defaultName": "Quarters this year",
+                "displayName": "Quarters this year"
+            },
+            "QUARTERS_LAST_YEAR": {
+                "defaultName": "Quarters last year",
+                "displayName": "Quarters last year"
+            }
+        }
+    },
+    {
+        "name": "QuarterlyNov",
+        "displayName": "Quarterly November",
+        "relativePeriods": {
+            "THIS_QUARTER": {
+                "defaultName": "This quarter",
+                "displayName": "This quarter"
+            },
+            "LAST_QUARTER": {
+                "defaultName": "Last quarter",
+                "displayName": "Last quarter"
+            },
+            "LAST_4_QUARTERS": {
+                "defaultName": "Last 4 quarters",
+                "displayName": "Last 4 quarters"
+            },
+            "QUARTERS_THIS_YEAR": {
+                "defaultName": "Quarters this year",
+                "displayName": "Quarters this year"
+            },
+            "QUARTERS_LAST_YEAR": {
+                "defaultName": "Quarters last year",
+                "displayName": "Quarters last year"
+            }
+        }
+    },
+    {
+        "name": "SixMonthly",
+        "displayName": "Six-monthly",
+        "relativePeriods": {
+            "THIS_SIX_MONTH": {
+                "defaultName": "This six-month",
+                "displayName": "This six-month"
+            },
+            "LAST_SIX_MONTH": {
+                "defaultName": "Last six-month",
+                "displayName": "Last six-month"
+            },
+            "LAST_2_SIXMONTHS": {
+                "defaultName": "Last 2 six-months",
+                "displayName": "Last 2 six-months"
+            }
+        }
+    },
+    {
+        "name": "SixMonthlyApril",
+        "displayName": "Six-monthly April",
+        "relativePeriods": {
+            "THIS_SIX_MONTH": {
+                "defaultName": "This six-month",
+                "displayName": "This six-month"
+            },
+            "LAST_SIX_MONTH": {
+                "defaultName": "Last six-month",
+                "displayName": "Last six-month"
+            },
+            "LAST_2_SIXMONTHS": {
+                "defaultName": "Last 2 six-months",
+                "displayName": "Last 2 six-months"
+            }
+        }
+    },
+    {
+        "name": "SixMonthlyNov",
+        "displayName": "Six-monthly November",
+        "relativePeriods": {
+            "THIS_SIX_MONTH": {
+                "defaultName": "This six-month",
+                "displayName": "This six-month"
+            },
+            "LAST_SIX_MONTH": {
+                "defaultName": "Last six-month",
+                "displayName": "Last six-month"
+            },
+            "LAST_2_SIXMONTHS": {
+                "defaultName": "Last 2 six-months",
+                "displayName": "Last 2 six-months"
+            }
+        }
+    },
+    {
+        "name": "Yearly",
+        "displayName": "Yearly",
+        "relativePeriods": {
+            "THIS_YEAR": {
+                "defaultName": "This year",
+                "displayName": "This year"
+            },
+            "LAST_YEAR": {
+                "defaultName": "Last year",
+                "displayName": "Last year"
+            },
+            "LAST_5_YEARS": {
+                "defaultName": "Last 5 years",
+                "displayName": "Last 5 years"
+            },
+            "LAST_10_YEARS": {
+                "defaultName": "Last 10 years",
+                "displayName": "Last 10 years"
+            }
+        }
+    },
+    {
+        "name": "FinancialFeb",
+        "displayName": "Financial February",
+        "relativePeriods": {
+            "THIS_FINANCIAL_YEAR": {
+                "defaultName": "This financial year",
+                "displayName": "This financial year"
+            },
+            "LAST_FINANCIAL_YEAR": {
+                "defaultName": "Last financial year",
+                "displayName": "Last financial year"
+            },
+            "LAST_5_FINANCIAL_YEARS": {
+                "defaultName": "Last 5 financial years",
+                "displayName": "Last 5 financial years"
+            },
+            "LAST_10_FINANCIAL_YEARS": {
+                "defaultName": "Last 10 financial years",
+                "displayName": "Last 10 financial years"
+            }
+        }
+    },
+    {
+        "name": "FinancialApril",
+        "displayName": "Financial April",
+        "relativePeriods": {
+            "THIS_FINANCIAL_YEAR": {
+                "defaultName": "This financial year",
+                "displayName": "This financial year"
+            },
+            "LAST_FINANCIAL_YEAR": {
+                "defaultName": "Last financial year",
+                "displayName": "Last financial year"
+            },
+            "LAST_5_FINANCIAL_YEARS": {
+                "defaultName": "Last 5 financial years",
+                "displayName": "Last 5 financial years"
+            },
+            "LAST_10_FINANCIAL_YEARS": {
+                "defaultName": "Last 10 financial years",
+                "displayName": "Last 10 financial years"
+            }
+        }
+    },
+    {
+        "name": "FinancialJuly",
+        "displayName": "Financial July",
+        "relativePeriods": {
+            "THIS_FINANCIAL_YEAR": {
+                "defaultName": "This financial year",
+                "displayName": "This financial year"
+            },
+            "LAST_FINANCIAL_YEAR": {
+                "defaultName": "Last financial year",
+                "displayName": "Last financial year"
+            },
+            "LAST_5_FINANCIAL_YEARS": {
+                "defaultName": "Last 5 financial years",
+                "displayName": "Last 5 financial years"
+            },
+            "LAST_10_FINANCIAL_YEARS": {
+                "defaultName": "Last 10 financial years",
+                "displayName": "Last 10 financial years"
+            }
+        }
+    },
+    {
+        "name": "FinancialAug",
+        "displayName": "Financial August",
+        "relativePeriods": {
+            "THIS_FINANCIAL_YEAR": {
+                "defaultName": "This financial year",
+                "displayName": "This financial year"
+            },
+            "LAST_FINANCIAL_YEAR": {
+                "defaultName": "Last financial year",
+                "displayName": "Last financial year"
+            },
+            "LAST_5_FINANCIAL_YEARS": {
+                "defaultName": "Last 5 financial years",
+                "displayName": "Last 5 financial years"
+            },
+            "LAST_10_FINANCIAL_YEARS": {
+                "defaultName": "Last 10 financial years",
+                "displayName": "Last 10 financial years"
+            }
+        }
+    },
+    {
+        "name": "FinancialSep",
+        "displayName": "Financial September",
+        "relativePeriods": {
+            "THIS_FINANCIAL_YEAR": {
+                "defaultName": "This financial year",
+                "displayName": "This financial year"
+            },
+            "LAST_FINANCIAL_YEAR": {
+                "defaultName": "Last financial year",
+                "displayName": "Last financial year"
+            },
+            "LAST_5_FINANCIAL_YEARS": {
+                "defaultName": "Last 5 financial years",
+                "displayName": "Last 5 financial years"
+            },
+            "LAST_10_FINANCIAL_YEARS": {
+                "defaultName": "Last 10 financial years",
+                "displayName": "Last 10 financial years"
+            }
+        }
+    },
+    {
+        "name": "FinancialOct",
+        "displayName": "Financial October",
+        "relativePeriods": {
+            "THIS_FINANCIAL_YEAR": {
+                "defaultName": "This financial year",
+                "displayName": "This financial year"
+            },
+            "LAST_FINANCIAL_YEAR": {
+                "defaultName": "Last financial year",
+                "displayName": "Last financial year"
+            },
+            "LAST_5_FINANCIAL_YEARS": {
+                "defaultName": "Last 5 financial years",
+                "displayName": "Last 5 financial years"
+            },
+            "LAST_10_FINANCIAL_YEARS": {
+                "defaultName": "Last 10 financial years",
+                "displayName": "Last 10 financial years"
+            }
+        }
+    },
+    {
+        "name": "FinancialNov",
+        "displayName": "Financial November",
+        "relativePeriods": {
+            "THIS_FINANCIAL_YEAR": {
+                "defaultName": "This financial year",
+                "displayName": "This financial year"
+            },
+            "LAST_FINANCIAL_YEAR": {
+                "defaultName": "Last financial year",
+                "displayName": "Last financial year"
+            },
+            "LAST_5_FINANCIAL_YEARS": {
+                "defaultName": "Last 5 financial years",
+                "displayName": "Last 5 financial years"
+            },
+            "LAST_10_FINANCIAL_YEARS": {
+                "defaultName": "Last 10 financial years",
+                "displayName": "Last 10 financial years"
+            }
+        }
+    }
+]

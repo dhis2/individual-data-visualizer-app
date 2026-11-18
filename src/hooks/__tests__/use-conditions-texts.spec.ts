@@ -1,11 +1,22 @@
 import { MockMetadataProvider } from '@components/app-wrapper/metadata-provider/metadata-provider'
 import type { LayoutDimension } from '@components/layout-panel/axis/chip'
 import { useAddMetadata } from '@hooks'
+import type { AnalyticsModule } from '@test-utils/relative-periods-names-stub'
 import { act, renderHook } from '@testing-library/react'
 import { createElement } from 'react'
 import type { ReactNode } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import { useConditionsTexts } from '../use-conditions-texts'
+
+vi.mock('@dhis2/analytics', async (importOriginal) => {
+    const analytics = await importOriginal<AnalyticsModule>()
+    const { stubUseRelativePeriodsNames } =
+        await import('@test-utils/relative-periods-names-stub')
+    return {
+        ...analytics,
+        useRelativePeriodsNames: stubUseRelativePeriodsNames(analytics),
+    }
+})
 
 const mockRootOrgUnits = [
     {

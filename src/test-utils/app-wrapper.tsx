@@ -7,6 +7,7 @@ import { DndContextProvider } from '@components/app-wrapper/drag-and-drop-provid
 import { MockMetadataProvider } from '@components/app-wrapper/metadata-provider/metadata-provider'
 // eslint-disable-next-line no-restricted-imports
 import { CustomDataProvider, useDataEngine } from '@dhis2/app-runtime'
+import { ConfigProvider } from '@dhis2/app-service-config'
 import {
     UserProvider,
     type CurrentUser as CurrentUserInfo,
@@ -48,6 +49,7 @@ import {
 } from 'react'
 import { ErrorBoundary, type FallbackProps } from 'react-error-boundary'
 import { Provider } from 'react-redux'
+import dataOutputPeriodTypesData from './__fixtures__/data-output-period-types.json'
 import meData from './__fixtures__/me.json'
 import organisationUnitLevelsData from './__fixtures__/organisation-unit-levels.json'
 import organisationUnitsData from './__fixtures__/organisation-units.json'
@@ -206,10 +208,27 @@ const ErrorBoundaryFallback = ({ error }: FallbackProps) => (
 
 const defaultUserInfo: CurrentUserInfo = meData
 
-const defaultAppCachedData = {
+const runtimeConfig = {
+    baseUrl: '..',
+    apiVersion: 44,
+    serverVersion: { major: 2, minor: 44, patch: 0, full: '2.44.0' },
+}
+
+const defaultQueryData = {
     organisationUnitLevels: organisationUnitLevelsData,
     organisationUnits: organisationUnitsData,
     systemSettings: systemSettingsData,
+    /* The JSON import types the period ids missing from some period types as
+     * `?: undefined`, which is not JSON. */
+    'configuration/dataOutputPeriodTypes':
+        dataOutputPeriodTypesData as unknown as QueryData[string],
+    'systemSettings/keyAnalysisRelativePeriod': {
+        keyAnalysisRelativePeriod: 'LAST_12_MONTHS',
+    },
+    'systemSettings/analyticsWeeklyStart': { analyticsWeeklyStart: 'WEEKLY' },
+    'systemSettings/analyticsFinancialYearStart': {
+        analyticsFinancialYearStart: 'FINANCIAL_YEAR_OCTOBER',
+    },
 }
 
 const MockAppWrapperCore: FC<{
@@ -220,24 +239,26 @@ const MockAppWrapperCore: FC<{
     partialStore?: MockOptions['partialStore']
 }> = ({ children, queryData, userInfo, metadata, partialStore }) => {
     return (
-        <CustomDataProvider data={{ ...defaultAppCachedData, ...queryData }}>
-            <UserProvider userInfo={{ ...defaultUserInfo, ...userInfo }}>
-                <CssVariables colors spacers theme elevations />
-                <AppCachedDataQueryProvider>
-                    <MockMetadataProvider mockMetadata={metadata}>
-                        <ErrorBoundary
-                            FallbackComponent={ErrorBoundaryFallback}
-                        >
-                            <MockStoreAndDndProvider
-                                partialStore={partialStore}
+        <ConfigProvider config={runtimeConfig}>
+            <CustomDataProvider data={{ ...defaultQueryData, ...queryData }}>
+                <UserProvider userInfo={{ ...defaultUserInfo, ...userInfo }}>
+                    <CssVariables colors spacers theme elevations />
+                    <AppCachedDataQueryProvider>
+                        <MockMetadataProvider mockMetadata={metadata}>
+                            <ErrorBoundary
+                                FallbackComponent={ErrorBoundaryFallback}
                             >
-                                {children}
-                            </MockStoreAndDndProvider>
-                        </ErrorBoundary>
-                    </MockMetadataProvider>
-                </AppCachedDataQueryProvider>
-            </UserProvider>
-        </CustomDataProvider>
+                                <MockStoreAndDndProvider
+                                    partialStore={partialStore}
+                                >
+                                    {children}
+                                </MockStoreAndDndProvider>
+                            </ErrorBoundary>
+                        </MockMetadataProvider>
+                    </AppCachedDataQueryProvider>
+                </UserProvider>
+            </CustomDataProvider>
+        </ConfigProvider>
     )
 }
 

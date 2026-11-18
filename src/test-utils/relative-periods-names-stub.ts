@@ -2,8 +2,9 @@ export type AnalyticsModule = {
     getRelativePeriodsName: () => Record<string, string>
 }
 
-/* The real hook reads the server version from the app-runtime config, which
- * tests don't provide, and fetches the period types on 2.43+. */
+/* For specs that render a metadata provider without the mock app wrapper,
+ * which is what supplies the runtime config and the period types responses
+ * the real hook needs. */
 export const stubUseRelativePeriodsNames =
     ({ getRelativePeriodsName }: AnalyticsModule) =>
     () => ({
