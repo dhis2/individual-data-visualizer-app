@@ -16,7 +16,8 @@ import type {
     MetadataStore,
     SavedVisualization,
 } from '@types'
-import { isCurrentVisualizationPersisted, isVisualizationEmpty } from './guards'
+import { isCurrentVisualizationPersisted } from './guards'
+import { getLineListSorting } from './sorting'
 
 /* Keys on CurrentVisualization that are NOT part of EventVisualizationOptions.
  * Combined with the option keys (derived from DEFAULT_OPTIONS) this gives the
@@ -97,7 +98,7 @@ const resolveCellValueFields = (
 }
 
 /* Rebuild a currentVis fresh from visUiConfig so stale currentVis fields can't
- * leak through. Carries over only id and sorting from the previous currentVis. */
+ * leak through. Carries over only the id from the previous currentVis. */
 export const buildCurrentVisFromVisUiConfig = ({
     previousCurrentVis,
     visUiConfig,
@@ -106,22 +107,34 @@ export const buildCurrentVisFromVisUiConfig = ({
     previousCurrentVis: CurrentVisState
     visUiConfig: VisUiConfigState
     metadataStore: MetadataStore
-}): CurrentVisualization => ({
-    id: isCurrentVisualizationPersisted(previousCurrentVis)
-        ? previousCurrentVis.id
-        : undefined,
-    sorting: isVisualizationEmpty(previousCurrentVis)
-        ? undefined
-        : previousCurrentVis.sorting,
-    type: visUiConfig.visualizationType,
-    outputType: visUiConfig.outputType,
-    columns: buildAxis(visUiConfig.layout.columns, visUiConfig, metadataStore),
-    rows: buildAxis(visUiConfig.layout.rows, visUiConfig, metadataStore),
-    filters: buildAxis(visUiConfig.layout.filters, visUiConfig, metadataStore),
-    programDimensions: collectProgramDimensions(visUiConfig, metadataStore),
-    ...getEnabledOptions(visUiConfig.options),
-    // There is no generated subtitle, so an empty one is a hidden one
-    hideSubtitle: !isPopulatedString(visUiConfig.options.subtitle),
-    ...resolveTeiFields(visUiConfig, metadataStore),
-    ...resolveCellValueFields(visUiConfig, metadataStore),
-})
+}): CurrentVisualization => {
+    const visualization: CurrentVisualization = {
+        id: isCurrentVisualizationPersisted(previousCurrentVis)
+            ? previousCurrentVis.id
+            : undefined,
+        type: visUiConfig.visualizationType,
+        outputType: visUiConfig.outputType,
+        columns: buildAxis(
+            visUiConfig.layout.columns,
+            visUiConfig,
+            metadataStore
+        ),
+        rows: buildAxis(visUiConfig.layout.rows, visUiConfig, metadataStore),
+        filters: buildAxis(
+            visUiConfig.layout.filters,
+            visUiConfig,
+            metadataStore
+        ),
+        programDimensions: collectProgramDimensions(visUiConfig, metadataStore),
+        ...getEnabledOptions(visUiConfig.options),
+        // There is no generated subtitle, so an empty one is a hidden one
+        hideSubtitle: !isPopulatedString(visUiConfig.options.subtitle),
+        ...resolveTeiFields(visUiConfig, metadataStore),
+        ...resolveCellValueFields(visUiConfig, metadataStore),
+    }
+
+    return {
+        ...visualization,
+        sorting: getLineListSorting(visUiConfig.sorting, visualization),
+    }
+}
