@@ -3,6 +3,8 @@ import type { CurrentVisualization } from '@types'
 export const PROGRAM_ID = 'program1'
 export const STAGE_ID = 'stage1'
 export const DIMENSION_ID = `${STAGE_ID}.de1`
+const PERIOD_ID = `${STAGE_ID}.eventDate`
+const ORG_UNIT_ID = `${STAGE_ID}.ou`
 
 /* An event program, so the EVENT output type is the applicable one — the same
  * shape a real layout dimension carries. Without the program the layout would
@@ -28,6 +30,33 @@ export const metadata = {
         programStageId: STAGE_ID,
         dimensionType: 'DATA_ELEMENT',
         valueType: 'TEXT',
+    },
+    [PERIOD_ID]: {
+        id: PERIOD_ID,
+        name: 'Event date',
+        dimensionId: 'eventDate',
+        programId: PROGRAM_ID,
+        programStageId: STAGE_ID,
+        dimensionType: 'PERIOD',
+        valueType: 'DATE',
+    },
+    [ORG_UNIT_ID]: {
+        id: ORG_UNIT_ID,
+        name: 'Event org. unit',
+        dimensionId: 'ou',
+        programId: PROGRAM_ID,
+        programStageId: STAGE_ID,
+        dimensionType: 'ORGANISATION_UNIT',
+        valueType: 'ORGANISATION_UNIT',
+    },
+}
+
+/* A period and an org unit in filters, which every applicable layout needs. */
+export const selectionInFilters = {
+    filters: [PERIOD_ID, ORG_UNIT_ID],
+    itemsByDimension: {
+        [PERIOD_ID]: ['LAST_12_MONTHS'],
+        [ORG_UNIT_ID]: ['USER_ORGUNIT'],
     },
 }
 
