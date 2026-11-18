@@ -66,7 +66,7 @@
         "vitest-canvas-mock": "^1.2.0"
     },
     "dependencies": {
-        "@dhis2/analytics": "github:d2-ci/analytics#feat/ptrp-labels-translations",
+        "@dhis2/analytics": "^29.10.0",
         "@dhis2/app-runtime": "^3.17.6",
         "@dhis2/ui": "^10.20.0",
         "@dnd-kit/core": "^6.3.1",
