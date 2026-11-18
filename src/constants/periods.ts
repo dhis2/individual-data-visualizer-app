@@ -1,6 +1,3 @@
-import type { RelativePeriodEnum } from '@types'
-import { asStringLiteralSubsetArray } from './as-string-literal-subset-array'
-
 export const PERIOD_TYPES = [
     'DAILY',
     'WEEKLY',
@@ -12,40 +9,3 @@ export const PERIOD_TYPES = [
     'MONTHLY',
     'BIMONTHLY',
 ] as const
-
-export const RELATIVE_PERIODS =
-    asStringLiteralSubsetArray<RelativePeriodEnum>()([
-        'TODAY',
-        'YESTERDAY',
-        'LAST_3_DAYS',
-        'LAST_7_DAYS',
-        'LAST_14_DAYS',
-        'THIS_WEEK',
-        'LAST_WEEK',
-        'LAST_4_WEEKS',
-        'LAST_12_WEEKS',
-        'LAST_52_WEEKS',
-        'WEEKS_THIS_YEAR',
-        'THIS_MONTH',
-        'LAST_MONTH',
-        'LAST_3_MONTHS',
-        'LAST_6_MONTHS',
-        'LAST_12_MONTHS',
-        'MONTHS_THIS_YEAR',
-        'THIS_BIMONTH',
-        'LAST_BIMONTH',
-        'LAST_6_BIMONTHS',
-        'BIMONTHS_THIS_YEAR',
-        'THIS_QUARTER',
-        'LAST_QUARTER',
-        'LAST_4_QUARTERS',
-        'QUARTERS_THIS_YEAR',
-        'THIS_SIX_MONTH',
-        'LAST_SIX_MONTH',
-        'LAST_2_SIXMONTHS',
-        'THIS_FINANCIAL_YEAR',
-        'LAST_FINANCIAL_YEAR',
-        'LAST_5_FINANCIAL_YEARS',
-        'THIS_YEAR',
-        'LAST_YEAR',
-    ] as const)
