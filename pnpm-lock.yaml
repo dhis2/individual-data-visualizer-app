@@ -83,10 +83,10 @@ importers:
         version: 21.2.4
       '@cypress/grep':
         specifier: ^7.0.0
-        version: 7.0.0(@babel/core@7.29.7)(cypress@15.21.1)(supports-color@10.2.2)
+        version: 7.0.0(@babel/core@7.29.7)(cypress@15.21.2)(supports-color@10.2.2)
       '@cypress/vite-dev-server':
         specifier: ^7.3.4
-        version: 7.3.4(cypress@15.21.1)(supports-color@10.2.2)
+        version: 7.3.4(cypress@15.21.2)(supports-color@10.2.2)
       '@dhis2/app-service-config':
         specifier: ^3.17.6
         version: 3.17.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -107,7 +107,7 @@ importers:
         version: 0.4.0(prettier@3.9.10)
       '@dhis2/cypress-commands':
         specifier: ^10.1.2
-        version: 10.1.2(@babel/preset-env@7.29.7(@babel/core@7.29.7))(cypress@15.21.1)
+        version: 10.1.2(@babel/preset-env@7.29.7(@babel/core@7.29.7))(cypress@15.21.2)
       '@eslint/compat':
         specifier: ^2.1.1
         version: 2.1.1(eslint@9.39.5(jiti@2.7.0)(supports-color@10.2.2))
@@ -116,7 +116,7 @@ importers:
         version: 2.3.2
       '@sonar/scan':
         specifier: ^5.0.2
-        version: 5.0.2
+        version: 5.0.2(supports-color@10.2.2)
       '@testing-library/dom':
         specifier: ^10.4.0
         version: 10.4.2
@@ -145,11 +145,11 @@ importers:
         specifier: ^6.2.1
         version: 6.2.1(vite@8.3.6(@types/node@26.6.6)(jiti@2.7.0)(less@4.9.1)(sass@1.108.1)(stylus@0.62.0)(terser@5.51.2)(yaml@2.9.1))
       cypress:
-        specifier: ^15.21.0
-        version: 15.21.1
+        specifier: ^15.21.2
+        version: 15.21.2
       cypress-real-events:
         specifier: ^1.15.0
-        version: 1.15.1(cypress@15.21.1)
+        version: 1.15.1(cypress@15.21.2)
       eslint:
         specifier: ^9.39.4
         version: 9.39.5(jiti@2.7.0)(supports-color@10.2.2)
@@ -3653,8 +3653,8 @@ packages:
     peerDependencies:
       cypress: ^4.x || ^5.x || ^6.x || ^7.x || ^8.x || ^9.x || ^10.x || ^11.x || ^12.x || ^13.x || ^14.x || ^15.x || ^16.x
 
-  cypress@15.21.1:
-    resolution: {integrity: sha512-ogHpHMj0XNlZA5MGzjg8SWHf0eMw9lTwVQRKjpcT1GzNTxNUjwnHA8YCG6nOJ8ThU+XZaUxJgpMYZnJ//8aDaw==}
+  cypress@15.21.2:
+    resolution: {integrity: sha512-LcO9+YBGT0zlLd9+mD6/O30S1GcvJqBFTOCQ+uTd3nwFi+fTvogSskE3W/BWgDd/iHFkJzuIun5fcDl1aVLKRQ==}
     engines: {node: ^20.1.0 || ^22.0.0 || >=24.0.0}
     hasBin: true
 
@@ -8943,9 +8943,9 @@ snapshots:
     dependencies:
       postcss-selector-parser: 7.1.7
 
-  '@cypress/grep@7.0.0(@babel/core@7.29.7)(cypress@15.21.1)(supports-color@10.2.2)':
+  '@cypress/grep@7.0.0(@babel/core@7.29.7)(cypress@15.21.2)(supports-color@10.2.2)':
     dependencies:
-      cypress: 15.21.1
+      cypress: 15.21.2
       debug: 4.4.3(supports-color@10.2.2)
       find-test-names: 1.29.19(@babel/core@7.29.7)(supports-color@10.2.2)
       globby: 11.1.0
@@ -8973,9 +8973,9 @@ snapshots:
       tough-cookie: 5.1.2
       tunnel-agent: 0.6.0
 
-  '@cypress/vite-dev-server@7.3.4(cypress@15.21.1)(supports-color@10.2.2)':
+  '@cypress/vite-dev-server@7.3.4(cypress@15.21.2)(supports-color@10.2.2)':
     dependencies:
-      cypress: 15.21.1
+      cypress: 15.21.2
       debug: 4.4.3(supports-color@10.2.2)
       find-up: 6.3.0
       node-html-parser: 5.3.3
@@ -9842,9 +9842,9 @@ snapshots:
     dependencies:
       prettier: 3.9.10
 
-  '@dhis2/cypress-commands@10.1.2(@babel/preset-env@7.29.7(@babel/core@7.29.7))(cypress@15.21.1)':
+  '@dhis2/cypress-commands@10.1.2(@babel/preset-env@7.29.7(@babel/core@7.29.7))(cypress@15.21.2)':
     dependencies:
-      cypress: 15.21.1
+      cypress: 15.21.2
       jscodeshift: 17.4.0(@babel/preset-env@7.29.7(@babel/core@7.29.7))
     transitivePeerDependencies:
       - '@babel/preset-env'
@@ -10728,10 +10728,10 @@ snapshots:
     dependencies:
       '@sinonjs/commons': 1.8.6
 
-  '@sonar/scan@5.0.2':
+  '@sonar/scan@5.0.2(supports-color@10.2.2)':
     dependencies:
       adm-zip: 0.6.1
-      axios: 1.20.0(debug@4.4.3(supports-color@10.2.2))
+      axios: 1.20.0(supports-color@10.2.2)
       commander: 15.0.0
       hpagent: 1.2.0
       node-forge: 1.4.0
@@ -11221,7 +11221,7 @@ snapshots:
 
   adm-zip@0.6.1: {}
 
-  agent-base@6.0.2:
+  agent-base@6.0.2(supports-color@10.2.2):
     dependencies:
       debug: 4.4.3(supports-color@10.2.2)
     transitivePeerDependencies:
@@ -11454,7 +11454,17 @@ snapshots:
     dependencies:
       follow-redirects: 1.16.1(debug@4.4.3(supports-color@10.2.2))
       form-data: 4.0.6
-      https-proxy-agent: 5.0.1
+      https-proxy-agent: 5.0.1(supports-color@10.2.2)
+      proxy-from-env: 2.1.0
+    transitivePeerDependencies:
+      - debug
+      - supports-color
+
+  axios@1.20.0(supports-color@10.2.2):
+    dependencies:
+      follow-redirects: 1.16.1(debug@4.4.3(supports-color@10.2.2))
+      form-data: 4.0.6
+      https-proxy-agent: 5.0.1(supports-color@10.2.2)
       proxy-from-env: 2.1.0
     transitivePeerDependencies:
       - debug
@@ -12051,11 +12061,11 @@ snapshots:
 
   csstype@3.2.3: {}
 
-  cypress-real-events@1.15.1(cypress@15.21.1):
+  cypress-real-events@1.15.1(cypress@15.21.2):
     dependencies:
-      cypress: 15.21.1
+      cypress: 15.21.2
 
-  cypress@15.21.1:
+  cypress@15.21.2:
     dependencies:
       '@cypress/request': 4.0.1
       '@cypress/xvfb': 1.2.4(supports-color@8.1.1)
@@ -13318,7 +13328,7 @@ snapshots:
   http-proxy-agent@4.0.1:
     dependencies:
       '@tootallnate/once': 1.1.2
-      agent-base: 6.0.2
+      agent-base: 6.0.2(supports-color@10.2.2)
       debug: 4.4.3(supports-color@10.2.2)
     transitivePeerDependencies:
       - supports-color
@@ -13343,9 +13353,9 @@ snapshots:
       jsprim: 2.0.2
       sshpk: 1.18.0
 
-  https-proxy-agent@5.0.1:
+  https-proxy-agent@5.0.1(supports-color@10.2.2):
     dependencies:
-      agent-base: 6.0.2
+      agent-base: 6.0.2(supports-color@10.2.2)
       debug: 4.4.3(supports-color@10.2.2)
     transitivePeerDependencies:
       - supports-color
@@ -14151,7 +14161,7 @@ snapshots:
       form-data: 3.0.5
       html-encoding-sniffer: 2.0.1
       http-proxy-agent: 4.0.1
-      https-proxy-agent: 5.0.1
+      https-proxy-agent: 5.0.1(supports-color@10.2.2)
       is-potential-custom-element-name: 1.0.1
       nwsapi: 2.2.28
       parse5: 6.0.1
