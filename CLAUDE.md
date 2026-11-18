@@ -149,6 +149,7 @@ effects) to load. This is a guideline, not an absolute — the occasional helper
 
 - **Test behavior, not implementation details**: assert on what callers observe, not on private state, internal call sequences, or how a result was produced.
 - **Cover new functionality**: when adding or changing logic, add tests in the same change — including edge cases and error conditions, not just the happy path.
+- **Tests describe the current logic, not its history**: a test asserts what the code does now. When a change removes or simplifies behaviour, delete or rewrite the tests for it. Don't add tests that pin the removed behaviour ("no longer does X", "does not re-add Y"). Only keep a negative assertion if it's a real rule of the current code that a reader would expect to hold. Test names follow the same rule as comments: no "still", "anymore", "previously", "regression test for fix".
 
 #### Unit Tests (Vitest)
 
@@ -334,18 +335,17 @@ dates, statuses). They are built by shared helpers in `src/modules/dimension/fix
 (`getStageFixedDimensions`, `getEnrollmentFixedDimensions`, `getTrackedEntityTypeFixedDimensions`)
 and consumed by both the sidebar cards and the metadata provider.
 
-| Scope      | Dimension ID     | Compound ID notation          | Display name source                                          | Sidebar card |
-| ---------- | ---------------- | ----------------------------- | ------------------------------------------------------------ | ------------ |
-| Stage      | `ou`             | `stageId.ou`                  | `program.displayOrgUnitLabel` or "Event org. unit"           | Stage        |
-| Stage      | `eventDate`      | `stageId.eventDate`           | `stage.displayExecutionDateLabel` or "Event date"            | Stage        |
-| Stage      | `scheduledDate`  | `stageId.scheduledDate`       | `stage.displayDueDateLabel` or "Scheduled date"              | Stage        |
-| Stage      | `eventStatus`    | `stageId.eventStatus`         | "Event status"                                               | Stage        |
-| Enrollment | `ou`             | `programId.ou`                | `program.displayOrgUnitLabel` or "Enrollment org. unit"      | Enrollment   |
-| Enrollment | `enrollmentDate` | `programId.enrollmentDate`    | `program.displayEnrollmentDateLabel` or "Date of enrollment" | Enrollment   |
-| Enrollment | `incidentDate`   | `programId.incidentDate`      | `program.displayIncidentDateLabel` or "Incident date"        | Enrollment   |
-| Enrollment | `programStatus`  | `programId.programStatus`     | "Enrollment status"                                          | Enrollment   |
-| TEI        | `ou`             | `trackedEntityTypeId.ou`      | "Registration org. unit"                                     | Registration |
-| TEI        | `created`        | `trackedEntityTypeId.created` | "Registration date"                                          | Registration |
+| Scope      | Dimension ID     | Compound ID notation       | Display name source                                          | Sidebar card |
+| ---------- | ---------------- | -------------------------- | ------------------------------------------------------------ | ------------ |
+| Stage      | `ou`             | `stageId.ou`               | `program.displayOrgUnitLabel` or "Event org. unit"           | Stage        |
+| Stage      | `eventDate`      | `stageId.eventDate`        | `stage.displayExecutionDateLabel` or "Event date"            | Stage        |
+| Stage      | `scheduledDate`  | `stageId.scheduledDate`    | `stage.displayDueDateLabel` or "Scheduled date"              | Stage        |
+| Stage      | `eventStatus`    | `stageId.eventStatus`      | "Event status"                                               | Stage        |
+| Enrollment | `ou`             | `programId.ou`             | `program.displayOrgUnitLabel` or "Enrollment org. unit"      | Enrollment   |
+| Enrollment | `enrollmentDate` | `programId.enrollmentDate` | `program.displayEnrollmentDateLabel` or "Date of enrollment" | Enrollment   |
+| Enrollment | `incidentDate`   | `programId.incidentDate`   | `program.displayIncidentDateLabel` or "Incident date"        | Enrollment   |
+| Enrollment | `programStatus`  | `programId.programStatus`  | "Enrollment status"                                          | Enrollment   |
+| TEI        | `ou`             | `trackedEntityTypeId.ou`   | "Registration org. unit"                                     | Registration |
 
 Non-fixed dimensions use compound or plain IDs depending on their type:
 

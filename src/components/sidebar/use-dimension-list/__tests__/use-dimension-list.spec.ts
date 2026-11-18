@@ -1426,7 +1426,7 @@ describe('useDimensionList - Fake Timers with Real Redux Store', () => {
         expect(result.current.isDisabledByFilter).toBe(true)
     })
 
-    it('filters fetched dimensions by UI filter when filter changes (regression test for fix)', async () => {
+    it('shows the fetched dimensions again when the filter is switched back or cleared', async () => {
         const baseQuery: SingleQuery = {
             resource: 'dimensions',
             params: {

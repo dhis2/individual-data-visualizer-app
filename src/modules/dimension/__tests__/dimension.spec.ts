@@ -775,22 +775,6 @@ describe('getDimensionBlockReason', () => {
     })
 })
 
-describe('getDimensionLayoutBlockedMessage — registration OU', () => {
-    it('does not block the TET registration OU in a pivot table', () => {
-        expect(
-            getMessage({
-                dimension: makeDim({
-                    id: 'tetA.ou',
-                    dimensionId: 'ou',
-                    dimensionType: 'ORGANISATION_UNIT',
-                    trackedEntityTypeId: 'tetA',
-                }),
-                visualizationType: 'PIVOT_TABLE',
-            })
-        ).toBeNull()
-    })
-})
-
 describe('getDimensionLayoutBlockedMessage — cross-TET rule (Case D)', () => {
     const crossTetMessage =
         'Person dimensions cannot be combined with Malaria case dimensions already in the layout.'
@@ -947,19 +931,6 @@ describe('isDimensionFullyInvalidForVisType', () => {
                 'PIVOT_TABLE'
             )
         ).toBe(true)
-    })
-
-    it('marks TET registration OU valid for PIVOT_TABLE', () => {
-        expect(
-            isDimensionFullyInvalidForVisType(
-                makeDim({
-                    dimensionId: 'ou',
-                    dimensionType: 'ORGANISATION_UNIT',
-                    trackedEntityTypeId: 'tetId',
-                }),
-                'PIVOT_TABLE'
-            )
-        ).toBe(false)
     })
 
     it('marks an ordinary numeric DATA_ELEMENT valid for PIVOT_TABLE', () => {
