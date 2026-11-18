@@ -1,5 +1,7 @@
 import { DigitGroupSeparator } from '@components/options/fields/digit-group-separator'
 import { DisplayDensity } from '@components/options/fields/display-density'
+import { FixColumnHeaders } from '@components/options/fields/fix-column-headers'
+import { FixRowHeaders } from '@components/options/fields/fix-row-headers'
 import { FontSize } from '@components/options/fields/font-size'
 import { ShowHierarchy } from '@components/options/fields/show-hierarchy'
 import { Subtitle } from '@components/options/fields/subtitle'
@@ -17,6 +19,8 @@ export const PivotTableStyleTab: FC = () => (
             <DisplayDensity />
             <FontSize />
             <DigitGroupSeparator />
+            <FixColumnHeaders />
+            <FixRowHeaders />
         </OptionsFieldSet>
         <OptionsFieldSet title={i18n.t('Labels')}>
             <ShowHierarchy />
