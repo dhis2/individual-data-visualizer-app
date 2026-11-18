@@ -430,9 +430,10 @@ its program qualifier so it reads like the TEI registration OU.
    A legacy pivot table keeps its one stage at the root and saves a data element value without a
    stage, so the root stage is moved onto the value; attribute values get none. The
    `PROGRAM_DATA_ELEMENT` → `DATA_ELEMENT` mapping is not its concern — that runs per analytics
-   request, in `transformDimensions` (`@modules/dimension/translation`).
+   request, in `transformDimensions` (`@modules/dimension/translation`). It also turns the sort
+   into a header name (see [Sorting a line list](#sorting-a-line-list)).
 2. `getVisualizationUiConfig` (`@modules/visualization/ui-config`) derives `visUiConfig` — layout
-   arrays, items, conditions and options — from the normalized visualization. It applies two
+   arrays, items, conditions, sorting and options — from the normalized visualization. It applies two
    dimension translations on the way:
     - `toAppLocalDimensions` (`@modules/dimension/translation`) renames API `ou` with a program but
       no programStage to `enrollmentOu`, and `registrationOu` to `ou`.
@@ -451,7 +452,7 @@ its program qualifier so it reads like the TEI registration OU.
    and emitting separate `program` and `programStage` objects. See the org unit mapping table
    above for the outputType/visType rules it applies.
 2. `getSaveableVisualization` (`@modules/visualization/save`) drops the non-persisted dimension
-   props (`dimensionType`, `valueType`) and formats sorting for the API.
+   props (`dimensionType`, `valueType`) and the `legacy` flag.
 3. The backend's `mergeAnalyticalObject` hydrates the stage from the database (including its parent
    program via `loadProgramForStage`), then `getQualifiedDimension` rebuilds the persisted string as
    `programId.stageId.dimensionId`.
@@ -534,6 +535,29 @@ when there is no tracked entity type).
 - **From the layout**: the `columns`/`rows`/`filters` objects don't carry an item's name or own
   aggregation type, so a loaded layout item gets them from `dataElementDimensions` /
   `attributeDimensions`, the lists the backend builds those layout dimensions from.
+
+## Sorting a line list
+
+A line list is sorted by one column. Analytics sorts by the column's **header name**
+(`stageId.eventdate`, `enrollmentdate`, `programId.enrollmentdate`), and the header name of a column
+changes with the outputType, `showHierarchy` and the repetition index. So the sort has two forms
+(helpers in `@modules/visualization/sorting`):
+
+- **`visUiConfig.sorting`** names the column by its canonical dimension ID, plus the repetition
+  index for a repeated column. This is the source of truth, like the rest of the layout.
+- **`currentVis.sorting`** is the header name, which is what the analytics request, the column
+  header arrow and the saved visualization use.
+
+`buildCurrentVisFromVisUiConfig` turns the first into the second for the line list it builds, and
+drops the sort when that line list has no such column (removed, moved to filters, repetition gone,
+or a pivot table). Update then clears the dropped sort from `visUiConfig` too, so it does not come
+back with its column. Clicking a column header (`tSetCurrentVisSorting`) sets both forms and
+applies only the sort, not other pending changes.
+
+On load, `normalizeApiSavedVisualization` turns the saved sort into a header name and drops it when
+it names no column. The Line Listing app saves a column whose header has no prefix under its
+dimension ID (`eventDate`), which analytics rejects (E7224); this app saves the header name, which
+the Line Listing app reads as well.
 
 ## Grouping values by legend
 
