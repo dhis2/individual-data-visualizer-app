@@ -1,17 +1,24 @@
 import { MockMetadataProvider } from '@components/app-wrapper/metadata-provider/metadata-provider'
 import { PivotTablePlugin } from '@components/plugin-wrapper/pivot-table-plugin'
+import type { AnalyticsModule } from '@test-utils/relative-periods-names-stub'
 import { render, screen } from '@testing-library/react'
 import type { CurrentVisualization } from '@types'
 import { describe, expect, it, vi } from 'vitest'
 
 /* The engine renders the filter row itself, so the only thing this app
  * controls is the prop. Stubbing the table keeps the assertion on that. */
-vi.mock('@dhis2/analytics', async (importOriginal) => ({
-    ...(await importOriginal<object>()),
-    PivotTable: ({ filterText }: { filterText?: string }) => (
-        <div data-test="pivot-table" data-filter-text={filterText} />
-    ),
-}))
+vi.mock('@dhis2/analytics', async (importOriginal) => {
+    const analytics = await importOriginal<AnalyticsModule>()
+    const { stubUseRelativePeriodsNames } =
+        await import('@test-utils/relative-periods-names-stub')
+    return {
+        ...analytics,
+        useRelativePeriodsNames: stubUseRelativePeriodsNames(analytics),
+        PivotTable: ({ filterText }: { filterText?: string }) => (
+            <div data-test="pivot-table" data-filter-text={filterText} />
+        ),
+    }
+})
 
 vi.mock(
     '@components/plugin-wrapper/hooks/use-pivot-table-analytics-data',

@@ -1,3 +1,4 @@
+import { getRelativePeriodsName } from '@dhis2/analytics'
 import type { AppCachedData, SavedVisualization, MetadataItem } from '@types'
 import { expect, describe, it, beforeEach, vi } from 'vitest'
 import inpatientCasesVisualization from '../__fixtures__/visualization-inpatient-cases-last-quarter-case.json'
@@ -26,7 +27,7 @@ const rootOrgUnits: AppCachedData['rootOrgUnits'] = [
 describe('MetadataStore', () => {
     it('after calling setVisualizationMetadata the store has the expected content', () => {
         const metadataStore = new TestMetadataStore(
-            getInitialMetadata(),
+            getInitialMetadata(getRelativePeriodsName()),
             rootOrgUnits
         )
         metadataStore.setVisualizationMetadata(
@@ -40,7 +41,7 @@ describe('MetadataStore', () => {
             },
             "BIMONTHS_THIS_YEAR": {
               "id": "BIMONTHS_THIS_YEAR",
-              "name": "Bimonths this year",
+              "name": "Bi-months this year",
             },
             "CANCELLED": {
               "id": "CANCELLED",
@@ -71,6 +72,10 @@ describe('MetadataStore', () => {
               "programId": "eBAyeGv0exc",
               "programStageId": "Zj7UnCAulEk",
             },
+            "LAST_10_YEARS": {
+              "id": "LAST_10_YEARS",
+              "name": "Last 10 years",
+            },
             "LAST_12_MONTHS": {
               "id": "LAST_12_MONTHS",
               "name": "Last 12 months",
@@ -83,9 +88,17 @@ describe('MetadataStore', () => {
               "id": "LAST_14_DAYS",
               "name": "Last 14 days",
             },
+            "LAST_180_DAYS": {
+              "id": "LAST_180_DAYS",
+              "name": "Last 180 days",
+            },
             "LAST_2_SIXMONTHS": {
               "id": "LAST_2_SIXMONTHS",
-              "name": "Last 2 six-months",
+              "name": "Last 2 six-month",
+            },
+            "LAST_30_DAYS": {
+              "id": "LAST_30_DAYS",
+              "name": "Last 30 days",
             },
             "LAST_3_DAYS": {
               "id": "LAST_3_DAYS",
@@ -94,6 +107,10 @@ describe('MetadataStore', () => {
             "LAST_3_MONTHS": {
               "id": "LAST_3_MONTHS",
               "name": "Last 3 months",
+            },
+            "LAST_4_BIWEEKS": {
+              "id": "LAST_4_BIWEEKS",
+              "name": "Last 4 bi-weeks",
             },
             "LAST_4_QUARTERS": {
               "id": "LAST_4_QUARTERS",
@@ -111,9 +128,17 @@ describe('MetadataStore', () => {
               "id": "LAST_5_FINANCIAL_YEARS",
               "name": "Last 5 financial years",
             },
+            "LAST_5_YEARS": {
+              "id": "LAST_5_YEARS",
+              "name": "Last 5 years",
+            },
+            "LAST_60_DAYS": {
+              "id": "LAST_60_DAYS",
+              "name": "Last 60 days",
+            },
             "LAST_6_BIMONTHS": {
               "id": "LAST_6_BIMONTHS",
-              "name": "Last 6 bimonths",
+              "name": "Last 6 bi-months",
             },
             "LAST_6_MONTHS": {
               "id": "LAST_6_MONTHS",
@@ -123,9 +148,17 @@ describe('MetadataStore', () => {
               "id": "LAST_7_DAYS",
               "name": "Last 7 days",
             },
+            "LAST_90_DAYS": {
+              "id": "LAST_90_DAYS",
+              "name": "Last 90 days",
+            },
             "LAST_BIMONTH": {
               "id": "LAST_BIMONTH",
-              "name": "Last bimonth",
+              "name": "Last bi-month",
+            },
+            "LAST_BIWEEK": {
+              "id": "LAST_BIWEEK",
+              "name": "Last bi-week",
             },
             "LAST_FINANCIAL_YEAR": {
               "id": "LAST_FINANCIAL_YEAR",
@@ -171,7 +204,11 @@ describe('MetadataStore', () => {
             },
             "THIS_BIMONTH": {
               "id": "THIS_BIMONTH",
-              "name": "This bimonth",
+              "name": "This bi-month",
+            },
+            "THIS_BIWEEK": {
+              "id": "THIS_BIWEEK",
+              "name": "This bi-week",
             },
             "THIS_FINANCIAL_YEAR": {
               "id": "THIS_FINANCIAL_YEAR",
@@ -496,7 +533,7 @@ describe('MetadataStore', () => {
     })
     it('after setting a new visualization the store is updated as expected', () => {
         const metadataStore = new TestMetadataStore(
-            getInitialMetadata(),
+            getInitialMetadata(getRelativePeriodsName()),
             rootOrgUnits
         )
         const snapshot0 = metadataStore.getMetadataSnapshot()
@@ -513,9 +550,9 @@ describe('MetadataStore', () => {
         const snapshot2Keys = new Set(Object.keys(snapshot2))
 
         // Length grows and decreases
-        expect(snapshot0Keys.size).toBe(43)
-        expect(snapshot1Keys.size).toBe(75)
-        expect(snapshot2Keys.size).toBe(61)
+        expect(snapshot0Keys.size).toBe(52)
+        expect(snapshot1Keys.size).toBe(84)
+        expect(snapshot2Keys.size).toBe(70)
 
         // Initial metadata is always included
         expect(snapshot0Keys.isSubsetOf(snapshot1Keys)).toBe(true)
@@ -584,7 +621,7 @@ describe('MetadataStore', () => {
     })
     it('when an organisation unit is added again without path field it is retained', () => {
         const metadataStore = new TestMetadataStore(
-            getInitialMetadata(),
+            getInitialMetadata(getRelativePeriodsName()),
             rootOrgUnits
         )
         const id = 'my-id'
@@ -617,7 +654,7 @@ describe('MetadataStore', () => {
          * displayOrgUnitLabel (or the i18n fallback "Event org. unit") must win
          * and survive a re-fetch of the same visualization. */
         const metadataStore = new TestMetadataStore(
-            getInitialMetadata(),
+            getInitialMetadata(getRelativePeriodsName()),
             rootOrgUnits
         )
         const visualization =

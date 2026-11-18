@@ -1,11 +1,23 @@
+import type { AnalyticsModule } from '@test-utils/relative-periods-names-stub'
 import { configure } from '@testing-library/dom'
 import * as matchers from '@testing-library/jest-dom/matchers'
 import { cleanup } from '@testing-library/react'
 import ResizeObserver from 'resize-observer-polyfill'
-import { expect, afterEach, beforeEach } from 'vitest'
+import { expect, afterEach, beforeEach, vi } from 'vitest'
 import 'vitest-canvas-mock'
 
 expect.extend(matchers)
+
+vi.mock('@dhis2/analytics', async (importOriginal) => {
+    const analytics = await importOriginal<AnalyticsModule>()
+    const { stubUseRelativePeriodsNames } =
+        await import('@test-utils/relative-periods-names-stub')
+    return {
+        ...analytics,
+        useRelativePeriodsNames: stubUseRelativePeriodsNames(analytics),
+    }
+})
+
 configure({
     testIdAttribute: 'data-test',
 })
