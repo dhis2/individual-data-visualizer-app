@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-11T08:39:41.472Z\n"
-"PO-Revision-Date: 2026-11-11T08:39:41.473Z\n"
+"POT-Creation-Date: 2026-11-18T13:32:40.759Z\n"
+"PO-Revision-Date: 2026-11-18T13:32:40.760Z\n"
 
 msgid ""
 "Some dimensions were not added because they cannot be used in a "
@@ -318,6 +318,22 @@ msgstr "Not valid with program indicators"
 
 msgid "Nothing selected. Add items to the layout to get started."
 msgstr "Nothing selected. Add items to the layout to get started."
+
+msgid "Add at least one column or row"
+msgstr "Add at least one column or row"
+
+msgid "Add at least one column"
+msgstr "Add at least one column"
+
+msgid "Add a period dimension with at least one period selected"
+msgstr "Add a period dimension with at least one period selected"
+
+msgid ""
+"Add an organisation unit dimension with at least one organisation unit "
+"selected"
+msgstr ""
+"Add an organisation unit dimension with at least one organisation unit "
+"selected"
 
 msgid "One row for each {{- outputTypeLabel}}"
 msgstr "One row for each {{- outputTypeLabel}}"
