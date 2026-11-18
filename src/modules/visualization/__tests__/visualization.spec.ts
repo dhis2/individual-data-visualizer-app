@@ -567,43 +567,17 @@ describe('getSaveableVisualization', () => {
         expect('legacy' in (saved as Record<string, unknown>)).toBe(false)
     })
 
-    it('uses only the first sorting item and uppercases the direction', () => {
+    /* Analytics rejects the dimension id (enrollmentDate) as a sort */
+    it('saves the sort as the header name analytics sorts by', () => {
+        const sorting = [{ dimension: 'enrollmentdate', direction: 'ASC' }]
         const vis = {
-            sorting: [
-                { dimension: 'someDim', direction: 'desc' },
-                { dimension: 'other', direction: 'asc' },
-            ],
+            sorting,
             columns: [],
             rows: [],
             filters: [],
         } as unknown as SavedVisualization
 
-        const saved = getSaveableVisualization(vis)
-        expect(saved.sorting).toBeDefined()
-        expect(saved.sorting as Array<Record<string, unknown>>).toHaveLength(1)
-        const s0 = (saved.sorting as Array<Record<string, unknown>>)[0]
-        expect(s0.dimension).toBe('someDim')
-        expect(s0.direction).toBe('DESC')
-    })
-
-    it('sets sorting to undefined when sorting is not provided or empty', () => {
-        const vis1 = {
-            columns: [],
-            rows: [],
-            filters: [],
-        } as unknown as SavedVisualization
-        const vis2 = {
-            sorting: [],
-            columns: [],
-            rows: [],
-            filters: [],
-        } as unknown as SavedVisualization
-
-        const saved1 = getSaveableVisualization(vis1)
-        const saved2 = getSaveableVisualization(vis2)
-
-        expect(saved1.sorting).toBeUndefined()
-        expect(saved2.sorting).toBeUndefined()
+        expect(getSaveableVisualization(vis).sorting).toEqual(sorting)
     })
 })
 
