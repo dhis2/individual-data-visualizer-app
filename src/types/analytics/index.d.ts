@@ -74,6 +74,11 @@ declare module '@dhis2/analytics' {
 
     // Hooks
     export const useCachedDataQuery: useCachedDataQuery
+    export const useRelativePeriodsNames: () => {
+        relativePeriodsNames: Record<string, string>
+        loading: boolean
+        error?: Error | null
+    }
 
     // Primitives
     export const ouIdHelper: OuIdHelper
@@ -125,6 +130,8 @@ declare module '@dhis2/analytics' {
         legendSet?: LegendSet,
         value?: string | number | boolean
     ) => string
+
+    export const getRelativePeriodsName: () => Record<string, string>
 
     export const layoutGetAllDimensions: (
         vis: CurrentVisualization
