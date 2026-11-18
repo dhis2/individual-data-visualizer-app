@@ -11,9 +11,10 @@ import {
 } from '@modules/visualization/current-vis'
 import { isVisualizationEmpty } from '@modules/visualization/guards'
 import { setLastUsedVisualizationTypeToLocalStorage } from '@modules/visualization/local-storage'
+import { getVisUiConfigSorting } from '@modules/visualization/sorting'
 import { getVisualizationUiConfig } from '@modules/visualization/ui-config'
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import type { AppDispatch, RootState } from '@types'
+import type { AppDispatch, RootState, Sorting } from '@types'
 import { clearCurrentVis, setCurrentVis } from './current-vis-slice'
 import { setDataSourceId } from './dimensions-selection-slice'
 import {
@@ -26,6 +27,7 @@ import {
     clearVisUiConfig,
     setVisUiConfig,
     setVisUiConfigGroupingByDimension,
+    setVisUiConfigSorting,
 } from './vis-ui-config-slice'
 
 type AppAsyncThunkConfig = {
@@ -143,20 +145,44 @@ export const tUpdateCurrentVisFromVisUiConfig =
             visUiConfig.visualizationType
         )
 
-        dispatch(
-            setCurrentVis(
-                buildCurrentVisFromVisUiConfig({
-                    previousCurrentVis: currentVis,
-                    visUiConfig,
-                    metadataStore: extra.metadataStore,
-                })
-            )
-        )
+        const nextCurrentVis = buildCurrentVisFromVisUiConfig({
+            previousCurrentVis: currentVis,
+            visUiConfig,
+            metadataStore: extra.metadataStore,
+        })
+
+        /* The sort is dropped with its column, so adding the column back later
+         * starts unsorted. */
+        if (visUiConfig.sorting && !nextCurrentVis.sorting) {
+            dispatch(setVisUiConfigSorting(undefined))
+        }
+        dispatch(setCurrentVis(nextCurrentVis))
         dispatch(
             setUiUpdateAnimationShowingFor(
                 isVisualizationEmpty(currentVis) ? null : visUiConfig.outputType
             )
         )
+    }
+
+/* Sorting applies straight away, but only the sort: other changes to the
+ * config stay unapplied. */
+export const tSetCurrentVisSorting =
+    (sorting: Sorting | undefined) =>
+    (dispatch: AppDispatch, getState: () => RootState) => {
+        const { currentVis } = getState()
+
+        if (isVisualizationEmpty(currentVis)) {
+            throw new Error('Sorting called with an empty visualization')
+        }
+
+        const sortingArray = sorting ? [sorting] : undefined
+
+        dispatch(
+            setVisUiConfigSorting(
+                getVisUiConfigSorting(sortingArray, currentVis)
+            )
+        )
+        dispatch(setCurrentVis({ ...currentVis, sorting: sortingArray }))
     }
 
 /* A line list defaults to no grouping, which is the absence of state, so only

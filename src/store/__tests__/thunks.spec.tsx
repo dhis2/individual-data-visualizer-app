@@ -6,11 +6,14 @@ import { getVisualizationLoadError } from '@store/loader-slice'
 import {
     tClearVisualization,
     tLoadSavedVisualization,
+    tSetCurrentVisSorting,
     tUpdateCurrentVisFromVisUiConfig,
 } from '@store/thunks'
 import {
     clearVisUiConfigCellValue,
     initialState as visUiConfigInitialState,
+    setVisUiConfigLayout,
+    setVisUiConfigOption,
     setVisUiConfigVisualizationType,
 } from '@store/vis-ui-config-slice'
 import {
@@ -167,6 +170,58 @@ describe('tUpdateCurrentVisFromVisUiConfig', () => {
 
         expect(store.getState().visUiConfig.cellValue).toBeUndefined()
         expect(getCurrentVis(store.getState()).value).toBeUndefined()
+    })
+})
+
+describe('sorting a line list', () => {
+    const sorting = { dimension: 's1.de1', direction: 'ASC' } as const
+
+    const renderAppliedLineList = async () => {
+        const { store } = await renderHookWithAppWrapper(() => null, {
+            metadata,
+            partialStore: {
+                preloadedState: {
+                    visUiConfig: deepmerge(visUiConfigInitialState, {
+                        layout: { columns: ['s1.de1'] },
+                    }),
+                } as Partial<RootState>,
+            },
+        })
+        store.dispatch(tUpdateCurrentVisFromVisUiConfig())
+        return { store }
+    }
+
+    it('sorts the visualization on screen without applying other changes', async () => {
+        const { store } = await renderAppliedLineList()
+
+        store.dispatch(setVisUiConfigOption({ key: 'title', value: 'Edited' }))
+        store.dispatch(tSetCurrentVisSorting(sorting))
+
+        const currentVis = getCurrentVis(store.getState())
+        expect(currentVis.sorting).toEqual([sorting])
+        expect(currentVis.title).toBeUndefined()
+    })
+
+    it('keeps the sort when the visualization is updated', async () => {
+        const { store } = await renderAppliedLineList()
+
+        store.dispatch(tSetCurrentVisSorting(sorting))
+        store.dispatch(tUpdateCurrentVisFromVisUiConfig())
+
+        expect(getCurrentVis(store.getState()).sorting).toEqual([sorting])
+    })
+
+    it('does not bring a dropped sort back when its column returns', async () => {
+        const { store } = await renderAppliedLineList()
+        const layout = store.getState().visUiConfig.layout
+
+        store.dispatch(tSetCurrentVisSorting(sorting))
+        store.dispatch(setVisUiConfigLayout({ ...layout, columns: [] }))
+        store.dispatch(tUpdateCurrentVisFromVisUiConfig())
+        store.dispatch(setVisUiConfigLayout(layout))
+        store.dispatch(tUpdateCurrentVisFromVisUiConfig())
+
+        expect(getCurrentVis(store.getState()).sorting).toBeUndefined()
     })
 })
 

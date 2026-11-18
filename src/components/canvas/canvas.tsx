@@ -3,12 +3,12 @@ import { PluginWrapper } from '@components/plugin-wrapper/plugin-wrapper'
 import { StartScreen } from '@components/start-screen/start-screen'
 import { useAppDispatch, useAppSelector, useCurrentUser } from '@hooks'
 import { isVisualizationEmpty } from '@modules/visualization/guards'
-import { getCurrentVis, setCurrentVis } from '@store/current-vis-slice'
+import { getCurrentVis } from '@store/current-vis-slice'
 import {
     getIsVisualizationLoading,
     getVisualizationLoadError,
 } from '@store/loader-slice'
-import { tLoadSavedVisualization } from '@store/thunks'
+import { tLoadSavedVisualization, tSetCurrentVisSorting } from '@store/thunks'
 import { setUiActiveDimensionModal } from '@store/ui-slice'
 import type { Sorting } from '@types'
 import { useCallback, type FC } from 'react'
@@ -33,19 +33,9 @@ export const Canvas: FC = () => {
 
     const onDataSorted = useCallback(
         (sorting: Sorting | undefined) => {
-            if (isVisualizationEmpty(currentVis)) {
-                throw new Error(
-                    'onDataSorted called with an empty visualization'
-                )
-            }
-            dispatch(
-                setCurrentVis({
-                    ...currentVis,
-                    sorting: sorting ? [sorting] : undefined,
-                })
-            )
+            dispatch(tSetCurrentVisSorting(sorting))
         },
-        [currentVis, dispatch]
+        [dispatch]
     )
 
     const onColumnHeaderClick = useCallback(
