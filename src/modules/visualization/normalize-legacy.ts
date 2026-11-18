@@ -14,6 +14,7 @@ import {
 } from '@modules/dimension/time'
 import { toEventVisualizationDimensionId } from '@modules/dimension/translation'
 import { isPopulatedString } from '@modules/utils/guards'
+import { normalizeSavedSorting } from '@modules/visualization/sorting'
 import type {
     ApiSavedVisualization,
     DimensionId,
@@ -226,6 +227,9 @@ const normalizeLegacyValue = (
  *   other, though no known client saves that. `DEFAULT` on an item that
  *   aggregates by NONE becomes the fallback type the app saves for such an
  *   item; ER let users save that combination. Neither implies `legacy`.
+ * - Turn the sort into the header name analytics sorts by, and drop it when it
+ *   names no line list column. This does not imply `legacy`: the Line Listing
+ *   app reads a header name too.
  *
  * Out of scope (handled downstream — these run on every load, not just legacy
  * visualizations, so they do not imply the `legacy` flag):
@@ -324,6 +328,8 @@ export const normalizeApiSavedVisualization = (
     } else if (typeof timeField === 'string') {
         normalizedVis.legacy = true
     }
+
+    normalizedVis.sorting = normalizeSavedSorting(normalizedVis)
 
     if (sortOrder !== 0) {
         normalizedVis.sortOrder = sortOrder
