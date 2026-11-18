@@ -62,6 +62,10 @@ describe('build a pivot table', () => {
             .dblclick()
         addDimensionFromModal('filters')
 
+        openDimensionModal('Event org. unit', STAGE)
+        cy.getByDataTest('org-unit-tree').contains('Sierra Leone').click()
+        addDimensionFromModal('filters')
+
         openDimensionModal('MCH Weight (g)', STAGE)
         addDimensionFromModal('value')
         cy.getByDataTest('cell-value-aggregation-trigger').click()
