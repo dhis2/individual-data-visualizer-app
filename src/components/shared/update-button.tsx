@@ -1,11 +1,12 @@
+import { getLayoutSelectionTooltipConfig } from '@components/layout-panel/bottom-bar/output-type-validity'
 import { visTypeDisplayNames } from '@dhis2/analytics'
 import i18n from '@dhis2/d2-i18n'
 import { Button, Tooltip } from '@dhis2/ui'
-import { useAppSelector } from '@hooks'
+import { useAppSelector, useMetadataStore } from '@hooks'
 import { isVisualizationEmpty } from '@modules/visualization/guards'
 import { getCurrentVis } from '@store/current-vis-slice'
 import { getVisUiConfigVisualizationType } from '@store/vis-ui-config-slice'
-import { type FC } from 'react'
+import { useMemo, type FC } from 'react'
 
 type UpdateButtonProps = {
     onClick?: () => void
@@ -22,14 +23,25 @@ export const UpdateButton: FC<UpdateButtonProps> = ({
 }) => {
     const currentVis = useAppSelector(getCurrentVis)
     const visType = useAppSelector(getVisUiConfigVisualizationType)
+    const visUiConfig = useAppSelector((state) => state.visUiConfig)
+    const metadataStore = useMetadataStore()
 
-    if (isVisualizationEmpty(currentVis)) {
+    const disabledReason = useMemo(
+        () =>
+            isVisualizationEmpty(currentVis)
+                ? i18n.t('Create a {{- visType}} before updating', {
+                      visType: visTypeDisplayNames[visType],
+                  })
+                : getLayoutSelectionTooltipConfig({
+                      visUiConfig,
+                      metadataStore,
+                  })?.content,
+        [currentVis, visType, visUiConfig, metadataStore]
+    )
+
+    if (disabledReason) {
         return (
-            <Tooltip
-                content={i18n.t('Create a {{- visType}} before updating', {
-                    visType: visTypeDisplayNames[visType],
-                })}
-            >
+            <Tooltip content={disabledReason}>
                 {({ onMouseOver, onMouseOut, onFocus, onBlur, ref }) => (
                     <span
                         onMouseOver={onMouseOver}
