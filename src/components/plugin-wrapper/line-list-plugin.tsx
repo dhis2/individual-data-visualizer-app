@@ -2,7 +2,8 @@ import { LineList } from '@components/line-list'
 import type {
     ColumnHeaderClickFn,
     DataSortFn,
-    PaginateFn,
+    PageChangeFn,
+    PageSizeChangeFn,
 } from '@components/line-list/types'
 import { transformVisualizationForAnalyticsRequest } from '@modules/analytics-request'
 import { logger } from '@modules/logger'
@@ -23,6 +24,8 @@ type LineListPluginProps = {
     onDataSorted?: (sorting: InternalSorting) => void
     onResponseReceived: () => void
     filterText?: string
+    pageSize: number
+    onPageSizeChange: PageSizeChangeFn
 }
 
 export const LineListPlugin: FC<LineListPluginProps> = ({
@@ -35,6 +38,8 @@ export const LineListPlugin: FC<LineListPluginProps> = ({
     onDataSorted,
     onResponseReceived,
     filterText,
+    pageSize,
+    onPageSizeChange,
 }) => {
     const [fetchAnalyticsData, { data, isFetching, requestedPage }] =
         useLineListAnalyticsData()
@@ -60,8 +65,8 @@ export const LineListPlugin: FC<LineListPluginProps> = ({
         } as CurrentVisualization
     }, [visualization, sorting])
 
-    const onPaginate = useCallback<PaginateFn>(
-        ({ page, pageSize }) => {
+    const onPageChange = useCallback<PageChangeFn>(
+        (page) => {
             void fetchAnalyticsData({
                 visualization:
                     transformVisualizationForAnalyticsRequest(
@@ -80,6 +85,7 @@ export const LineListPlugin: FC<LineListPluginProps> = ({
             eventVisualization,
             onResponseReceived,
             fetchAnalyticsData,
+            pageSize,
         ]
     )
 
@@ -109,6 +115,7 @@ export const LineListPlugin: FC<LineListPluginProps> = ({
             relativePeriodDate,
             displayProperty,
             onResponseReceived,
+            pageSize,
         })
     }, [
         displayProperty,
@@ -116,6 +123,7 @@ export const LineListPlugin: FC<LineListPluginProps> = ({
         eventVisualization,
         onResponseReceived,
         fetchAnalyticsData,
+        pageSize,
     ])
 
     logger.debug('LL eventVisualization', eventVisualization)
@@ -130,7 +138,8 @@ export const LineListPlugin: FC<LineListPluginProps> = ({
             filterText={filterText}
             analyticsData={data}
             onDataSort={onDataSort}
-            onPaginate={onPaginate}
+            onPageChange={onPageChange}
+            onPageSizeChange={onPageSizeChange}
             visualization={eventVisualization}
             isFetching={isFetching}
             requestedPage={requestedPage}

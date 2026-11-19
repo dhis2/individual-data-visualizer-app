@@ -40,7 +40,8 @@ const PAGE_TWO_OF_THIRTEEN: LineListPager = {
 type BarProps = Partial<ComponentProps<typeof PaginationBar>>
 
 const renderBar = (props: BarProps = {}) => {
-    const onPaginate = vi.fn()
+    const onPageChange = vi.fn()
+    const onPageSizeChange = vi.fn()
     const barProps = {
         colSpan: 3,
         pager: PAGE_TWO_OF_MANY,
@@ -48,7 +49,8 @@ const renderBar = (props: BarProps = {}) => {
         visualization,
         requestedPage: null,
         isDisconnected: false,
-        onPaginate,
+        onPageChange,
+        onPageSizeChange,
         ...props,
     }
     const view = render(
@@ -74,7 +76,7 @@ const renderBar = (props: BarProps = {}) => {
                 </table>
             </ScrollBox>
         )
-    return { onPaginate, rerender }
+    return { onPageChange, onPageSizeChange, rerender }
 }
 
 const pageInput = () => screen.getByLabelText('Page number')
@@ -233,87 +235,66 @@ describe('PaginationBar', () => {
         }
 
         it('requests the next page', () => {
-            const { onPaginate } = renderBar()
+            const { onPageChange } = renderBar()
 
             fireEvent.click(nextButton())
 
-            expect(onPaginate).toHaveBeenCalledWith({ page: 3, pageSize: 100 })
+            expect(onPageChange).toHaveBeenCalledWith(3)
         })
 
         it('requests the previous page', () => {
-            const { onPaginate } = renderBar()
+            const { onPageChange } = renderBar()
 
             fireEvent.click(previousButton())
 
-            expect(onPaginate).toHaveBeenCalledWith({ page: 1, pageSize: 100 })
+            expect(onPageChange).toHaveBeenCalledWith(1)
         })
 
         it('requests a typed page', () => {
-            const { onPaginate } = renderBar()
+            const { onPageChange } = renderBar()
 
             typePage('7')
 
-            expect(onPaginate).toHaveBeenCalledWith({ page: 7, pageSize: 100 })
+            expect(onPageChange).toHaveBeenCalledWith(7)
         })
 
         it('requests the page after the one that is loading', () => {
-            const { onPaginate } = renderBar({
+            const { onPageChange } = renderBar({
                 pager: PAGE_TWO_OF_THIRTEEN,
                 requestedPage: { page: 3, pageSize: 100 },
             })
 
             fireEvent.click(nextButton())
 
-            expect(onPaginate).toHaveBeenCalledWith({ page: 4, pageSize: 100 })
+            expect(onPageChange).toHaveBeenCalledWith(4)
         })
 
         it('does not request the next page while a page loads without totals', () => {
-            const { onPaginate } = renderBar({
+            const { onPageChange } = renderBar({
                 requestedPage: { page: 3, pageSize: 100 },
             })
 
             fireEvent.click(nextButton())
 
-            expect(onPaginate).not.toHaveBeenCalled()
+            expect(onPageChange).not.toHaveBeenCalled()
         })
 
         it('requests the previous page while a page loads without totals', () => {
-            const { onPaginate } = renderBar({
+            const { onPageChange } = renderBar({
                 requestedPage: { page: 3, pageSize: 100 },
             })
 
             fireEvent.click(previousButton())
 
-            expect(onPaginate).toHaveBeenCalledWith({ page: 2, pageSize: 100 })
+            expect(onPageChange).toHaveBeenCalledWith(2)
         })
 
-        it('keeps the page size that is loading when paging', () => {
-            const { onPaginate } = renderBar({
-                pager: PAGE_TWO_OF_THIRTEEN,
-                requestedPage: { page: 1, pageSize: 50 },
-            })
-
-            fireEvent.click(nextButton())
-
-            expect(onPaginate).toHaveBeenCalledWith({ page: 2, pageSize: 50 })
-        })
-
-        it('keeps the page size when paging', () => {
-            const { onPaginate } = renderBar({
-                pager: { page: 1, pageSize: 25, isLastPage: false },
-            })
-
-            fireEvent.click(nextButton())
-
-            expect(onPaginate).toHaveBeenCalledWith({ page: 2, pageSize: 25 })
-        })
-
-        it('requests the first page with a new page size', () => {
-            const { onPaginate } = renderBar()
+        it('requests a new page size', () => {
+            const { onPageSizeChange } = renderBar()
 
             choosePageSize('50')
 
-            expect(onPaginate).toHaveBeenCalledWith({ page: 1, pageSize: 50 })
+            expect(onPageSizeChange).toHaveBeenCalledWith(50)
         })
 
         it('shows the page of a new response', () => {
