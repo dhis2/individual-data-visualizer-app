@@ -40,9 +40,9 @@
     display: flex;
     flex-direction: row;
     align-items: start;
-    padding-block: 6px 2px;
+    padding-block: 5px;
     padding-inline: 4px;
-    gap: 2px;
+    gap: 4px;
     z-index: 1;
 }
 
@@ -57,8 +57,7 @@
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: #c7cfd6 transparent;
-    gap: 8px;
-    padding-block-start: 8px;
+    gap: 5px;
     padding-inline: 4px;
     padding-block-end: 4px;
     margin-inline-end: 2px;

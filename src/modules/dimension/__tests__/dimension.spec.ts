@@ -2,8 +2,8 @@ import {
     getDimensionBlockReason,
     getDimensionLayoutBlockedMessage,
     isDimensionCrossTet,
-    isDimensionFullyInvalidForVisType,
-    isDimensionTypeFullyInvalidForVisType,
+    isDimensionUnsupportedByVisType,
+    isDimensionTypeUnsupportedByVisType,
 } from '@modules/dimension/blocking'
 import { getDefaultItemsForDimension } from '@modules/dimension/default-items'
 import {
@@ -865,39 +865,39 @@ describe('isDimensionCrossTet', () => {
     })
 })
 
-describe('isDimensionTypeFullyInvalidForVisType', () => {
-    it('marks PROGRAM_INDICATOR invalid for PIVOT_TABLE', () => {
+describe('isDimensionTypeUnsupportedByVisType', () => {
+    it('marks PROGRAM_INDICATOR unsupported by PIVOT_TABLE', () => {
         expect(
-            isDimensionTypeFullyInvalidForVisType(
+            isDimensionTypeUnsupportedByVisType(
                 'PROGRAM_INDICATOR',
                 'PIVOT_TABLE'
             )
         ).toBe(true)
     })
 
-    it('marks PROGRAM_INDICATOR valid for LINE_LIST', () => {
+    it('marks PROGRAM_INDICATOR supported by LINE_LIST', () => {
         expect(
-            isDimensionTypeFullyInvalidForVisType(
+            isDimensionTypeUnsupportedByVisType(
                 'PROGRAM_INDICATOR',
                 'LINE_LIST'
             )
         ).toBe(false)
     })
 
-    it('marks DATA_ELEMENT valid for PIVOT_TABLE', () => {
+    it('marks DATA_ELEMENT supported by PIVOT_TABLE', () => {
         expect(
-            isDimensionTypeFullyInvalidForVisType('DATA_ELEMENT', 'PIVOT_TABLE')
+            isDimensionTypeUnsupportedByVisType('DATA_ELEMENT', 'PIVOT_TABLE')
         ).toBe(false)
     })
 
-    it('marks CATEGORY valid for PIVOT_TABLE', () => {
+    it('marks CATEGORY supported by PIVOT_TABLE', () => {
         expect(
-            isDimensionTypeFullyInvalidForVisType('CATEGORY', 'PIVOT_TABLE')
+            isDimensionTypeUnsupportedByVisType('CATEGORY', 'PIVOT_TABLE')
         ).toBe(false)
     })
 })
 
-describe('isDimensionFullyInvalidForVisType', () => {
+describe('isDimensionUnsupportedByVisType', () => {
     const makeDim = (
         overrides: Partial<DimensionMetadataItem> = {}
     ): Partial<DimensionMetadataItem> => ({
@@ -908,13 +908,13 @@ describe('isDimensionFullyInvalidForVisType', () => {
 
     it('returns false for any dimension when target is LINE_LIST', () => {
         expect(
-            isDimensionFullyInvalidForVisType(
+            isDimensionUnsupportedByVisType(
                 makeDim({ dimensionType: 'PROGRAM_INDICATOR' }),
                 'LINE_LIST'
             )
         ).toBe(false)
         expect(
-            isDimensionFullyInvalidForVisType(
+            isDimensionUnsupportedByVisType(
                 makeDim({
                     dimensionId: 'ou',
                     trackedEntityTypeId: 'tetId',
@@ -924,18 +924,18 @@ describe('isDimensionFullyInvalidForVisType', () => {
         ).toBe(false)
     })
 
-    it('marks PROGRAM_INDICATOR invalid for PIVOT_TABLE', () => {
+    it('marks PROGRAM_INDICATOR unsupported by PIVOT_TABLE', () => {
         expect(
-            isDimensionFullyInvalidForVisType(
+            isDimensionUnsupportedByVisType(
                 makeDim({ dimensionType: 'PROGRAM_INDICATOR' }),
                 'PIVOT_TABLE'
             )
         ).toBe(true)
     })
 
-    it('marks an ordinary numeric DATA_ELEMENT valid for PIVOT_TABLE', () => {
+    it('marks an ordinary numeric DATA_ELEMENT supported by PIVOT_TABLE', () => {
         expect(
-            isDimensionFullyInvalidForVisType(
+            isDimensionUnsupportedByVisType(
                 makeDim({ dimensionType: 'DATA_ELEMENT' }),
                 'PIVOT_TABLE'
             )

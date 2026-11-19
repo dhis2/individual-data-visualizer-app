@@ -1,8 +1,7 @@
 .button {
     all: unset;
     inline-size: 26px;
-    block-size: 26px;
-    margin-inline-start: var(--spacers-dp4);
+    block-size: 28px;
     cursor: pointer;
     display: flex;
     align-items: center;

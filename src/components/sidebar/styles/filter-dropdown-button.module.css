@@ -27,7 +27,7 @@
 }
 .filterButton {
     gap: 4px;
-    padding: 5px 6px 5px 4px;
+    padding: 6px 6px 6px 4px;
     border: 1px dashed
         color-mix(in srgb, var(--colors-grey500) 50%, transparent);
     border-radius: 5px;
@@ -54,7 +54,7 @@
 }
 .filterClearButton {
     justify-content: center;
-    padding: 5px;
+    padding: 6px 5px;
     border: 1px solid var(--colors-grey500);
     border-inline-start-color: var(--colors-grey300);
     background-color: var(--colors-white);

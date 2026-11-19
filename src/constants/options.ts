@@ -22,6 +22,8 @@ export const DEFAULT_OPTIONS: EventVisualizationOptions = {
      * default — a saved vis always keeps its own value. */
     digitGroupSeparator: undefined,
     displayDensity: 'NORMAL',
+    fixColumnHeaders: false,
+    fixRowHeaders: false,
     fontSize: 'NORMAL',
     /* A supported eventVisualizations API option, but not implemented in this
      * app yet (only "hide empty rows" is). Kept commented out here and in the
