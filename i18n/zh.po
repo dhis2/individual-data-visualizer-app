@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2026-10-22T12:48:15.232Z\n"
+"POT-Creation-Date: 2026-11-11T08:39:41.472Z\n"
 "PO-Revision-Date: 2026-07-23 07:34+0000\n"
 "Last-Translator: easylin <lin_xd@126.com>, 2026\n"
 "Language-Team: Chinese (https://app.transifex.com/hisp-uio/teams/100509/zh/)\n"
@@ -29,8 +29,13 @@ msgid ""
 "layoutTetName}} dimensions: {{list}}."
 msgstr "某些维度未被添加，因为它们无法与{{- layoutTetName}} 的维度结合使用：{{list}} 。"
 
-msgid "Only numeric data items can be used as the cell value."
-msgstr "只有数值型数据项才能用作单元格值。"
+msgid "This app needs a newer version of DHIS2"
+msgstr ""
+
+msgid ""
+"This server is running version {{currentVersion}}. Individual Data "
+"Visualizer needs {{requiredVersion}} or later."
+msgstr ""
 
 msgid "Changes not applied"
 msgstr "更改未应用"
@@ -167,24 +172,6 @@ msgstr "找不到“ {{- searchTerm}}”"
 msgid "No options"
 msgstr "没有选项"
 
-msgid "Data value set"
-msgstr "数据值集"
-
-msgid "JSON"
-msgstr "JSON"
-
-msgid "XML"
-msgstr "XML"
-
-msgid "Other formats"
-msgstr "Other formats"
-
-msgid "JRXML"
-msgstr "JRXML"
-
-msgid "Raw data SQL"
-msgstr "原生数据SQL"
-
 msgid "HTML"
 msgstr "HTML"
 
@@ -194,14 +181,17 @@ msgstr "HTML+CSS (.html+css)"
 msgid "Plain data source"
 msgstr "普通数据源"
 
+msgid "JSON"
+msgstr "JSON"
+
+msgid "XML"
+msgstr "XML"
+
 msgid "Microsoft Excel"
 msgstr "微软Excel"
 
 msgid "CSV"
 msgstr "CSV"
-
-msgid "Advanced"
-msgstr "高级"
 
 msgid "Download data from this date"
 msgstr "从该日期下载数据"
@@ -312,6 +302,9 @@ msgstr "若无节目单，则无效"
 msgid "Not valid with multiple programs"
 msgstr "不可与多个项目同时使用"
 
+msgid "Not valid with tracked entity attributes and event programs"
+msgstr ""
+
 msgid "Not valid with multiple program stages"
 msgstr "不适用于包含多个程序阶段的情况"
 
@@ -338,6 +331,9 @@ msgstr "每项占一行{{- outputTypeLabel}}"
 
 msgid "Use item default ({{- aggregationType}})"
 msgstr "使用项目默认值（{{- aggregationType}} ）"
+
+msgid "Only numeric data items can be used as the cell value."
+msgstr "只有数值型数据项才能用作单元格值。"
 
 msgid "Value"
 msgstr "数值"
@@ -404,14 +400,35 @@ msgid ""
 "was written."
 msgstr "该行列表可能会显示编写解释时不可用的数据。"
 
-msgid "Rows per page"
-msgstr "行每页"
+msgid "Page number"
+msgstr ""
 
-msgid "Page {{- page}}, row {{- firstItem}}-{{- lastItem}}"
-msgstr "第{{- page}} 页，第{{- firstItem}} 行 -{{- lastItem}}"
+msgid "Pagination options"
+msgstr ""
+
+msgid "Rows per page (view only)"
+msgstr ""
 
 msgid "Not available offline"
 msgstr "离线不可用"
+
+msgid "Previous page"
+msgstr ""
+
+msgid "Next page"
+msgstr ""
+
+msgid "{{- formattedCount}} enrollment"
+msgid_plural "{{- formattedCount}} enrollment"
+msgstr[0] ""
+
+msgid "{{- formattedCount}} tracked entity"
+msgid_plural "{{- formattedCount}} tracked entity"
+msgstr[0] ""
+
+msgid "{{- formattedCount}} event"
+msgid_plural "{{- formattedCount}} event"
+msgstr[0] ""
 
 msgid "most recent"
 msgstr "最近的"
@@ -586,6 +603,9 @@ msgstr "筛选条件不适用于“事件”可视化"
 
 msgid "Show without filters"
 msgstr "显示无过滤器"
+
+msgid "Page {{page}} not found, returned to page {{shownPage}}"
+msgstr ""
 
 msgid "Create a {{- visType}} before updating"
 msgstr "在更新之前创建一个{{- visType}} "
@@ -1267,11 +1287,11 @@ msgstr "事件"
 
 msgid ""
 "Track or compare changes over time. Recommend period as category. (adjust "
-"for EVER)"
-msgstr "跟踪或比较随时间推移的变化。建议将“时间段”作为分类。（根据EVER进行调整）"
+"for IDV)"
+msgstr ""
 
-msgid "View data and indicators in a manipulatable table. (adjust for EVER)"
-msgstr "在可交互表格中查看数据和指标。（按“EVER”调整）"
+msgid "View data and indicators in a manipulatable table. (adjust for IDV)"
+msgstr ""
 
 msgctxt "Application title"
 msgid "__MANIFEST_APP_TITLE"
