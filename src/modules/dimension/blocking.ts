@@ -10,7 +10,7 @@ import type {
  * disable cards and individual chips, and by the conversion strategy to
  * decide which dimensions to discard when switching vis types. */
 
-export const isDimensionTypeFullyInvalidForVisType = (
+export const isDimensionTypeUnsupportedByVisType = (
     dimensionType: DimensionType,
     visType: VisualizationType
 ): boolean => {
@@ -20,12 +20,12 @@ export const isDimensionTypeFullyInvalidForVisType = (
     return dimensionType === 'PROGRAM_INDICATOR'
 }
 
-export const isDimensionFullyInvalidForVisType = (
+export const isDimensionUnsupportedByVisType = (
     dim: Partial<Pick<DimensionMetadataItem, 'dimensionType'>>,
     visType: VisualizationType
 ): boolean =>
     !!dim.dimensionType &&
-    isDimensionTypeFullyInvalidForVisType(dim.dimensionType, visType)
+    isDimensionTypeUnsupportedByVisType(dim.dimensionType, visType)
 
 export const isDimensionCrossTet = (
     dimensionTetId: string | null,
@@ -57,7 +57,7 @@ export const getDimensionBlockReason = ({
     layoutTetId,
     dimensionTetId,
 }: DimensionBlockReasonInput): DimensionBlockReason | null => {
-    if (isDimensionFullyInvalidForVisType(dimension, visualizationType)) {
+    if (isDimensionUnsupportedByVisType(dimension, visualizationType)) {
         return 'visType'
     }
     if (isDimensionCrossTet(dimensionTetId, layoutTetId)) {
