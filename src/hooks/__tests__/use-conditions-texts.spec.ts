@@ -7,19 +7,29 @@ import type { ReactNode } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import { useConditionsTexts } from '../use-conditions-texts'
 
-const mockRootOrgUnits = [
+const mockRootOrgUnits = vi.hoisted(() => [
     {
         id: 'ROOT',
         name: 'Root org unit',
         displayName: 'Root org unit',
         path: '/ROOT',
     },
-]
+])
 
 vi.mock('@hooks', async () => ({
     ...(await vi.importActual('@hooks')),
     useRootOrgUnits: () => mockRootOrgUnits,
 }))
+
+vi.mock(
+    '@components/app-wrapper/cached-data/app-cached-data-provider',
+    async (importOriginal) => ({
+        ...(await importOriginal<object>()),
+        useAppCachedData: (
+            await import('@test-utils/cached-data-stub')
+        ).stubAppCachedData(mockRootOrgUnits),
+    })
+)
 
 type WrapperProps = { children: ReactNode }
 const DefaultWrapper = ({ children }: WrapperProps) =>

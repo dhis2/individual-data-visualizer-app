@@ -29,6 +29,16 @@ vi.mock('@dhis2/analytics', async (importOriginal) => ({
 }))
 
 vi.mock(
+    '@components/app-wrapper/cached-data/app-cached-data-provider',
+    async (importOriginal) => ({
+        ...(await importOriginal<object>()),
+        useAppCachedData: (
+            await import('@test-utils/cached-data-stub')
+        ).stubAppCachedData(),
+    })
+)
+
+vi.mock(
     '@components/plugin-wrapper/hooks/use-pivot-table-analytics-data',
     () => ({
         usePivotTableAnalyticsData: () => [

@@ -1,12 +1,13 @@
 import { api } from '@api/api'
 import {
-    AppCachedDataQueryProvider,
-    useAppCachedDataQuery,
-} from '@components/app-wrapper/app-cached-data-query-provider'
+    AppCachedDataProvider,
+    useAppCachedData,
+} from '@components/app-wrapper/cached-data/app-cached-data-provider'
 import { DndContextProvider } from '@components/app-wrapper/drag-and-drop-provider/dnd-context-provider'
 import { MockMetadataProvider } from '@components/app-wrapper/metadata-provider/metadata-provider'
 // eslint-disable-next-line no-restricted-imports
 import { CustomDataProvider, useDataEngine } from '@dhis2/app-runtime'
+import { ConfigProvider } from '@dhis2/app-service-config'
 import {
     UserProvider,
     type CurrentUser as CurrentUserInfo,
@@ -52,6 +53,7 @@ import meData from './__fixtures__/me.json'
 import organisationUnitLevelsData from './__fixtures__/organisation-unit-levels.json'
 import organisationUnitsData from './__fixtures__/organisation-units.json'
 import systemSettingsData from './__fixtures__/system-settings.json'
+import { mockPeriodTypesQueryData, mockRuntimeConfig } from './server-mocks'
 
 /**
  * Configuration options for mocking the app wrapper in tests.
@@ -63,7 +65,7 @@ import systemSettingsData from './__fixtures__/system-settings.json'
 export type MockOptions = {
     /**
      * Mock API response data that will be merged with default app-cached data.
-     * This allows customization of data returned by `AppCachedDataQueryProvider`
+     * This allows customization of data returned by `AppCachedDataProvider`
      * and its associated hooks.
      */
     queryData?: QueryData
@@ -178,7 +180,7 @@ const MockStoreAndDndProvider: FC<{
 }> = ({ children, partialStore }) => {
     const engine = useDataEngine()
     const metadataStore = useMetadataStore()
-    const appCachedData = useAppCachedDataQuery()
+    const appCachedData = useAppCachedData()
     const resolvedStore = useMemo(
         () =>
             createPartialOrDefaultStore({
@@ -206,10 +208,11 @@ const ErrorBoundaryFallback = ({ error }: FallbackProps) => (
 
 const defaultUserInfo: CurrentUserInfo = meData
 
-const defaultAppCachedData = {
+const defaultQueryData = {
     organisationUnitLevels: organisationUnitLevelsData,
     organisationUnits: organisationUnitsData,
     systemSettings: systemSettingsData,
+    ...mockPeriodTypesQueryData,
 }
 
 const MockAppWrapperCore: FC<{
@@ -220,24 +223,26 @@ const MockAppWrapperCore: FC<{
     partialStore?: MockOptions['partialStore']
 }> = ({ children, queryData, userInfo, metadata, partialStore }) => {
     return (
-        <CustomDataProvider data={{ ...defaultAppCachedData, ...queryData }}>
-            <UserProvider userInfo={{ ...defaultUserInfo, ...userInfo }}>
-                <CssVariables colors spacers theme elevations />
-                <AppCachedDataQueryProvider>
-                    <MockMetadataProvider mockMetadata={metadata}>
-                        <ErrorBoundary
-                            FallbackComponent={ErrorBoundaryFallback}
-                        >
-                            <MockStoreAndDndProvider
-                                partialStore={partialStore}
+        <ConfigProvider config={mockRuntimeConfig}>
+            <CustomDataProvider data={{ ...defaultQueryData, ...queryData }}>
+                <UserProvider userInfo={{ ...defaultUserInfo, ...userInfo }}>
+                    <CssVariables colors spacers theme elevations />
+                    <AppCachedDataProvider>
+                        <MockMetadataProvider mockMetadata={metadata}>
+                            <ErrorBoundary
+                                FallbackComponent={ErrorBoundaryFallback}
                             >
-                                {children}
-                            </MockStoreAndDndProvider>
-                        </ErrorBoundary>
-                    </MockMetadataProvider>
-                </AppCachedDataQueryProvider>
-            </UserProvider>
-        </CustomDataProvider>
+                                <MockStoreAndDndProvider
+                                    partialStore={partialStore}
+                                >
+                                    {children}
+                                </MockStoreAndDndProvider>
+                            </ErrorBoundary>
+                        </MockMetadataProvider>
+                    </AppCachedDataProvider>
+                </UserProvider>
+            </CustomDataProvider>
+        </ConfigProvider>
     )
 }
 

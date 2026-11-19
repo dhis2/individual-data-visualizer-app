@@ -1,6 +1,6 @@
 import { render, act, renderHook } from '@testing-library/react'
 import { useState, type ReactNode } from 'react'
-import { expect, describe, it, beforeEach } from 'vitest'
+import { expect, describe, it, beforeEach, vi } from 'vitest'
 import {
     PluginMetadataProvider,
     useMetadataItem,
@@ -12,6 +12,15 @@ import {
     useDimensionMetadataItem,
     useOrganisationUnitMetadataItem,
 } from '../metadata-provider'
+
+vi.mock(
+    '@components/app-wrapper/cached-data/plugin-cached-data-provider',
+    async (importOriginal) => ({
+        ...(await importOriginal<object>()),
+        usePluginCachedData: (await import('@test-utils/cached-data-stub'))
+            .stubPluginCachedData,
+    })
+)
 
 let renders = { item: 0, items: 0, add: 0, store: 0 }
 

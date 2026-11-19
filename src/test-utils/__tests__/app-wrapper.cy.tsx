@@ -18,7 +18,7 @@ const TestComponent = () => {
 }
 
 describe('MockAppWrapper', () => {
-    it('should provide mocked app context with AppCachedDataQueryProvider and MetadataContext', () => {
+    it('should provide mocked app context with AppCachedDataProvider and MetadataContext', () => {
         cy.mount(
             <MockAppWrapper>
                 <TestComponent />

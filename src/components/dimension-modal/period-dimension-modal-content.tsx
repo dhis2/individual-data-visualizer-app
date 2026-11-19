@@ -9,7 +9,7 @@ import {
 } from '@dhis2/ui'
 import {
     useAddMetadata,
-    useAppCachedDataQuery,
+    useAppCachedData,
     useAppDispatch,
     useAppSelector,
     useMetadataItems,
@@ -89,7 +89,7 @@ type PeriodDimensionModalContentProps = {
 export const PeriodDimensionModalContent: FC<
     PeriodDimensionModalContentProps
 > = ({ dimension }) => {
-    const { systemSettings } = useAppCachedDataQuery()
+    const { systemSettings } = useAppCachedData()
     const dispatch = useAppDispatch()
     const addMetadata = useAddMetadata()
 

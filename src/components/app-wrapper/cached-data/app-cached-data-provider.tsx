@@ -1,5 +1,13 @@
-import { CachedDataQueryProvider, useCachedDataQuery } from '@dhis2/analytics'
-import { useCurrentUserInfo } from '@dhis2/app-runtime'
+import {
+    CachedDataProvider,
+    useCachedData,
+    type CachedData,
+} from '@components/app-wrapper/cached-data/cached-data-provider'
+import { useRelativePeriodsNames } from '@dhis2/analytics'
+/* useDataQuery, not the RTK-query hooks: the Redux store is created from this
+ * data, so it does not exist yet. */
+// eslint-disable-next-line no-restricted-imports
+import { useCurrentUserInfo, useDataQuery } from '@dhis2/app-runtime'
 import type { Query } from '@dhis2/app-service-data'
 import { freeze } from '@reduxjs/toolkit'
 import type {
@@ -80,6 +88,7 @@ export type TransformedAppCachedData = {
     systemSettings: TransformedSystemSettings
     rootOrgUnits: RootOrgUnitsData
     orgUnitLevels: OrgUnitLevelsData
+    relativePeriodsNames: CachedData['relativePeriodsNames']
 }
 
 const toCurrentUserData = ({
@@ -98,6 +107,7 @@ const toCurrentUserData = ({
 
 const providerDataTransformation = (
     { systemSettings, rootOrgUnits, orgUnitLevels }: AppCachedQueryData,
+    relativePeriodsNames: CachedData['relativePeriodsNames'],
     currentUser: CurrentUserData
 ): TransformedAppCachedData => {
     const displayNameProperty: DisplayNameProperty =
@@ -134,50 +144,69 @@ const providerDataTransformation = (
         systemSettings: transformedSystemSettings,
         rootOrgUnits: transformedRootOrgUnits,
         orgUnitLevels: transformedOrgUnitLevels,
+        relativePeriodsNames,
     })
 }
 
 /* The app-shell fetches `/api/me` before rendering the app and exposes it
  * through `useCurrentUserInfo`, so the current user is not part of the query. */
-export const AppCachedDataQueryProvider: FC<{ children: ReactNode }> = ({
+export const AppCachedDataProvider: FC<{ children: ReactNode }> = ({
     children,
 }) => {
     const currentUserInfo = useCurrentUserInfo()
+    const queryResult = useDataQuery<AppCachedQueryData>(query)
+    const relativePeriods = useRelativePeriodsNames()
 
     if (!currentUserInfo) {
         throw new Error('Current user info is not available')
     }
 
-    const currentUser = toCurrentUserData(currentUserInfo)
+    const data =
+        queryResult.data && !relativePeriods.loading
+            ? providerDataTransformation(
+                  queryResult.data,
+                  relativePeriods.relativePeriodsNames,
+                  toCurrentUserData(currentUserInfo)
+              )
+            : undefined
 
     return (
-        <CachedDataQueryProvider<AppCachedQueryData, TransformedAppCachedData>
-            query={query}
-            dataTransformation={(queryData) =>
-                providerDataTransformation(queryData, currentUser)
-            }
+        <CachedDataProvider
+            data={data}
+            error={queryResult.error ?? relativePeriods.error}
         >
             {children}
-        </CachedDataQueryProvider>
+        </CachedDataProvider>
     )
 }
 
-export const useAppCachedDataQuery = (): TransformedAppCachedData =>
-    useCachedDataQuery<TransformedAppCachedData>()
+const isAppCachedData = (
+    cachedData: CachedData
+): cachedData is TransformedAppCachedData => 'currentUser' in cachedData
+
+export const useAppCachedData = (): TransformedAppCachedData => {
+    const cachedData = useCachedData()
+
+    if (!isAppCachedData(cachedData)) {
+        throw new Error('useAppCachedData can only be used in the app')
+    }
+
+    return cachedData
+}
 export const useCurrentUser = (): TransformedAppCachedData['currentUser'] => {
-    const { currentUser } = useAppCachedDataQuery()
+    const { currentUser } = useAppCachedData()
     return currentUser
 }
 export const useSystemSettings = (): TransformedSystemSettings => {
-    const { systemSettings } = useAppCachedDataQuery()
+    const { systemSettings } = useAppCachedData()
     return systemSettings
 }
 export const useRootOrgUnits = (): TransformedAppCachedData['rootOrgUnits'] => {
-    const { rootOrgUnits } = useAppCachedDataQuery()
+    const { rootOrgUnits } = useAppCachedData()
     return rootOrgUnits
 }
 export const useOrgUnitLevels =
     (): TransformedAppCachedData['orgUnitLevels'] => {
-        const { orgUnitLevels } = useAppCachedDataQuery()
+        const { orgUnitLevels } = useAppCachedData()
         return orgUnitLevels
     }

@@ -1,4 +1,5 @@
-import { useRootOrgUnits } from '@components/app-wrapper/app-cached-data-query-provider'
+import { useAppCachedData } from '@components/app-wrapper/cached-data/app-cached-data-provider'
+import { usePluginCachedData } from '@components/app-wrapper/cached-data/plugin-cached-data-provider'
 import { getInitialMetadata } from '@modules/metadata/initial-metadata'
 import {
     isProgramMetadataItem,
@@ -13,6 +14,7 @@ import { MetadataStore } from '@modules/metadata/store'
 import { assertTypedMetadataItem } from '@modules/metadata/typed-metadata-item'
 import { isPopulatedString } from '@modules/utils/guards'
 import type {
+    AppCachedData,
     InitialMetadataItems,
     MetadataItem,
     Program,
@@ -36,54 +38,68 @@ import type { FC, ReactNode } from 'react'
 
 const MetadataContext = createContext<MetadataStore | null>(null)
 
-/* App-side provider: pulls rootOrgUnits from AppCachedDataQueryProvider. */
+const MetadataStoreProvider: FC<{
+    children: ReactNode
+    initialMetadata: InitialMetadataItems
+    rootOrgUnits?: AppCachedData['rootOrgUnits']
+}> = ({ children, initialMetadata, rootOrgUnits }) => {
+    const [metadataStore] = useState(
+        () => new MetadataStore(initialMetadata, rootOrgUnits)
+    )
+    return (
+        <MetadataContext.Provider value={metadataStore}>
+            {children}
+        </MetadataContext.Provider>
+    )
+}
+
 export const AppMetadataProvider: FC<{ children: ReactNode }> = ({
     children,
 }) => {
-    const rootOrgUnits = useRootOrgUnits()
-    const [metadataStore] = useState(
-        () => new MetadataStore(getInitialMetadata(), rootOrgUnits)
-    )
+    const { rootOrgUnits, relativePeriodsNames } = useAppCachedData()
+
     return (
-        <MetadataContext.Provider value={metadataStore}>
+        <MetadataStoreProvider
+            initialMetadata={getInitialMetadata(relativePeriodsNames)}
+            rootOrgUnits={rootOrgUnits}
+        >
             {children}
-        </MetadataContext.Provider>
+        </MetadataStoreProvider>
     )
 }
 
-/* Plugin-side provider: no rootOrgUnits dependency, so the plugin can render
- * without an AppCachedDataQueryProvider ancestor. */
 export const PluginMetadataProvider: FC<{ children: ReactNode }> = ({
     children,
 }) => {
-    const [metadataStore] = useState(
-        () => new MetadataStore(getInitialMetadata())
-    )
+    const { relativePeriodsNames } = usePluginCachedData()
+
     return (
-        <MetadataContext.Provider value={metadataStore}>
+        <MetadataStoreProvider
+            initialMetadata={getInitialMetadata(relativePeriodsNames)}
+        >
             {children}
-        </MetadataContext.Provider>
+        </MetadataStoreProvider>
     )
 }
 
-/* Test-side provider: seeds the store with mock metadata. Pulls rootOrgUnits
- * from AppCachedDataQueryProvider, which the test-utils wrapper sets up. */
+/* Test-side provider: seeds the store with mock metadata on top of the app's
+ * cached data, which the test-utils wrapper provides. */
 export const MockMetadataProvider: FC<{
     children: ReactNode
     mockMetadata?: InitialMetadataItems
 }> = ({ children, mockMetadata }) => {
-    const rootOrgUnits = useRootOrgUnits()
-    const [metadataStore] = useState(
-        () =>
-            new MetadataStore(
-                { ...getInitialMetadata(), ...mockMetadata },
-                rootOrgUnits
-            )
-    )
+    const { rootOrgUnits, relativePeriodsNames } = useAppCachedData()
+
     return (
-        <MetadataContext.Provider value={metadataStore}>
+        <MetadataStoreProvider
+            initialMetadata={{
+                ...getInitialMetadata(relativePeriodsNames),
+                ...mockMetadata,
+            }}
+            rootOrgUnits={rootOrgUnits}
+        >
             {children}
-        </MetadataContext.Provider>
+        </MetadataStoreProvider>
     )
 }
 

@@ -1,4 +1,4 @@
-import { useCurrentUser } from '@components/app-wrapper/app-cached-data-query-provider'
+import { useCurrentUser } from '@components/app-wrapper/cached-data/app-cached-data-provider'
 import { useMemo } from 'react'
 
 /*
