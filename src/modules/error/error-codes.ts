@@ -108,6 +108,14 @@ export const getBackendErrorCodeDisplay = (
                     'This request returns more data than the server allows. Reduce the amount of data and try again, for example by choosing fewer items, adding filters, or choosing a shorter period.'
                 ),
             }
+        case 'E7270':
+            return {
+                icon: 'data',
+                title: i18n.t('Date range not supported'),
+                description: i18n.t(
+                    'Date ranges aren’t supported in rows or columns yet. Move the period to filter or use a fixed or relative selection.'
+                ),
+            }
         case 'E7209':
             return {
                 icon: 'generic',

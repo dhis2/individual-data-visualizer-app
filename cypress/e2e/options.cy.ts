@@ -37,6 +37,37 @@ describe('options', () => {
         getPivotTableHeaders().should('not.contain', 'Total')
     })
 
+    it('fixes the headers of a pivot table', () => {
+        const getColumnHeaderCell = () =>
+            cy
+                .getByDataTest('visualization-column-header')
+                .first()
+                .closest('th')
+        const getRowHeaderCell = () =>
+            cy.getByDataTest('visualization-row-header').first()
+        cy.visit('/#/t6KrUiPqcd0')
+        getColumnHeaderCell().should('have.css', 'position', 'static')
+        getRowHeaderCell().should('have.css', 'position', 'static')
+
+        openOptions('Style')
+        cy.getByDataTest('options-modal-content')
+            .contains('label', 'Fix column headers to top of table')
+            .click()
+        cy.getByDataTest('options-modal-content')
+            .contains('label', 'Fix row headers to left of table')
+            .click()
+        applyOptions()
+
+        getColumnHeaderCell().should('have.css', 'position', 'sticky')
+        getRowHeaderCell().should('have.css', 'position', 'sticky')
+
+        /* The title row and the table scroll away under fixed headers, so the
+         * headers carry the outer border of the edge they stick to. */
+        cy.getByDataTest('visualization-title').should('exist')
+        getColumnHeaderCell().should('have.css', 'border-top-width', '1px')
+        getRowHeaderCell().should('have.css', 'border-left-width', '1px')
+    })
+
     it('hides the empty rows of a pivot table', () => {
         const getBodyRows = () =>
             cy.get('[data-test="visualization-container"] tbody tr')

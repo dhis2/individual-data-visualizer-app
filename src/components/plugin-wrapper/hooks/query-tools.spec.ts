@@ -360,7 +360,7 @@ describe('getAdaptedVisualization (line list)', () => {
         expect(dimensionsOf(vis, 'filters')).toEqual([])
     })
 
-    it('expands repetition indexes without an undefined stage segment', () => {
+    it('expands repetition indexes into one stage-indexed dimension each', () => {
         const vis = buildVis({
             dimension: UID,
             items: [{ id: 'item1' }],

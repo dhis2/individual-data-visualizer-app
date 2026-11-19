@@ -116,4 +116,19 @@ describe('build a line list', () => {
         expectVisualizationToRender(EXPECTED)
         expectFiltersToApply()
     })
+
+    it('enables updating once the layout has a column, a period and an org unit', () => {
+        cy.visit('/#/new')
+
+        selectDataSource('Inpatient morbidity and mortality')
+
+        addDimensionToColumns('Gender')
+        cy.getByDataTest('update-button-event').should('be.disabled')
+
+        addDimensionToColumns('Report date')
+        cy.getByDataTest('update-button-event').should('be.disabled')
+
+        addDimensionToColumns('Event org. unit')
+        cy.getByDataTest('update-button-event').should('be.enabled')
+    })
 })

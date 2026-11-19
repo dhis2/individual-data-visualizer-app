@@ -33,9 +33,12 @@ export const ConversionConfirmationModal: FC<
         </ModalTitle>
         <ModalContent>
             <p>
-                {i18n.t('{{- names}} will be removed. Are you sure?', {
-                    names: discardedDimensionNames.join(', '),
-                })}
+                {i18n.t(
+                    '{{- names}} will be removed because program indicators are not supported in pivot tables. Are you sure?',
+                    {
+                        names: discardedDimensionNames.join(', '),
+                    }
+                )}
             </p>
         </ModalContent>
         <ModalActions>

@@ -40,8 +40,7 @@ const createNode = (scrollHeight: number, clientHeight = scrollHeight) =>
         clientWidth: 0,
     }) as unknown as HTMLDivElement
 
-/* The user-set height now lives in the Redux UI slice (`layoutPanelHeight`),
- * not localStorage; seed it via the store. */
+// The user-set height is `layoutPanelHeight` in the UI slice, so tests seed it via the store
 const renderResizeHandle = (
     overrides: {
         min?: number
