@@ -1,49 +1,85 @@
-import { useRelativePeriodsNames } from '@dhis2/analytics'
-import { render, screen } from '@testing-library/react'
-import { expect, describe, it, vi } from 'vitest'
-import { PluginMetadataProvider, useMetadataItem } from '../metadata-provider'
+import { PluginCachedDataProvider } from '@components/app-wrapper/cached-data/plugin-cached-data-provider'
+import {
+    PluginMetadataProvider,
+    useMetadataItem,
+} from '@components/app-wrapper/metadata-provider/metadata-provider'
+import { CustomDataProvider } from '@dhis2/app-runtime'
+import { ConfigProvider } from '@dhis2/app-service-config'
+import { renderHookWithAppWrapper } from '@test-utils/app-wrapper'
+import {
+    mockPeriodTypesQueryData,
+    mockRuntimeConfig,
+} from '@test-utils/server-mocks'
+import { render, screen, waitFor } from '@testing-library/react'
+import { expect, describe, it } from 'vitest'
 
-vi.mock('@dhis2/analytics', async (importOriginal) => ({
-    ...(await importOriginal<object>()),
-    useRelativePeriodsNames: vi.fn(),
-}))
+type ServerPeriodType = {
+    name: string
+    relativePeriods: Record<string, { displayName: string }>
+}
+
+const withServerPeriodName = (id: string, displayName: string) => {
+    const periodTypes = mockPeriodTypesQueryData[
+        'configuration/dataOutputPeriodTypes'
+    ] as unknown as ServerPeriodType[]
+
+    return {
+        ...mockPeriodTypesQueryData,
+        'configuration/dataOutputPeriodTypes': periodTypes.map((periodType) =>
+            periodType.relativePeriods[id]
+                ? {
+                      ...periodType,
+                      relativePeriods: {
+                          ...periodType.relativePeriods,
+                          [id]: { displayName },
+                      },
+                  }
+                : periodType
+        ),
+    }
+}
 
 const PeriodName = ({ id }: { id: string }) => (
     <div data-test="period-name">{useMetadataItem(id)?.name}</div>
 )
 
-describe('PluginMetadataProvider relative period names', () => {
-    it('names relative periods with the names from the hook', () => {
-        vi.mocked(useRelativePeriodsNames).mockReturnValue({
-            relativePeriodsNames: { LAST_5_YEARS: 'Les 5 dernières années' },
-            loading: false,
-            error: null,
-        })
-
-        render(
-            <PluginMetadataProvider>
-                <PeriodName id="LAST_5_YEARS" />
-            </PluginMetadataProvider>
+describe('relative period names in the metadata store', () => {
+    it('uses the server names in the app', async () => {
+        const { result } = await renderHookWithAppWrapper(
+            () => useMetadataItem('LAST_5_YEARS'),
+            {
+                queryData: withServerPeriodName(
+                    'LAST_5_YEARS',
+                    'Les 5 dernières années'
+                ),
+            }
         )
 
-        expect(screen.getByTestId('period-name')).toHaveTextContent(
-            'Les 5 dernières années'
-        )
+        expect(result.current?.name).toBe('Les 5 dernières années')
     })
 
-    it('renders nothing below it while the names are loading', () => {
-        vi.mocked(useRelativePeriodsNames).mockReturnValue({
-            relativePeriodsNames: {},
-            loading: true,
-            error: null,
-        })
-
+    it('uses the server names in the plugin', async () => {
         render(
-            <PluginMetadataProvider>
-                <PeriodName id="LAST_5_YEARS" />
-            </PluginMetadataProvider>
+            <ConfigProvider config={mockRuntimeConfig}>
+                <CustomDataProvider
+                    data={withServerPeriodName(
+                        'LAST_5_YEARS',
+                        'Les 5 dernières années'
+                    )}
+                >
+                    <PluginCachedDataProvider>
+                        <PluginMetadataProvider>
+                            <PeriodName id="LAST_5_YEARS" />
+                        </PluginMetadataProvider>
+                    </PluginCachedDataProvider>
+                </CustomDataProvider>
+            </ConfigProvider>
         )
 
-        expect(screen.queryByTestId('period-name')).not.toBeInTheDocument()
+        await waitFor(() =>
+            expect(screen.getByTestId('period-name')).toHaveTextContent(
+                'Les 5 dernières années'
+            )
+        )
     })
 })

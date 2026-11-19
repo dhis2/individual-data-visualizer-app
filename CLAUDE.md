@@ -45,19 +45,20 @@ The app (`src/app.ts`) and the dashboard plugin (`src/dashboard-plugin.tsx`) are
 two entry points with deliberately different provider stacks.
 
 - The **app** mounts a wide range of providers in the app-wrapper — the Redux
-  store, `AppCachedDataQueryProvider`, the metadata store, and more.
-- The **plugin** mounts only the **plugin-side metadata store provider**
-  (`PluginMetadataProvider`). It must not mount the Redux store
-  (`StoreProvider`) or `AppCachedDataQueryProvider` — those pull the app's
-  cached-data query (`me`, `systemSettings`, org units, org unit levels) into
-  every plugin instance on a dashboard.
+  store, `AppCachedDataProvider`, the metadata store, and more.
+- The **plugin** mounts only `PluginCachedDataProvider` and the **plugin-side
+  metadata store provider** (`PluginMetadataProvider`). It must not mount the
+  Redux store (`StoreProvider`) or `AppCachedDataProvider` — those pull the
+  app's cached data (`systemSettings`, org units, org unit levels) into every
+  plugin instance on a dashboard.
 
 **The rule:** `PluginWrapper` and everything below it in the component tree may
 depend only on the metadata store provider plus the providers supplied by the
 DHIS2 app-shell / app-adapter (the data engine and `useDataQuery`, config,
 alerts, etc.). It must not touch the app's Redux store — no `useAppSelector`,
-`useAppDispatch`, or RTK-query hooks (`useRtkQuery`) — and not
-`AppCachedDataQueryProvider`.
+`useAppDispatch`, or RTK-query hooks (`useRtkQuery`) — and not either cached
+data provider. Data the shared components need from the cached data, like the
+relative period names, reaches them through the metadata store.
 
 Consequences that follow from this:
 

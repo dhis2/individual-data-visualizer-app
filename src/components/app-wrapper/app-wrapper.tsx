@@ -1,5 +1,5 @@
+import { AppCachedDataProvider } from '@components/app-wrapper/cached-data/app-cached-data-provider'
 import type { FC, ReactNode } from 'react'
-import { AppCachedDataQueryProvider } from './app-cached-data-query-provider'
 import { DndContextProvider } from './drag-and-drop-provider/dnd-context-provider'
 import { InterpretationsProvider } from './interpretations-provider'
 import { AppMetadataProvider } from './metadata-provider/metadata-provider'
@@ -11,7 +11,7 @@ import '../../locales/index.js'
 
 export const AppWrapper: FC<{ children: ReactNode }> = ({ children }) => (
     <ServerVersionGate>
-        <AppCachedDataQueryProvider>
+        <AppCachedDataProvider>
             <AppMetadataProvider>
                 <StoreProvider>
                     <StoreToLocationSyncer />
@@ -22,6 +22,6 @@ export const AppWrapper: FC<{ children: ReactNode }> = ({ children }) => (
                     </DndContextProvider>
                 </StoreProvider>
             </AppMetadataProvider>
-        </AppCachedDataQueryProvider>
+        </AppCachedDataProvider>
     </ServerVersionGate>
 )

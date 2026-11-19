@@ -8,12 +8,12 @@ export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
 export const useAppSelector = useSelector.withTypes<RootState>()
 export const useAppStore = useStore.withTypes<AppStore>()
 export {
-    useAppCachedDataQuery,
+    useAppCachedData,
     useCurrentUser,
     useSystemSettings,
     useRootOrgUnits,
     useOrgUnitLevels,
-} from '@components/app-wrapper/app-cached-data-query-provider'
+} from '@components/app-wrapper/cached-data/app-cached-data-provider'
 export {
     useMetadataItem,
     useMetadataItems,

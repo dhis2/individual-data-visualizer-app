@@ -1,4 +1,3 @@
-import type { AnalyticsModule } from '@test-utils/relative-periods-names-stub'
 import { render, act, renderHook } from '@testing-library/react'
 import { useState, type ReactNode } from 'react'
 import { expect, describe, it, beforeEach, vi } from 'vitest'
@@ -14,15 +13,14 @@ import {
     useOrganisationUnitMetadataItem,
 } from '../metadata-provider'
 
-vi.mock('@dhis2/analytics', async (importOriginal) => {
-    const analytics = await importOriginal<AnalyticsModule>()
-    const { stubUseRelativePeriodsNames } =
-        await import('@test-utils/relative-periods-names-stub')
-    return {
-        ...analytics,
-        useRelativePeriodsNames: stubUseRelativePeriodsNames(analytics),
-    }
-})
+vi.mock(
+    '@components/app-wrapper/cached-data/plugin-cached-data-provider',
+    async (importOriginal) => ({
+        ...(await importOriginal<object>()),
+        usePluginCachedData: (await import('@test-utils/cached-data-stub'))
+            .stubPluginCachedData,
+    })
+)
 
 let renders = { item: 0, items: 0, add: 0, store: 0 }
 
