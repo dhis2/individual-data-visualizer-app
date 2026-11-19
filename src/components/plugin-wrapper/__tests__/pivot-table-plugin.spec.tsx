@@ -21,6 +21,9 @@ vi.mock('@dhis2/analytics', async (importOriginal) => ({
             data-filter-text={filterText}
             data-fix-column-headers={visualization.fixColumnHeaders}
             data-fix-row-headers={visualization.fixRowHeaders}
+            data-filter-dimensions={visualization.filters
+                .map(({ dimension }) => dimension)
+                .join(',')}
         />
     ),
 }))
@@ -114,6 +117,53 @@ describe('PivotTablePlugin', () => {
 
         expect(screen.getByTestId('pivot-table')).not.toHaveAttribute(
             'data-filter-text'
+        )
+    })
+
+    it('hands only the filters with a selection to the pivot table', () => {
+        render(
+            <MockMetadataProvider>
+                <PivotTablePlugin
+                    displayProperty="name"
+                    visualization={{
+                        ...visualization,
+                        filters: [
+                            { dimension: 'pe', items: [{ id: 'THIS_YEAR' }] },
+                            { dimension: 'programStatus', items: [] },
+                        ],
+                    }}
+                    isInDashboard={false}
+                    isInModal={false}
+                    onResponseReceived={vi.fn()}
+                />
+            </MockMetadataProvider>
+        )
+
+        expect(screen.getByTestId('pivot-table')).toHaveAttribute(
+            'data-filter-dimensions',
+            'pe'
+        )
+    })
+
+    it('hands no filters to the pivot table when none has a selection', () => {
+        render(
+            <MockMetadataProvider>
+                <PivotTablePlugin
+                    displayProperty="name"
+                    visualization={{
+                        ...visualization,
+                        filters: [{ dimension: 'programStatus', items: [] }],
+                    }}
+                    isInDashboard={false}
+                    isInModal={false}
+                    onResponseReceived={vi.fn()}
+                />
+            </MockMetadataProvider>
+        )
+
+        expect(screen.getByTestId('pivot-table')).toHaveAttribute(
+            'data-filter-dimensions',
+            ''
         )
     })
 })
