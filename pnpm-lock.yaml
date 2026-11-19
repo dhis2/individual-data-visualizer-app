@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@dhis2/analytics':
-        specifier: ^29.9.0
-        version: 29.9.0(@dhis2/app-runtime@3.17.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@dhis2/d2-i18n@1.2.0)(@dhis2/ui@10.20.0(@dhis2/app-runtime@3.17.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@dhis2/d2-i18n@1.2.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-jsx@4.0.1(@babel/core@7.29.13)(react@18.3.1)))(prop-types@15.8.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-jsx@4.0.1(@babel/core@7.29.13)(react@18.3.1))
+        specifier: ^29.10.1
+        version: 29.10.1(@dhis2/app-runtime@3.17.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@dhis2/d2-i18n@1.2.0)(@dhis2/ui@10.20.0(@dhis2/app-runtime@3.17.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@dhis2/d2-i18n@1.2.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-jsx@4.0.1(@babel/core@7.29.13)(react@18.3.1)))(prop-types@15.8.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-jsx@4.0.1(@babel/core@7.29.13)(react@18.3.1))
       '@dhis2/app-runtime':
         specifier: ^3.17.6
         version: 3.17.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1388,8 +1388,8 @@ packages:
       react-dom: ^16.13 || ^18
       styled-jsx: ^4
 
-  '@dhis2/analytics@29.9.0':
-    resolution: {integrity: sha512-xwBFFJwJWLShO+dj3+AwHr3tMZUVk9W80DWMHjp/4p5tWk6RbsUq5Ctdcx+3zERqDW8UPZQzRo6OlpO5rRX/gg==}
+  '@dhis2/analytics@29.10.1':
+    resolution: {integrity: sha512-7pZ0U8GEi23jvCJTdLSY9R3COzNVSGAe1xI7ihdp6IGjkJc8sgrxpytetdOU/ygp3mHUKOEliE9fiR53CGjbRQ==}
     peerDependencies:
       '@dhis2/app-runtime': ^3
       '@dhis2/d2-i18n': ^1.1
@@ -9575,7 +9575,7 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
       styled-jsx: 4.0.1(@babel/core@7.29.13)(react@18.3.1)
 
-  '@dhis2/analytics@29.9.0(@dhis2/app-runtime@3.17.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@dhis2/d2-i18n@1.2.0)(@dhis2/ui@10.20.0(@dhis2/app-runtime@3.17.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@dhis2/d2-i18n@1.2.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-jsx@4.0.1(@babel/core@7.29.13)(react@18.3.1)))(prop-types@15.8.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-jsx@4.0.1(@babel/core@7.29.13)(react@18.3.1))':
+  '@dhis2/analytics@29.10.1(@dhis2/app-runtime@3.17.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@dhis2/d2-i18n@1.2.0)(@dhis2/ui@10.20.0(@dhis2/app-runtime@3.17.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@dhis2/d2-i18n@1.2.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-jsx@4.0.1(@babel/core@7.29.13)(react@18.3.1)))(prop-types@15.8.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-jsx@4.0.1(@babel/core@7.29.13)(react@18.3.1))':
     dependencies:
       '@dhis2/app-runtime': 3.17.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@dhis2/d2-i18n': 1.2.0
