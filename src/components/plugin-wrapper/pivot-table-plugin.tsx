@@ -3,6 +3,7 @@ import {
     getAnalyticsRequestHeaderName,
     transformVisualizationForAnalyticsRequest,
 } from '@modules/analytics-request'
+import { isActiveFilterDimensionRecord } from '@modules/dimension/active-filter'
 import { logger } from '@modules/logger'
 import type { CurrentUser, CurrentVisualization, DimensionArray } from '@types'
 import { type FC, useEffect, useMemo } from 'react'
@@ -26,7 +27,11 @@ const formatVisualizationForPivotTableEngine = (
         ...visualization,
         columns: formatDimensions(visualization.columns),
         rows: formatDimensions(visualization.rows),
-        filters: formatDimensions(visualization.filters),
+        /* The engine shows a filter row whenever there are filters, so it gets
+         * only those that are sent to analytics. */
+        filters: formatDimensions(
+            visualization.filters.filter(isActiveFilterDimensionRecord)
+        ),
     }
 }
 
