@@ -59,14 +59,15 @@ const NOTHING_SELECTED = {
     content: 'Nothing selected. Add items to the layout to get started.',
     openDelay: 1000,
 }
-const NO_COLUMN = { content: 'Add at least one column' }
-const NO_COLUMN_OR_ROW = { content: 'Add at least one column or row' }
+const NO_COLUMN = { content: 'Add at least one dimension to columns' }
+const NO_COLUMN_OR_ROW = {
+    content: 'Add at least one dimension to columns or rows',
+}
 const NO_PERIOD = {
-    content: 'Add a period dimension with at least one period selected',
+    content: 'Select at least one period',
 }
 const NO_ORG_UNIT = {
-    content:
-        'Add an organisation unit dimension with at least one organisation unit selected',
+    content: 'Select at least one organisation unit',
 }
 
 const check = (visUiConfig: VisUiConfigState) =>

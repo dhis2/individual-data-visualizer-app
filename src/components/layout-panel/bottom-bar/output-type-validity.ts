@@ -212,10 +212,14 @@ export const getLayoutSelectionTooltipConfig = ({
 
     if (visualizationType === 'PIVOT_TABLE') {
         if (!layout.columns.length && !layout.rows.length) {
-            return { content: i18n.t('Add at least one column or row') }
+            return {
+                content: i18n.t(
+                    'Add at least one dimension to columns or rows'
+                ),
+            }
         }
     } else if (!layout.columns.length) {
-        return { content: i18n.t('Add at least one column') }
+        return { content: i18n.t('Add at least one dimension to columns') }
     }
 
     const hasDimensionWithItems = (dimensionType: DimensionType): boolean =>
@@ -228,17 +232,13 @@ export const getLayoutSelectionTooltipConfig = ({
 
     if (!hasDimensionWithItems('PERIOD')) {
         return {
-            content: i18n.t(
-                'Add a period dimension with at least one period selected'
-            ),
+            content: i18n.t('Select at least one period'),
         }
     }
 
     if (!hasDimensionWithItems('ORGANISATION_UNIT')) {
         return {
-            content: i18n.t(
-                'Add an organisation unit dimension with at least one organisation unit selected'
-            ),
+            content: i18n.t('Select at least one organisation unit'),
         }
     }
 

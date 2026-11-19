@@ -158,9 +158,7 @@ describe('UpdateButton', () => {
 
         await user.hover(button)
         await expect(
-            screen.findByText(
-                'Add a period dimension with at least one period selected'
-            )
+            screen.findByText('Select at least one period')
         ).resolves.toBeInTheDocument()
 
         await user.click(button)
