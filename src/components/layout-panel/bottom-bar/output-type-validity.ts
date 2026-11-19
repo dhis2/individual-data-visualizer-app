@@ -6,7 +6,12 @@ import {
     selectLayoutAllDimensionIds,
     type VisUiConfigState,
 } from '@store/vis-ui-config-slice'
-import type { MetadataStore, OutputType, VisualizationType } from '@types'
+import type {
+    DimensionType,
+    MetadataStore,
+    OutputType,
+    VisualizationType,
+} from '@types'
 
 /* The output types the bottom bar offers for a visualization type. A pivot
  * table has no tracked entity output. */
@@ -182,6 +187,64 @@ const getTrackedEntityInstanceTooltipConfig = ({
         hasCategoryOptionGroupSetInLayout,
     })
 }
+/* Without a period or an org unit the analytics API applies a fallback (the
+ * last 12 months, the user's org unit), so the result would show data the user
+ * never asked for. Only fixed period and org unit dimensions count: a date or
+ * org unit data element does not stop the fallback, even with a condition. */
+export const getLayoutSelectionTooltipConfig = ({
+    visUiConfig,
+    metadataStore,
+}: {
+    visUiConfig: VisUiConfigState
+    metadataStore: MetadataStore
+}): TooltipConfig => {
+    const { layout, itemsByDimension, visualizationType } = visUiConfig
+    const layoutDimensionIds = selectLayoutAllDimensionIds(visUiConfig)
+
+    if (!layoutDimensionIds.length) {
+        return {
+            content: i18n.t(
+                'Nothing selected. Add items to the layout to get started.'
+            ),
+            openDelay: 1000,
+        }
+    }
+
+    if (visualizationType === 'PIVOT_TABLE') {
+        if (!layout.columns.length && !layout.rows.length) {
+            return {
+                content: i18n.t(
+                    'Add at least one dimension to columns or rows'
+                ),
+            }
+        }
+    } else if (!layout.columns.length) {
+        return { content: i18n.t('Add at least one dimension to columns') }
+    }
+
+    const hasDimensionWithItems = (dimensionType: DimensionType): boolean =>
+        layoutDimensionIds.some(
+            (dimensionId) =>
+                metadataStore.getDimensionMetadataItem(dimensionId)
+                    ?.dimensionType === dimensionType &&
+                Boolean(itemsByDimension[dimensionId]?.length)
+        )
+
+    if (!hasDimensionWithItems('PERIOD')) {
+        return {
+            content: i18n.t('Select at least one period'),
+        }
+    }
+
+    if (!hasDimensionWithItems('ORGANISATION_UNIT')) {
+        return {
+            content: i18n.t('Select at least one organisation unit'),
+        }
+    }
+
+    return undefined
+}
+
 /* Why an output type cannot be produced from this config, or undefined when it
  * can. The single source of truth for output type validity: the buttons
  * disable on it, and the unapplied changes hint uses it to decide whether the
@@ -195,17 +258,16 @@ export const getOutputTypeTooltipConfig = ({
     visUiConfig: VisUiConfigState
     metadataStore: MetadataStore
 }): TooltipConfig => {
+    const layoutSelectionTooltipConfig = getLayoutSelectionTooltipConfig({
+        visUiConfig,
+        metadataStore,
+    })
+    if (layoutSelectionTooltipConfig) {
+        return layoutSelectionTooltipConfig
+    }
+
     const { visualizationType } = visUiConfig
     const layoutDimensionIds = selectLayoutAllDimensionIds(visUiConfig)
-
-    if (!layoutDimensionIds.length) {
-        return {
-            content: i18n.t(
-                'Nothing selected. Add items to the layout to get started.'
-            ),
-            openDelay: 1000,
-        }
-    }
 
     const { tetId, programIds, programStageIds } = resolveLayoutContext(
         layoutDimensionIds,

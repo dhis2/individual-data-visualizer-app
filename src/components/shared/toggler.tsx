@@ -17,7 +17,7 @@ export const Toggler: FC<TogglerProps> = ({
     onClick,
     dataTest,
 }) => (
-    <Tooltip content={tooltipText} closeDelay={0}>
+    <Tooltip content={tooltipText} closeDelay={0} placement="bottom">
         {({ onMouseOver, onMouseOut, ref }) => (
             <span ref={ref} className={classes.tooltipAnchor}>
                 <Button

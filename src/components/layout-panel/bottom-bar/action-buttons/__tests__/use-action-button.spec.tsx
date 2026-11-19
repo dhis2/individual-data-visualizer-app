@@ -136,12 +136,30 @@ const metadata = {
         dimensionType: 'PERIOD',
         valueType: 'DATE',
     },
+    ou: {
+        id: 'ou',
+        name: 'Organisation unit',
+        dimensionType: 'ORGANISATION_UNIT',
+        valueType: 'ORGANISATION_UNIT',
+    },
 }
 
+/* Every layout gets a period and an org unit in filters, so the output type
+ * rules are what decides each case. */
 const initialPreloadedState: Partial<RootState> = {
     currentVis: currentVisInitialState,
     dimensionSelection: dimensionSelectionInitialState,
-    visUiConfig: visUiConfigInitialState,
+    visUiConfig: {
+        ...visUiConfigInitialState,
+        layout: {
+            ...visUiConfigInitialState.layout,
+            filters: [metadata.lastUpdated.id, metadata.ou.id],
+        },
+        itemsByDimension: {
+            [metadata.lastUpdated.id]: ['LAST_12_MONTHS'],
+            [metadata.ou.id]: ['USER_ORGUNIT'],
+        },
+    },
 }
 
 const createStoreWithPreloadedState = (overrides: DeepPartial<RootState>) => ({
@@ -152,7 +170,9 @@ const createStoreWithPreloadedState = (overrides: DeepPartial<RootState>) => ({
             dimensionSelection: dimensionSelectionSlice.reducer,
             visUiConfig: visUiConfigSlice.reducer,
         },
-        preloadedState: deepmerge(initialPreloadedState, overrides),
+        preloadedState: deepmerge(initialPreloadedState, overrides, {
+            arrayMerge: (_target, source: unknown[]) => source,
+        }),
     },
 })
 
@@ -219,6 +239,7 @@ describe('useActionButton for Event button', () => {
                     dataSourceId: metadata.p1.id,
                 },
                 visUiConfig: {
+                    layout: { filters: [] },
                     visualizationType: 'LINE_LIST',
                 },
             })
@@ -458,6 +479,7 @@ describe('useActionButton for Enrollment button', () => {
                     dataSourceId: metadata.p1.id,
                 },
                 visUiConfig: {
+                    layout: { filters: [] },
                     visualizationType: 'LINE_LIST',
                 },
             })
@@ -765,6 +787,7 @@ describe('useActionButton for Tracked entity instance button', () => {
                     dataSourceId: metadata.p1.id,
                 },
                 visUiConfig: {
+                    layout: { filters: [] },
                     visualizationType: 'LINE_LIST',
                 },
             })
@@ -1175,7 +1198,17 @@ describe('useActionButton with a cell value from another program', () => {
     it('leaves an empty layout reported as empty, not as multi-program', async () => {
         const { result } = await renderHookWithAppWrapper(
             () => useActionButton('EVENT'),
-            buildOptions([], metadata['p2.p2s1.d1'].id)
+            createStoreWithPreloadedState({
+                dimensionSelection: { dataSourceId: metadata.p1.id },
+                visUiConfig: {
+                    layout: { filters: [] },
+                    visualizationType: 'PIVOT_TABLE',
+                    cellValue: {
+                        id: metadata['p2.p2s1.d1'].id,
+                        aggregationType: 'SUM',
+                    },
+                },
+            })
         )
 
         expect(result.current.tooltipConfig?.content).toEqual(

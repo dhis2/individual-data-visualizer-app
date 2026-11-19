@@ -11,6 +11,7 @@ import {
     DIMENSION_ID,
     metadata,
     populatedVis,
+    selectionInFilters,
 } from '../__fixtures__/unapplied-changes'
 import { useHasUnappliedChanges } from '../use-has-unapplied-changes'
 
@@ -64,14 +65,36 @@ describe('useHasUnappliedChanges', () => {
         const { result } = await renderHookWithVis(populatedVis, {
             ...visUiConfigInitialState,
             outputType: 'TRACKED_ENTITY_INSTANCE',
-            layout: { columns: [DIMENSION_ID], rows: [], filters: [] },
+            layout: {
+                columns: [DIMENSION_ID],
+                rows: [],
+                filters: selectionInFilters.filters,
+            },
+            itemsByDimension: selectionInFilters.itemsByDimension,
         })
 
         expect(result.current).toBe(true)
     })
 
+    /* Starts from a visualization showing only the period and org unit
+     * filters, so adding a column is what makes the layout applicable. */
+    const renderHookWithAppliedSelection = async () => {
+        const view = await renderHookWithVis(populatedVis, {
+            ...visUiConfigInitialState,
+            layout: {
+                ...visUiConfigInitialState.layout,
+                filters: selectionInFilters.filters,
+            },
+            itemsByDimension: selectionInFilters.itemsByDimension,
+        })
+        await act(async () => {
+            view.store.dispatch(tUpdateCurrentVisFromVisUiConfig())
+        })
+        return view
+    }
+
     it('becomes true when a dimension is added to the layout', async () => {
-        const { result, store } = await renderHookWithVis(populatedVis)
+        const { result, store } = await renderHookWithAppliedSelection()
 
         expect(result.current).toBe(false)
 
@@ -88,7 +111,7 @@ describe('useHasUnappliedChanges', () => {
     })
 
     it('becomes false again once the change is applied', async () => {
-        const { result, store } = await renderHookWithVis(populatedVis)
+        const { result, store } = await renderHookWithAppliedSelection()
 
         await act(async () => {
             store.dispatch(

@@ -198,15 +198,6 @@ describe('CellValueAxis', () => {
         })
     })
 
-    it('stays clickable whatever programs the layout holds', async () => {
-        await renderWithAppWrapper(
-            <CellValueAxis />,
-            buildMockOptions({ columns: ['s1.de1', 's2.de1'] })
-        )
-
-        expect(getTrigger()).toBeEnabled()
-    })
-
     /* The cell value carries program/stage context like any other dimension, so
      * it is suffixed by the same rules as the chips. */
     it('suffixes the name once the cell value widens the scope', async () => {

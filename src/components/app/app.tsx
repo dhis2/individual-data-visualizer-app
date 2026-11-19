@@ -22,7 +22,7 @@ import {
 } from '@store/ui-slice'
 import { useCallback, type FC } from 'react'
 import { useLoadVisualizationOnMount } from './use-load-visualization-on-mount'
-import './styles/app.module.css'
+import './styles/app.css'
 
 const IndividualDataVisualizer: FC = () => {
     useLoadVisualizationOnMount()

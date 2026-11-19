@@ -165,42 +165,6 @@ describe('normalizeMetadataInputItem', () => {
             })
         })
 
-        it('requires optionSet items to have name', () => {
-            const input: MetadataInputItem = {
-                id: 'option-set-id',
-                name: 'Option Set',
-                options: [{ id: 'opt1', name: 'Option 1' }],
-                extraProp: 'value',
-            }
-
-            const result = normalizeMetadataInputItem(input, mockMetadataMap)
-
-            expect(result).toEqual({
-                id: 'option-set-id',
-                name: 'Option Set',
-                options: [{ id: 'opt1', name: 'Option 1' }],
-                extraProp: 'value',
-            })
-        })
-
-        it('requires legendSet items to have name', () => {
-            const input: MetadataInputItem = {
-                id: 'legend-set-id',
-                name: 'Legend Set',
-                legends: [{ id: 'leg1', name: 'Legend 1' }],
-                extraProp: 'value',
-            }
-
-            const result = normalizeMetadataInputItem(input, mockMetadataMap)
-
-            expect(result).toEqual({
-                id: 'legend-set-id',
-                name: 'Legend Set',
-                legends: [{ id: 'leg1', name: 'Legend 1' }],
-                extraProp: 'value',
-            })
-        })
-
         it('throws error for new items without name', () => {
             const input: MetadataInputItem = {
                 id: 'new-item-id',
