@@ -8,8 +8,13 @@ const getNewUid = () =>
 /* Goes through the metadata export and import, like
  * visualization-metadata-import/, so the copy holds exactly what was saved.
  * What people did with the source (subscribing, favouriting, translating) is
- * left behind, so the copy starts clean. */
-export const copyVisualization = (id: string, name: string) =>
+ * left behind, so the copy starts clean. `overrides` stands in for a field
+ * another client saved differently. */
+export const copyVisualization = (
+    id: string,
+    name: string,
+    overrides: Record<string, unknown> = {}
+) =>
     cy
         .request(
             `${getApiBaseUrl()}/metadata?eventVisualizations=true&skipSharing=true&skipCreatedAndLastUpdated=true&filter=id:eq:${id}`
@@ -29,6 +34,7 @@ export const copyVisualization = (id: string, name: string) =>
                                     subscribers: [],
                                     favorites: [],
                                     translations: [],
+                                    ...overrides,
                                 },
                             ],
                         },
