@@ -1,39 +1,18 @@
-/* useDataQuery, not the RTK-query hooks: the plugin carries no app store (see
- * CLAUDE.md > plugin providers). */
-// eslint-disable-next-line no-restricted-imports
-import { useDataQuery } from '@dhis2/app-runtime'
-import type { Query } from '@dhis2/app-service-data'
 import i18n from '@dhis2/d2-i18n'
 import { Center, CircularLoader, Layer, NoticeBox } from '@dhis2/ui'
-import type { Context, ReactNode } from 'react'
+import { createContext, useContext, type FC, type ReactNode } from 'react'
 
-export type AsyncDataResult<TAsyncData> = {
-    data: TAsyncData
-    loading: boolean
+export type CachedData = {
+    relativePeriodsNames: Record<string, string>
+}
+
+const CachedDataContext = createContext<CachedData | null>(null)
+
+export const CachedDataProvider: FC<{
+    data: CachedData | undefined
     error?: Error | null
-}
-
-type CachedDataProviderProps<TQueryData, TAsyncData, TData> = {
     children: ReactNode
-    context: Context<TData | null>
-    query?: Query
-    useAsyncData: () => AsyncDataResult<TAsyncData>
-    transformation: (queryData: TQueryData, asyncData: TAsyncData) => TData
-}
-
-const NO_QUERY: Query = {}
-
-export const CachedDataProvider = <TQueryData, TAsyncData, TData>({
-    children,
-    context: CachedDataContext,
-    query = NO_QUERY,
-    useAsyncData,
-    transformation,
-}: CachedDataProviderProps<TQueryData, TAsyncData, TData>) => {
-    const queryResult = useDataQuery<TQueryData>(query)
-    const asyncResult = useAsyncData()
-    const error = queryResult.error ?? asyncResult.error
-
+}> = ({ data, error, children }) => {
     if (error) {
         return (
             <NoticeBox error title={i18n.t('Network error')}>
@@ -43,7 +22,7 @@ export const CachedDataProvider = <TQueryData, TAsyncData, TData>({
         )
     }
 
-    if (queryResult.loading || asyncResult.loading || !queryResult.data) {
+    if (!data) {
         return (
             <Layer translucent>
                 <Center>
@@ -54,10 +33,20 @@ export const CachedDataProvider = <TQueryData, TAsyncData, TData>({
     }
 
     return (
-        <CachedDataContext.Provider
-            value={transformation(queryResult.data, asyncResult.data)}
-        >
+        <CachedDataContext.Provider value={data}>
             {children}
         </CachedDataContext.Provider>
     )
+}
+
+export const useCachedData = (): CachedData => {
+    const cachedData = useContext(CachedDataContext)
+
+    if (!cachedData) {
+        throw new Error(
+            'useCachedData must be used within a CachedDataProvider'
+        )
+    }
+
+    return cachedData
 }

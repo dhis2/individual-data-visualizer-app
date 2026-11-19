@@ -41,29 +41,23 @@ vi.mock('@dhis2/app-runtime', async (importOriginal) => ({
     useDataQuery: () => queryResult,
 }))
 
-vi.mock('@dhis2/analytics', async (importOriginal) => ({
-    ...(await importOriginal<object>()),
-    DashboardPluginWrapper: ({
-        children,
-    }: {
-        children: (props: object) => unknown
-    }) => children({ displayProperty: 'name' }),
-}))
-
-vi.mock(
-    '@components/app-wrapper/cached-data/relative-periods-names',
-    async () => {
-        const { stubPluginCachedData } =
-            await import('@test-utils/cached-data-stub')
-        return {
-            useRelativePeriodsNamesData: () => ({
-                data: stubPluginCachedData(),
-                loading: false,
-                error: null,
-            }),
-        }
+vi.mock('@dhis2/analytics', async (importOriginal) => {
+    const { stubPluginCachedData } =
+        await import('@test-utils/cached-data-stub')
+    return {
+        ...(await importOriginal<object>()),
+        DashboardPluginWrapper: ({
+            children,
+        }: {
+            children: (props: object) => unknown
+        }) => children({ displayProperty: 'name' }),
+        useRelativePeriodsNames: () => ({
+            ...stubPluginCachedData(),
+            loading: false,
+            error: null,
+        }),
     }
-)
+})
 
 const cellValueItemsSeen = vi.hoisted(() => ({
     onRender: [] as unknown[],
