@@ -11,7 +11,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2026-10-22T12:48:15.232Z\n"
+"POT-Creation-Date: 2026-11-11T08:39:41.472Z\n"
 "PO-Revision-Date: 2026-07-23 07:34+0000\n"
 "Last-Translator: Philip Larsen Donnelly, 2026\n"
 "Language-Team: Russian (https://app.transifex.com/hisp-uio/teams/100509/ru/)\n"
@@ -31,7 +31,12 @@ msgid ""
 "layoutTetName}} dimensions: {{list}}."
 msgstr ""
 
-msgid "Only numeric data items can be used as the cell value."
+msgid "This app needs a newer version of DHIS2"
+msgstr ""
+
+msgid ""
+"This server is running version {{currentVersion}}. Individual Data "
+"Visualizer needs {{requiredVersion}} or later."
 msgstr ""
 
 msgid "Changes not applied"
@@ -169,24 +174,6 @@ msgstr ""
 msgid "No options"
 msgstr ""
 
-msgid "Data value set"
-msgstr "Набор значений данных"
-
-msgid "JSON"
-msgstr "JSON"
-
-msgid "XML"
-msgstr "XML"
-
-msgid "Other formats"
-msgstr "Другие форматы"
-
-msgid "JRXML"
-msgstr ""
-
-msgid "Raw data SQL"
-msgstr ""
-
 msgid "HTML"
 msgstr "HTML"
 
@@ -196,14 +183,17 @@ msgstr ""
 msgid "Plain data source"
 msgstr "Источник данных"
 
+msgid "JSON"
+msgstr "JSON"
+
+msgid "XML"
+msgstr "XML"
+
 msgid "Microsoft Excel"
 msgstr "Microsoft Excel"
 
 msgid "CSV"
 msgstr "CSV"
-
-msgid "Advanced"
-msgstr "Расширенный"
 
 msgid "Download data from this date"
 msgstr "Загрузите данные с этой даты"
@@ -317,6 +307,9 @@ msgstr ""
 msgid "Not valid with multiple programs"
 msgstr ""
 
+msgid "Not valid with tracked entity attributes and event programs"
+msgstr ""
+
 msgid "Not valid with multiple program stages"
 msgstr ""
 
@@ -342,6 +335,9 @@ msgid "One row for each {{- outputTypeLabel}}"
 msgstr ""
 
 msgid "Use item default ({{- aggregationType}})"
+msgstr ""
+
+msgid "Only numeric data items can be used as the cell value."
 msgstr ""
 
 msgid "Value"
@@ -409,14 +405,44 @@ msgid ""
 "was written."
 msgstr ""
 
-msgid "Rows per page"
-msgstr "Строк на странице"
+msgid "Page number"
+msgstr ""
 
-msgid "Page {{- page}}, row {{- firstItem}}-{{- lastItem}}"
+msgid "Pagination options"
+msgstr ""
+
+msgid "Rows per page (view only)"
 msgstr ""
 
 msgid "Not available offline"
 msgstr "Недоступно в автономном режиме"
+
+msgid "Previous page"
+msgstr ""
+
+msgid "Next page"
+msgstr ""
+
+msgid "{{- formattedCount}} enrollment"
+msgid_plural "{{- formattedCount}} enrollment"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "{{- formattedCount}} tracked entity"
+msgid_plural "{{- formattedCount}} tracked entity"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "{{- formattedCount}} event"
+msgid_plural "{{- formattedCount}} event"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 msgid "most recent"
 msgstr ""
@@ -591,6 +617,9 @@ msgstr ""
 
 msgid "Show without filters"
 msgstr "Показать без фильтров"
+
+msgid "Page {{page}} not found, returned to page {{shownPage}}"
+msgstr ""
 
 msgid "Create a {{- visType}} before updating"
 msgstr ""
@@ -1277,10 +1306,10 @@ msgstr "События"
 
 msgid ""
 "Track or compare changes over time. Recommend period as category. (adjust "
-"for EVER)"
+"for IDV)"
 msgstr ""
 
-msgid "View data and indicators in a manipulatable table. (adjust for EVER)"
+msgid "View data and indicators in a manipulatable table. (adjust for IDV)"
 msgstr ""
 
 msgctxt "Application title"

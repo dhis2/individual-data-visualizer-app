@@ -44,7 +44,7 @@ export const DEFAULT_OPTIONS: EventVisualizationOptions = {
     rowSubTotals: false,
     rowTotals: false,
     showData: false,
-    showDimensionLabels: false,
+    showDimensionLabels: true,
     showHierarchy: false,
     skipRounding: false,
     sortOrder: undefined,

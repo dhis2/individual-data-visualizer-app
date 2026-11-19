@@ -27,7 +27,7 @@
     inline-size: 100%;
     box-sizing: border-box;
     padding-inline-start: 30px; /* Space for left search icon */
-    padding-block: 5px;
+    padding-block: 6px;
     border: 1px solid color-mix(in srgb, var(--colors-grey500) 50%, transparent);
     background-color: color-mix(in srgb, var(--colors-white) 80%, transparent);
     border-radius: 3px;

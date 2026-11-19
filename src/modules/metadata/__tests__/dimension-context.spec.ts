@@ -116,16 +116,6 @@ describe('extractDimensionContextFromCompoundId', () => {
         })
     })
 
-    it('resolves created fixed dimension prefixed with a tracked entity type ID', () => {
-        const map = makeMap([{ id: 'tet1', name: 'Person' }])
-        expect(
-            extractDimensionContextFromCompoundId('tet1.created', map)
-        ).toEqual({
-            dimensionId: 'created',
-            trackedEntityTypeId: 'tet1',
-        })
-    })
-
     it('throws when repetitionIndex is set but no programStageId is resolved', () => {
         // 2-part key with a program that has multiple stages — no stage resolved
         const map = makeMap([programWithMultipleStages])

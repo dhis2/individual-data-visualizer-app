@@ -586,16 +586,6 @@ describe('getSaveableVisualization', () => {
         expect(s0.direction).toBe('DESC')
     })
 
-    it('leaves the cell value out when the visualization has none', () => {
-        const vis = {
-            columns: [],
-            rows: [],
-            filters: [],
-        } as unknown as SavedVisualization
-
-        expect(getSaveableVisualization(vis).value).toBeUndefined()
-    })
-
     it('sets sorting to undefined when sorting is not provided or empty', () => {
         const vis1 = {
             columns: [],

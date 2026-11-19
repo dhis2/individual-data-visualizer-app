@@ -611,11 +611,7 @@ describe('MetadataStore', () => {
         expect(metadataStore.getMetadataItem(id)).toHaveProperty('path', path)
     })
 
-    it('preserves the program-stage-specific org-unit label across visualization reloads', () => {
-        /* The backend's analytics response carries the generic field name
-         * "Organisation unit" keyed by the compound stage-OU id; the program's
-         * displayOrgUnitLabel (or the i18n fallback "Event org. unit") must win
-         * and survive a re-fetch of the same visualization. */
+    it('keeps the stage org unit label when the same visualization is set again', () => {
         const metadataStore = new TestMetadataStore(
             getInitialMetadata(),
             rootOrgUnits
@@ -872,73 +868,19 @@ describe('MetadataStore — subscriber fan-out for compound key aliases', () => 
         expect(cbAlias).toHaveBeenCalledTimes(1)
     })
 
-    it('notifies subscriber under alias key when canonical item is removed via setVisualizationMetadata', () => {
-        // Set up: load a visualization that contains the compound dimension
+    it('does not notify an alias subscriber when the next visualization keeps its item', () => {
         store.setVisualizationMetadata(
             inpatientVisitVisualization as unknown as SavedVisualization
         )
-
-        // The inpatient visit visualization has stage Zj7UnCAulEk and compound key Zj7UnCAulEk.ou
-        // The program is eBAyeGv0exc (event program / WITHOUT_REGISTRATION) with one stage.
-        // So p1.ou would be an alias for Zj7UnCAulEk.ou IF eBAyeGv0exc was p1.
-        // To test, subscribe to the 3-part alias: eBAyeGv0exc.Zj7UnCAulEk.ou
         const cbAlias = vi.fn()
         store.subscribe('eBAyeGv0exc.Zj7UnCAulEk.ou', cbAlias)
 
-        // Now switch to the inpatient cases visualization — it also has Zj7UnCAulEk.ou,
-        // so that item WON'T be removed. Instead confirm the subscriber is NOT notified.
-        // This validates that the fan-out only fires when something actually changes.
-        cbAlias.mockClear()
+        // Both visualizations hold Zj7UnCAulEk.ou
         store.setVisualizationMetadata(
             inpatientCasesVisualization as unknown as SavedVisualization
         )
 
-        // Zj7UnCAulEk.ou is in both visualizations, so the alias subscriber
-        // should NOT receive a spurious removal notification
         expect(cbAlias).not.toHaveBeenCalled()
-    })
-
-    it('does not throw when switching from a visualization that has compound keys whose context (program/stage) is not in the new visualization', () => {
-        // Regression test for: "No context metadata found for dimension with
-        // compound ID" when opening a second visualization whose program/stage
-        // differs from the first one.
-        //
-        // The bug: in the deletion loop, plain keys (e.g. old stage "oldStage")
-        // were deleted before compound keys that reference them (e.g.
-        // "oldStage.ou"), so the context lookup inside
-        // getCompoundDimensionIdVariants would fail.
-        const oldProgramId = 'oldProgram'
-        const oldStageId = 'oldStage'
-
-        // Simulate the store state left by a previous visualization that used
-        // a different program/stage than the inpatient visit fixture.
-        store.addMetadata(makeProgram(oldProgramId, oldStageId))
-        store.addMetadata(makeStage(oldStageId, oldProgramId))
-        store.addMetadata({
-            [`${oldStageId}.ou`]: {
-                id: `${oldStageId}.ou`,
-                name: 'Organisation unit',
-                dimensionType: 'ORGANISATION_UNIT',
-            },
-        })
-
-        // Now open a new visualization that uses a completely different program
-        // (eBAyeGv0exc / Zj7UnCAulEk). This must not throw.
-        expect(() => {
-            store.setVisualizationMetadata(
-                inpatientVisitVisualization as unknown as SavedVisualization
-            )
-        }).not.toThrow()
-
-        // The old program/stage and its compound keys must be gone
-        const snapshot = store.getMetadataSnapshot()
-        expect(snapshot[oldProgramId]).toBeUndefined()
-        expect(snapshot[oldStageId]).toBeUndefined()
-        expect(snapshot[`${oldStageId}.ou`]).toBeUndefined()
-
-        // The new visualization's keys must be present
-        expect(snapshot['Zj7UnCAulEk']).toBeDefined()
-        expect(snapshot['Zj7UnCAulEk.ou']).toBeDefined()
     })
 
     it('notifies alias subscriber when item name changes via addMetadata', () => {

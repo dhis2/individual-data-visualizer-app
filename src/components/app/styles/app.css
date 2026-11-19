@@ -1,9 +1,9 @@
 /* This prevents a double scrollbar appearing
  * when toggling all panels into view */
-:global(html),
-:global(body),
-:global(#dhis2-app-root),
-:global(.app-shell-adapter) {
+html,
+body,
+#dhis2-app-root,
+.app-shell-adapter {
     overflow: hidden;
 }
 
