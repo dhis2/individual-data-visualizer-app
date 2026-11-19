@@ -24,6 +24,8 @@ type LineListPluginProps = {
     onDataSorted?: (sorting: InternalSorting) => void
     onResponseReceived: () => void
     filterText?: string
+    pageSize: number
+    onPageSizeChange: PageSizeChangeFn
 }
 
 export const LineListPlugin: FC<LineListPluginProps> = ({
@@ -36,6 +38,8 @@ export const LineListPlugin: FC<LineListPluginProps> = ({
     onDataSorted,
     onResponseReceived,
     filterText,
+    pageSize,
+    onPageSizeChange,
 }) => {
     const [fetchAnalyticsData, { data, isFetching, requestedPage }] =
         useLineListAnalyticsData()
@@ -72,27 +76,6 @@ export const LineListPlugin: FC<LineListPluginProps> = ({
                 displayProperty,
                 onResponseReceived,
                 page,
-            })
-        },
-        [
-            displayProperty,
-            relativePeriodDate,
-            eventVisualization,
-            onResponseReceived,
-            fetchAnalyticsData,
-        ]
-    )
-
-    const onPageSizeChange = useCallback<PageSizeChangeFn>(
-        (pageSize) => {
-            void fetchAnalyticsData({
-                visualization:
-                    transformVisualizationForAnalyticsRequest(
-                        eventVisualization
-                    ),
-                relativePeriodDate,
-                displayProperty,
-                onResponseReceived,
                 pageSize,
             })
         },
@@ -102,6 +85,7 @@ export const LineListPlugin: FC<LineListPluginProps> = ({
             eventVisualization,
             onResponseReceived,
             fetchAnalyticsData,
+            pageSize,
         ]
     )
 
@@ -131,6 +115,7 @@ export const LineListPlugin: FC<LineListPluginProps> = ({
             relativePeriodDate,
             displayProperty,
             onResponseReceived,
+            pageSize,
         })
     }, [
         displayProperty,
@@ -138,6 +123,7 @@ export const LineListPlugin: FC<LineListPluginProps> = ({
         eventVisualization,
         onResponseReceived,
         fetchAnalyticsData,
+        pageSize,
     ])
 
     logger.debug('LL eventVisualization', eventVisualization)

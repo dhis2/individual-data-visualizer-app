@@ -118,6 +118,10 @@ export const PluginWrapper: FC<PluginWrapperProps> = ({
         [visualization, metadataStore, locale]
     )
 
+    /* Kept here, outside the boundary keyed by requestKey, so a chosen page
+     * size outlives the remount on a new request */
+    const [lineListPageSize, setLineListPageSize] = useState(100)
+
     const [hasAnalyticsData, setHasAnalyticsData] = useState(false)
 
     const onResponseReceived = useCallback(() => {
@@ -186,6 +190,8 @@ export const PluginWrapper: FC<PluginWrapperProps> = ({
                         onColumnHeaderClick={onColumnHeaderClick}
                         onDataSorted={onDataSorted}
                         onResponseReceived={onResponseReceived}
+                        pageSize={lineListPageSize}
+                        onPageSizeChange={setLineListPageSize}
                     />
                 )}
                 {visualizationWithTitle.type === 'PIVOT_TABLE' && (

@@ -57,6 +57,7 @@ describe('useLineListAnalyticsData', () => {
             ),
             displayProperty: 'name',
             onResponseReceived: vi.fn(),
+            pageSize: 100,
         })
         await waitFor(() => {
             expect(result.current[1].data).not.toBeNull()
