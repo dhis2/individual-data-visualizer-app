@@ -1,4 +1,5 @@
 import {
+    DROPPED_LEGACY_DIMENSIONS,
     ENROLLMENT_SCOPED_DIMENSION_IDS,
     REPETITION_INDEX_PATTERN,
 } from '@modules/dimension/ids'
@@ -7,7 +8,12 @@ import {
     transformDimensions,
 } from '@modules/dimension/translation'
 import { getTetId } from '@modules/visualization/tracked-entity-type'
-import type { CurrentVisualization, DimensionId, OutputType } from '@types'
+import type {
+    CurrentVisualization,
+    DimensionId,
+    DimensionRecord,
+    OutputType,
+} from '@types'
 
 export const headersMap: Record<DimensionId, string> = {
     ou: 'ouname',
@@ -251,6 +257,41 @@ export const getAnalyticsRequestHeaderName = ({
 
     return wireDim
 }
+
+const getDimensionHeaderNames = (
+    dim: DimensionRecord,
+    visualization: CurrentVisualization
+): string | string[] => {
+    const baseArgs = {
+        dimensionId: dim.dimension,
+        programId: dim.program?.id,
+        visualization,
+    }
+    const stageId = dim.programStage?.id
+
+    if (dim.repetition?.indexes?.length && stageId) {
+        return dim.repetition.indexes.map((index) =>
+            getAnalyticsRequestHeaderName({
+                ...baseArgs,
+                programStageId: stageId,
+                repetitionIndex: index,
+            })
+        )
+    }
+    return getAnalyticsRequestHeaderName({
+        ...baseArgs,
+        programStageId: stageId,
+    })
+}
+
+/* One entry per line list column dimension; a repeated stage dimension gives
+ * one header per repetition. */
+export const getLineListHeaderNames = (
+    visualization: CurrentVisualization
+): (string | string[])[] =>
+    [...(visualization.columns ?? []), ...(visualization.rows ?? [])]
+        .filter((dim) => !DROPPED_LEGACY_DIMENSIONS.has(dim.dimension))
+        .map((dim) => getDimensionHeaderNames(dim, visualization))
 
 /**
  * Transforms a canonical CurrentVisualization into the shape needed for
