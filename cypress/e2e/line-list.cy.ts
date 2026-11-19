@@ -1,10 +1,16 @@
-import { interceptLineListAnalytics, sortColumn } from '../helpers'
+import {
+    expectColumnSort,
+    interceptLineListAnalytics,
+    removeChip,
+    sortColumn,
+} from '../helpers'
 import { getHeaderTexts } from '../support/rendering'
 
 const EVENT_LINE_LIST_ID = 't6SxiQdVPVs'
 const ENROLLMENT_LINE_LIST_ID = 'kUbNtOy0T12'
 const TRACKED_ENTITY_LINE_LIST_ID = 'IS74uKRvJvl'
 const AGE_DIMENSION = 'Zj7UnCAulEk.qrur9Dvnyt5'
+const ENROLLMENT_PROGRAM_ID = 'IpHINAT79UW'
 const DEFAULT_CELL_BACKGROUND_COLOR = 'rgb(255, 255, 255)'
 
 type Pager = { total: number; pageCount: number }
@@ -56,6 +62,29 @@ const choosePageSize = (pageSize: number) => {
         .click()
     getRows().should('have.length', pageSize)
 }
+
+const getRequestParam = (name: string) =>
+    cy
+        .wait('@lineListAnalytics')
+        .its('request.url')
+        .then((url) => new URL(url).searchParams.get(name))
+
+/* A tracked entity list can't show a program indicator */
+const switchEnrollmentListToTrackedEntityList = () => {
+    removeChip('Average weight (g)')
+    interceptLineListAnalytics()
+    cy.getByDataTest('update-button-tracked-entity').click()
+}
+
+const expectNoSort = () =>
+    cy
+        .wait('@lineListAnalytics')
+        .its('request.url')
+        .then((url) => {
+            const { searchParams } = new URL(url)
+            expect(searchParams.has('asc')).to.equal(false)
+            expect(searchParams.has('desc')).to.equal(false)
+        })
 
 describe('line list', () => {
     it('sorts by a column', () => {
@@ -112,6 +141,53 @@ describe('line list', () => {
                 }
             )
         })
+    })
+
+    it('renames the sort when the output type changes', () => {
+        openLineList(ENROLLMENT_LINE_LIST_ID)
+        sortColumn('Date of enrollment', 'asc', 'enrollmentdate')
+
+        switchEnrollmentListToTrackedEntityList()
+
+        expectColumnSort(
+            'Date of enrollment',
+            'asc',
+            `${ENROLLMENT_PROGRAM_ID}.enrollmentdate`
+        )
+    })
+
+    it('drops the sort when its column is removed', () => {
+        openLineList()
+        sortColumn('Age in years', 'asc', AGE_DIMENSION)
+
+        removeChip('Age in years')
+        interceptLineListAnalytics()
+        cy.getByDataTest('update-button-event').click()
+
+        expectNoSort()
+        cy.getByDataTest('data-table-header').should(
+            'not.contain',
+            'Age in years'
+        )
+    })
+
+    it('keeps the page size when sorting', () => {
+        openLineList()
+        choosePageSize(10)
+
+        sortColumn('Age in years', 'asc', AGE_DIMENSION)
+
+        getRows().should('have.length', 10)
+    })
+
+    it('keeps the page size when the output type changes', () => {
+        openLineList(ENROLLMENT_LINE_LIST_ID)
+        choosePageSize(10)
+
+        switchEnrollmentListToTrackedEntityList()
+
+        getRequestParam('pageSize').should('equal', '10')
+        getRows().should('have.length', 10)
     })
 
     it('colours the cells by the legend set of each data item', () => {
