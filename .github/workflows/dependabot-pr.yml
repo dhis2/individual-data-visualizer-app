@@ -1,0 +1,99 @@
+name: 'Dependabot PRs'
+
+# pull_request_target runs this file from master, with the repository's secrets.
+# The PR's code is only installed in the `dedupe` job, which has no secrets, a
+# read-only token and runs no lifecycle scripts.
+on:
+    pull_request_target:
+        types: [opened, reopened, synchronize]
+
+permissions: {}
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event.pull_request.number }}-${{ github.actor }}
+    cancel-in-progress: true
+
+jobs:
+    enable-automerge:
+        if: github.event.pull_request.user.login == 'dependabot[bot]'
+        runs-on: ubuntu-latest
+        permissions:
+            pull-requests: write
+            contents: write
+        steps:
+            - name: Enable auto-merge (squash)
+              uses: peter-evans/enable-pull-request-automerge@v3
+              with:
+                  pull-request-number: ${{ github.event.pull_request.number }}
+                  merge-method: squash
+
+    # Dependabot doesn't dedupe the lockfile, and duplicate versions can break
+    # tools that are loaded together (e.g. two postcss copies crash Stylelint).
+    dedupe:
+        if: github.event.pull_request.user.login == 'dependabot[bot]' && github.actor == 'dependabot[bot]' && github.event.pull_request.head.repo.full_name == github.repository
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+        outputs:
+            changed: ${{ steps.diff.outputs.changed }}
+        steps:
+            - uses: actions/checkout@v7
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+                  persist-credentials: false
+            - uses: pnpm/action-setup@v6
+            - uses: actions/setup-node@v7
+              with:
+                  node-version: lts/*
+                  # A cache written from PR code would be shared with master
+                  package-manager-cache: false
+
+            - run: pnpm dedupe --ignore-scripts
+
+            - id: diff
+              run: |
+                  if git diff --quiet -- pnpm-lock.yaml; then
+                      echo "changed=false" >> "$GITHUB_OUTPUT"
+                  else
+                      echo "changed=true" >> "$GITHUB_OUTPUT"
+                  fi
+
+            - if: steps.diff.outputs.changed == 'true'
+              uses: actions/upload-artifact@v7
+              with:
+                  name: pnpm-lock
+                  path: pnpm-lock.yaml
+                  retention-days: 1
+
+    # Pushed by dhis2-bot, so CI runs on the new commit. Dependabot ignores
+    # commits marked [dependabot skip], so it keeps rebasing the PR, which runs
+    # this workflow again.
+    commit-dedupe:
+        needs: dedupe
+        if: needs.dedupe.outputs.changed == 'true'
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+        steps:
+            - uses: actions/checkout@v7
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+                  token: ${{ secrets.DHIS2_BOT_GITHUB_TOKEN }}
+
+            - uses: actions/download-artifact@v7
+              with:
+                  name: pnpm-lock
+
+            - uses: dhis2/action-commit-signing@v1
+              with:
+                  ssh-signing-key: ${{ secrets.DHIS2_BOT_SSH_SIGNING_KEY }}
+                  ssh-signing-key-passphrase: ${{ secrets.DHIS2_BOT_SSH_SIGNING_PASSPHRASE }}
+
+            # Pushing the checked-out sha fails if Dependabot has pushed since,
+            # so a lockfile deduped from an older commit never lands.
+            - name: Commit deduped pnpm-lock.yaml
+              env:
+                  HEAD_REF: ${{ github.event.pull_request.head.ref }}
+              run: |
+                  git commit -m "chore(deps): dedupe pnpm lockfile [dependabot skip]" -- pnpm-lock.yaml
+                  git push origin "HEAD:refs/heads/$HEAD_REF"
