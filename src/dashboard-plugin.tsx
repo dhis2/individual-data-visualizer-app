@@ -1,5 +1,6 @@
 import { getVisualizationQueryFields } from '@api/event-visualizations-api'
 import { parseEngineError } from '@api/parse-engine-error'
+import { PluginCachedDataProvider } from '@components/app-wrapper/cached-data/plugin-cached-data-provider'
 import {
     PluginMetadataProvider,
     useMetadataStore,
@@ -108,9 +109,11 @@ const DashboardPluginContent: FC<DashboardPluginProps> = (props) => {
 }
 
 const DashboardPlugin: FC<DashboardPluginProps> = (props) => (
-    <PluginMetadataProvider>
-        <DashboardPluginContent {...props} />
-    </PluginMetadataProvider>
+    <PluginCachedDataProvider>
+        <PluginMetadataProvider>
+            <DashboardPluginContent {...props} />
+        </PluginMetadataProvider>
+    </PluginCachedDataProvider>
 )
 
 // eslint-disable-next-line import/no-default-export

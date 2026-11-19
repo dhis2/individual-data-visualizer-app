@@ -5,8 +5,14 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-19T08:45:07.160Z\n"
-"PO-Revision-Date: 2026-11-19T08:45:07.160Z\n"
+"POT-Creation-Date: 2026-11-19T14:34:40.520Z\n"
+"PO-Revision-Date: 2026-11-19T14:34:40.521Z\n"
+
+msgid "Network error"
+msgstr "Network error"
+
+msgid "This app could not retrieve required data."
+msgstr "This app could not retrieve required data."
 
 msgid ""
 "Some dimensions were not added because they cannot be used in a "

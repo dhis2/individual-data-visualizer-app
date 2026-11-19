@@ -1,6 +1,5 @@
-import { useRootOrgUnits } from '@components/app-wrapper/app-cached-data-query-provider'
-import { useRelativePeriodsNames } from '@dhis2/analytics'
-import { Center, CircularLoader } from '@dhis2/ui'
+import { useAppCachedData } from '@components/app-wrapper/cached-data/app-cached-data-provider'
+import { usePluginCachedData } from '@components/app-wrapper/cached-data/plugin-cached-data-provider'
 import { getInitialMetadata } from '@modules/metadata/initial-metadata'
 import {
     isProgramMetadataItem,
@@ -54,22 +53,10 @@ const MetadataStoreProvider: FC<{
     )
 }
 
-const MetadataLoader: FC = () => (
-    <Center>
-        <CircularLoader />
-    </Center>
-)
-
-/* App-side provider: pulls rootOrgUnits from AppCachedDataQueryProvider. */
 export const AppMetadataProvider: FC<{ children: ReactNode }> = ({
     children,
 }) => {
-    const rootOrgUnits = useRootOrgUnits()
-    const { relativePeriodsNames, loading } = useRelativePeriodsNames()
-
-    if (loading) {
-        return <MetadataLoader />
-    }
+    const { rootOrgUnits, relativePeriodsNames } = useAppCachedData()
 
     return (
         <MetadataStoreProvider
@@ -81,16 +68,10 @@ export const AppMetadataProvider: FC<{ children: ReactNode }> = ({
     )
 }
 
-/* Plugin-side provider: no rootOrgUnits dependency, so the plugin can render
- * without an AppCachedDataQueryProvider ancestor. */
 export const PluginMetadataProvider: FC<{ children: ReactNode }> = ({
     children,
 }) => {
-    const { relativePeriodsNames, loading } = useRelativePeriodsNames()
-
-    if (loading) {
-        return <MetadataLoader />
-    }
+    const { relativePeriodsNames } = usePluginCachedData()
 
     return (
         <MetadataStoreProvider
@@ -101,18 +82,13 @@ export const PluginMetadataProvider: FC<{ children: ReactNode }> = ({
     )
 }
 
-/* Test-side provider: seeds the store with mock metadata. Pulls rootOrgUnits
- * from AppCachedDataQueryProvider, which the test-utils wrapper sets up. */
+/* Test-side provider: seeds the store with mock metadata on top of the app's
+ * cached data, which the test-utils wrapper provides. */
 export const MockMetadataProvider: FC<{
     children: ReactNode
     mockMetadata?: InitialMetadataItems
 }> = ({ children, mockMetadata }) => {
-    const rootOrgUnits = useRootOrgUnits()
-    const { relativePeriodsNames, loading } = useRelativePeriodsNames()
-
-    if (loading) {
-        return <MetadataLoader />
-    }
+    const { rootOrgUnits, relativePeriodsNames } = useAppCachedData()
 
     return (
         <MetadataStoreProvider

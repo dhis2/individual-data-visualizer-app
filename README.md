@@ -433,14 +433,20 @@ Function signatures and return types can be found in `src/app-wrapper/metadata-p
 
 In addition to being available via hooks, you can also access the metadata store in RTK Query endpoint query functions via `api.extra.metadataStore`. This object is populated by the return value of `useMetadataStore`.
 
-### App Cached Data
+### Cached Data
 
-The outermost component of the `AppWrapper` is the `AppCachedDataQueryProvider`. This fetches data considered static for the app's lifecycle: system settings, root org units and org unit levels. The current user is not fetched here; it is taken from the `/api/me` response the app-shell already loads, via `useCurrentUserInfo` from `@dhis2/app-runtime`. This data is guaranteed to be available before the app loads and can be accessed via the `useAppCachedDataQuery` hook. You can also directly access individual cached data properties using these hooks:
+Data that stays the same for the app's lifecycle is loaded once, before anything else renders, by a cached data provider. The app and the dashboard plugin each have one, because the plugin needs less data:
 
-- `useCurrentUser`
-- `useSystemSettings`
-- `useRootOrgUnits`
-- `useOrgUnitLevels`
+- `AppCachedDataProvider` (inside `AppWrapper`) loads system settings, root org units, org unit levels and the relative period names. The current user is not fetched here; it is taken from the `/api/me` response the app-shell already loads, via `useCurrentUserInfo` from `@dhis2/app-runtime`. Read it with `useAppCachedData`, or with these hooks for single properties:
+    - `useCurrentUser`
+    - `useSystemSettings`
+    - `useRootOrgUnits`
+    - `useOrgUnitLevels`
+- `PluginCachedDataProvider` (in `src/dashboard-plugin.tsx`) loads only the relative period names. Read it with `usePluginCachedData`.
+
+Both are built on `CachedDataProvider` (`src/components/app-wrapper/cached-data/`). It runs an app-runtime query and one async hook (for data that comes from a hook rather than a query, such as `useRelativePeriodsNames` from `@dhis2/analytics`), and passes both through a transformation. While either is loading it shows a loader; if either fails it shows an error instead of the app.
+
+The relative period names end up in the metadata store, so components read them from there, not from the cached data.
 
 ### Browser Navigation
 

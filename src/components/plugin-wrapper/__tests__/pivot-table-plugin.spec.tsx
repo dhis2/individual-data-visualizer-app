@@ -1,6 +1,5 @@
 import { MockMetadataProvider } from '@components/app-wrapper/metadata-provider/metadata-provider'
 import { PivotTablePlugin } from '@components/plugin-wrapper/pivot-table-plugin'
-import type { AnalyticsModule } from '@test-utils/relative-periods-names-stub'
 import { render, screen } from '@testing-library/react'
 import type { CurrentVisualization } from '@types'
 import { describe, expect, it, vi } from 'vitest'
@@ -8,29 +7,33 @@ import { describe, expect, it, vi } from 'vitest'
 /* The engine renders the filter row and fixes the headers itself, so the only
  * thing this app controls is the props. Stubbing the table keeps the
  * assertions on those. */
-vi.mock('@dhis2/analytics', async (importOriginal) => {
-    const analytics = await importOriginal<AnalyticsModule>()
-    const { stubUseRelativePeriodsNames } =
-        await import('@test-utils/relative-periods-names-stub')
-    return {
-        ...analytics,
-        useRelativePeriodsNames: stubUseRelativePeriodsNames(analytics),
-        PivotTable: ({
-            filterText,
-            visualization,
-        }: {
-            filterText?: string
-            visualization: CurrentVisualization
-        }) => (
-            <div
-                data-test="pivot-table"
-                data-filter-text={filterText}
-                data-fix-column-headers={visualization.fixColumnHeaders}
-                data-fix-row-headers={visualization.fixRowHeaders}
-            />
-        ),
-    }
-})
+vi.mock('@dhis2/analytics', async (importOriginal) => ({
+    ...(await importOriginal<object>()),
+    PivotTable: ({
+        filterText,
+        visualization,
+    }: {
+        filterText?: string
+        visualization: CurrentVisualization
+    }) => (
+        <div
+            data-test="pivot-table"
+            data-filter-text={filterText}
+            data-fix-column-headers={visualization.fixColumnHeaders}
+            data-fix-row-headers={visualization.fixRowHeaders}
+        />
+    ),
+}))
+
+vi.mock(
+    '@components/app-wrapper/cached-data/app-cached-data-provider',
+    async (importOriginal) => ({
+        ...(await importOriginal<object>()),
+        useAppCachedData: (
+            await import('@test-utils/cached-data-stub')
+        ).stubAppCachedData(),
+    })
+)
 
 vi.mock(
     '@components/plugin-wrapper/hooks/use-pivot-table-analytics-data',
