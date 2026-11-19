@@ -380,6 +380,68 @@ describe('buildAxis', () => {
         }
     )
 
+    it.each([
+        ['EVENT', 'LINE_LIST'],
+        ['ENROLLMENT', 'LINE_LIST'],
+        ['TRACKED_ENTITY_INSTANCE', 'LINE_LIST'],
+        ['EVENT', 'PIVOT_TABLE'],
+        ['ENROLLMENT', 'PIVOT_TABLE'],
+    ] as const)(
+        'tells the enrollment org unit from the event org unit by dimension id in a %s %s',
+        (outputType, visualizationType) => {
+            const store = makeStore({
+                dims: {
+                    'stage.ou': makeDim({
+                        id: 'stage.ou',
+                        dimensionId: 'ou',
+                        dimensionType: 'ORGANISATION_UNIT',
+                        programId: 'prog',
+                        programStageId: 'stage',
+                    }),
+                    'prog.enrollmentOu': makeDim({
+                        id: 'prog.enrollmentOu',
+                        dimensionId: 'enrollmentOu',
+                        dimensionType: 'ORGANISATION_UNIT',
+                        programId: 'prog',
+                    }),
+                },
+            })
+            const visUiConfig = {
+                visualizationType,
+                outputType,
+                layout: {
+                    columns: ['stage.ou', 'prog.enrollmentOu'],
+                    rows: [],
+                    filters: [],
+                },
+                itemsByDimension: {
+                    'stage.ou': ['eventOrgUnit'],
+                    'prog.enrollmentOu': ['enrollmentOrgUnit'],
+                },
+                conditionsByDimension: {},
+                repetitionsByDimension: {},
+            } as unknown as VisUiConfigState
+
+            expect(
+                buildAxis(visUiConfig.layout.columns, visUiConfig, store)
+            ).toEqual([
+                {
+                    dimension: 'ou',
+                    dimensionType: 'ORGANISATION_UNIT',
+                    items: [{ id: 'eventOrgUnit' }],
+                    program: { id: 'prog' },
+                    programStage: { id: 'stage' },
+                },
+                {
+                    dimension: 'enrollmentOu',
+                    dimensionType: 'ORGANISATION_UNIT',
+                    items: [{ id: 'enrollmentOrgUnit' }],
+                    program: { id: 'prog' },
+                },
+            ])
+        }
+    )
+
     it('throws when metadata lookup returns undefined for a dimension', () => {
         const input = {
             layout: { columns: ['unknown.dim'], rows: [], filters: [] },

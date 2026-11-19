@@ -751,11 +751,38 @@ describe('normalizeApiSavedVisualization', () => {
         expect(result.legacy).toBe(true)
     })
 
-    it('upgrades a legacy EVENT+LINE_LIST enrollment `ou` to `enrollmentOu`', () => {
+    it.each([
+        ['EVENT', 'LINE_LIST'],
+        ['ENROLLMENT', 'LINE_LIST'],
+        ['EVENT', 'PIVOT_TABLE'],
+        ['ENROLLMENT', 'PIVOT_TABLE'],
+    ] as const)(
+        'renames the enrollment `ou` of a %s %s to `enrollmentOu` without making it legacy',
+        (outputType, type) => {
+            const result = normalizeApiSavedVisualization(
+                buildApiVis({
+                    type,
+                    outputType,
+                    columns: [
+                        {
+                            dimension: 'ou',
+                            dimensionType: 'ORGANISATION_UNIT',
+                            program: { id: PID },
+                        },
+                    ] as ApiSavedVisualization['columns'],
+                })
+            )
+
+            expect(dimensionsOf(result)).toEqual(['enrollmentOu'])
+            expect(result.legacy).toBeUndefined()
+        }
+    )
+
+    it('makes a TRACKED_ENTITY_INSTANCE line list legacy when it renames its enrollment `ou`', () => {
         const result = normalizeApiSavedVisualization(
             buildApiVis({
                 type: 'LINE_LIST',
-                outputType: 'EVENT',
+                outputType: 'TRACKED_ENTITY_INSTANCE',
                 columns: [
                     {
                         dimension: 'ou',
@@ -837,24 +864,6 @@ describe('normalizeApiSavedVisualization', () => {
 
         expect(result.legacy).toBe(true)
         expect(result.hideTitle).toBe(true)
-    })
-
-    it('leaves ENROLLMENT enrollment `ou` as `ou`', () => {
-        const result = normalizeApiSavedVisualization(
-            buildApiVis({
-                type: 'LINE_LIST',
-                outputType: 'ENROLLMENT',
-                columns: [
-                    {
-                        dimension: 'ou',
-                        dimensionType: 'ORGANISATION_UNIT',
-                        program: { id: PID },
-                    },
-                ] as ApiSavedVisualization['columns'],
-            })
-        )
-
-        expect(dimensionsOf(result)).toEqual(['ou'])
     })
 
     it('leaves the stage event `ou` (with programStage) as `ou`', () => {

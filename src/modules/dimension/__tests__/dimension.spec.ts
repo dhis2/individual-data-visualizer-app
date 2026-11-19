@@ -395,86 +395,50 @@ describe('getFixedMetaDimensions', () => {
 })
 
 describe('toEventVisualizationDimensionId', () => {
-    describe('enrollmentOu', () => {
-        it('keeps enrollmentOu for program-scope + EVENT + LINE_LIST', () => {
+    it.each(['EVENT', 'ENROLLMENT', 'TRACKED_ENTITY_INSTANCE'] as const)(
+        'keeps enrollmentOu for %s',
+        (outputType) => {
             expect(
                 toEventVisualizationDimensionId({
                     dimensionId: 'enrollmentOu',
                     programId: 'prog1',
-                    outputType: 'EVENT',
-                    visualizationType: 'LINE_LIST',
+                    outputType,
                 })
             ).toBe('enrollmentOu')
-        })
-
-        it('rewrites to ou for program-scope + ENROLLMENT + LINE_LIST', () => {
-            expect(
-                toEventVisualizationDimensionId({
-                    dimensionId: 'enrollmentOu',
-                    programId: 'prog1',
-                    outputType: 'ENROLLMENT',
-                    visualizationType: 'LINE_LIST',
-                })
-            ).toBe('ou')
-        })
-
-        it('keeps enrollmentOu for program-scope + TRACKED_ENTITY_INSTANCE + LINE_LIST', () => {
-            expect(
-                toEventVisualizationDimensionId({
-                    dimensionId: 'enrollmentOu',
-                    programId: 'prog1',
-                    outputType: 'TRACKED_ENTITY_INSTANCE',
-                    visualizationType: 'LINE_LIST',
-                })
-            ).toBe('enrollmentOu')
-        })
-
-        it('rewrites to ou for program-scope + EVENT + PIVOT_TABLE', () => {
-            expect(
-                toEventVisualizationDimensionId({
-                    dimensionId: 'enrollmentOu',
-                    programId: 'prog1',
-                    outputType: 'EVENT',
-                    visualizationType: 'PIVOT_TABLE',
-                })
-            ).toBe('ou')
-        })
-
-        it('rewrites to ou for program-scope + ENROLLMENT + PIVOT_TABLE', () => {
-            expect(
-                toEventVisualizationDimensionId({
-                    dimensionId: 'enrollmentOu',
-                    programId: 'prog1',
-                    outputType: 'ENROLLMENT',
-                    visualizationType: 'PIVOT_TABLE',
-                })
-            ).toBe('ou')
-        })
-    })
+        }
+    )
 
     describe('registration ou (no programId)', () => {
-        it('keeps ou for TEI output + LINE_LIST', () => {
+        it('keeps ou for TRACKED_ENTITY_INSTANCE', () => {
             expect(
                 toEventVisualizationDimensionId({
                     dimensionId: 'ou',
                     outputType: 'TRACKED_ENTITY_INSTANCE',
-                    visualizationType: 'LINE_LIST',
                 })
             ).toBe('ou')
         })
 
         it.each(['EVENT', 'ENROLLMENT'] as const)(
-            'rewrites to registrationOu for %s + PIVOT_TABLE',
+            'rewrites to registrationOu for %s',
             (outputType) => {
                 expect(
                     toEventVisualizationDimensionId({
                         dimensionId: 'ou',
                         outputType,
-                        visualizationType: 'PIVOT_TABLE',
                     })
                 ).toBe('registrationOu')
             }
         )
+    })
+
+    it('keeps the event ou, which has a programId', () => {
+        expect(
+            toEventVisualizationDimensionId({
+                dimensionId: 'ou',
+                programId: 'prog1',
+                outputType: 'ENROLLMENT',
+            })
+        ).toBe('ou')
     })
 
     it('passes through other dimension IDs unchanged', () => {
@@ -483,23 +447,13 @@ describe('toEventVisualizationDimensionId', () => {
                 dimensionId: 'eventDate',
                 programId: 'prog1',
                 outputType: 'ENROLLMENT',
-                visualizationType: 'PIVOT_TABLE',
             })
         ).toBe('eventDate')
-        expect(
-            toEventVisualizationDimensionId({
-                dimensionId: 'ou',
-                programId: 'prog1',
-                outputType: 'ENROLLMENT',
-                visualizationType: 'PIVOT_TABLE',
-            })
-        ).toBe('ou')
         expect(
             toEventVisualizationDimensionId({
                 dimensionId: 'enrollmentDate',
                 programId: 'prog1',
                 outputType: 'ENROLLMENT',
-                visualizationType: 'PIVOT_TABLE',
             })
         ).toBe('enrollmentDate')
     })

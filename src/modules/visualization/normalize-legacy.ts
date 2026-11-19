@@ -12,7 +12,6 @@ import {
     outputTypeTimeDimensionMap,
     timeFieldTimeDimensionMap,
 } from '@modules/dimension/time'
-import { toEventVisualizationDimensionId } from '@modules/dimension/translation'
 import { isPopulatedString } from '@modules/utils/guards'
 import type {
     ApiSavedVisualization,
@@ -20,7 +19,6 @@ import type {
     DimensionRecord,
     OutputType,
     SavedVisualization,
-    VisualizationType,
 } from '@types'
 
 /* Dimension types whose values are not bound to any program or stage —
@@ -50,7 +48,6 @@ const LEGACY_DIMENSION_ID_RENAMES: Record<string, DimensionId> = {
  * and timeField are consumed here and dropped from the result. */
 type LegacyDimensionContext = {
     outputType: OutputType | undefined
-    visualizationType: VisualizationType
     timeField: string | undefined
     programRef: { id: string } | undefined
     stageRef: { id: string } | undefined
@@ -114,39 +111,31 @@ const applyProgramStageContext = (
     return out
 }
 
-// A legacy vis stored the enrollment org unit as bare `ou`; this app uses
-// `enrollmentOu` where the wire form needs it (EVENT/TEI LINE_LIST). Upgrade
-// with the same rule the save path uses — a no-op for ENROLLMENT/PIVOT (where
-// `ou` is canonical) and for the stage event OU (which has a programStage).
-const upgradeLegacyEnrollmentOu = (
+/* The eventVisualizations API also takes the enrollment org unit as `ou` with a
+ * program and no stage, and the Line Listing app saves and reads it that way.
+ * Its EVENT and ENROLLMENT line lists keep the program at the root, which
+ * already marks them legacy. A TRACKED_ENTITY_INSTANCE one has no root program,
+ * so the rename is what marks it. */
+const renameEnrollmentOu = (
     dim: DimensionRecord,
     context: LegacyDimensionContext,
     vis: SavedVisualization
 ): DimensionRecord => {
-    if (
-        !context.outputType ||
-        dim.dimension !== 'ou' ||
-        !dim.program?.id ||
-        dim.programStage
-    ) {
+    const isEnrollmentOu =
+        dim.dimension === 'ou' && dim.program?.id && !dim.programStage
+
+    if (!isEnrollmentOu) {
         return dim
     }
-    const canonicalOu = toEventVisualizationDimensionId({
-        dimensionId: 'enrollmentOu',
-        programId: dim.program.id,
-        outputType: context.outputType,
-        visualizationType: context.visualizationType,
-    })
-    if (canonicalOu === dim.dimension) {
-        return dim
+    if (context.outputType === 'TRACKED_ENTITY_INSTANCE') {
+        vis.legacy = true
     }
-    vis.legacy = true
-    return { ...dim, dimension: canonicalOu }
+    return { ...dim, dimension: 'enrollmentOu' }
 }
 
 /* Normalise one dimension, in order: materialise a legacy `pe`, rename old IDs,
  * then — unless the dim takes no program/stage context — propagate top-level
- * program/programStage and upgrade a legacy enrollment `ou`. The rename runs
+ * program/programStage and rename an enrollment `ou`. The ID rename runs
  * before the context check so a meta dim renamed from a legacy ID (e.g.
  * `createdDate` → `created`) is recognised as context-free. Steps flip
  * `vis.legacy` as they upgrade the shape. */
@@ -162,7 +151,7 @@ const normalizeLegacyDimension = (
     if (dimensionTakesNoProgramContext(renamed)) {
         return renamed
     }
-    return upgradeLegacyEnrollmentOu(
+    return renameEnrollmentOu(
         applyProgramStageContext(renamed, context),
         context,
         vis
@@ -252,7 +241,6 @@ export const normalizeApiSavedVisualization = (
     const normalizedVis = rest as SavedVisualization
     const context: LegacyDimensionContext = {
         outputType: rest.outputType as OutputType | undefined,
-        visualizationType: rest.type as VisualizationType,
         timeField,
         programRef: program ? { id: program.id } : undefined,
         stageRef: programStage ? { id: programStage.id } : undefined,
