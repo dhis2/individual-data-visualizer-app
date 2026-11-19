@@ -207,7 +207,7 @@ describe('useResizableSidebar', () => {
     })
 
     describe('store-driven reset (View menu)', () => {
-        it('resets local width when store is set to default', () => {
+        it('follows the store when the width is reset to the default', () => {
             const { result, store } = renderResizableHook(600)
 
             expect(result.current.width).toBe(600)

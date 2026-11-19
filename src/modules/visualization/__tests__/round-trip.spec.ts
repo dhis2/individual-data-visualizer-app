@@ -404,3 +404,21 @@ it('saves a legacy data element cell value with the root stage', () => {
         ).value
     ).toEqual({ id: 'UXz7xuGCEhU', programStage: { id: BIRTH } })
 })
+
+it('keeps the fixed header options from load to save', () => {
+    const { visUiConfigFromCurrentVis, currentVisFromVisUiConfig } = roundTrip({
+        ...eventPivotTable,
+        fixColumnHeaders: true,
+        fixRowHeaders: true,
+    })
+
+    expect(visUiConfigFromCurrentVis.options).toMatchObject({
+        fixColumnHeaders: true,
+        fixRowHeaders: true,
+    })
+    expect(
+        getSaveableVisualization(
+            currentVisFromVisUiConfig as SavedVisualization
+        )
+    ).toMatchObject({ fixColumnHeaders: true, fixRowHeaders: true })
+})

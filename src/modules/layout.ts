@@ -1,5 +1,5 @@
 import i18n from '@dhis2/d2-i18n'
-import { isDimensionFullyInvalidForVisType } from '@modules/dimension/blocking'
+import { isDimensionUnsupportedByVisType } from '@modules/dimension/blocking'
 import { toEventVisualizationDimensionId } from '@modules/dimension/translation'
 import { parseUiRepetitions } from '@modules/repetitions'
 import {
@@ -238,7 +238,7 @@ export const convertLayoutForVisType = ({
 
     for (const id of layout.filters) {
         const dimension = getDimension(id)
-        if (isDimensionFullyInvalidForVisType(dimension, targetVisType)) {
+        if (isDimensionUnsupportedByVisType(dimension, targetVisType)) {
             invalidDimensionIds.push(id)
         } else {
             convertedLayout.filters.push(id)
@@ -247,7 +247,7 @@ export const convertLayoutForVisType = ({
 
     for (const id of layout.columns) {
         const dimension = getDimension(id)
-        if (isDimensionFullyInvalidForVisType(dimension, targetVisType)) {
+        if (isDimensionUnsupportedByVisType(dimension, targetVisType)) {
             invalidDimensionIds.push(id)
         } else {
             switch (dimension.dimensionType) {

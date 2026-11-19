@@ -124,14 +124,14 @@ describe('visUiConfig visualization type listener', () => {
         expect(store.getState().visUiConfig.options.hideTitle).toBe(false)
     })
 
-    it('clears a hidden title when the visualization type changes', async () => {
+    it('keeps a hidden title hidden when the visualization type changes', async () => {
         const store = createVisUiConfigStore()
         store.dispatch(setVisUiConfigOption({ key: 'hideTitle', value: true }))
 
         store.dispatch(setVisUiConfigVisualizationType('PIVOT_TABLE'))
         await Promise.resolve()
 
-        expect(store.getState().visUiConfig.options.hideTitle).toBe(false)
+        expect(store.getState().visUiConfig.options.hideTitle).toBe(true)
     })
 
     it('leaves the title alone when the output type changes', async () => {

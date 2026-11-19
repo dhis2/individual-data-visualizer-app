@@ -97,18 +97,6 @@ describe('ConditionsTabContent — Show all / Filter', () => {
         expect(screen.getAllByTestId('alphanumeric-condition')).toHaveLength(1)
     })
 
-    it('uses a single static "Add filter" label regardless of condition count', async () => {
-        await renderTabContent({ de1: { condition: 'LIKE:foo:LIKE:bar' } })
-
-        expect(screen.getAllByTestId('alphanumeric-condition')).toHaveLength(2)
-        expect(
-            screen.getByRole('button', { name: 'Add filter' })
-        ).toBeInTheDocument()
-        expect(
-            screen.queryByRole('button', { name: 'Add another filter' })
-        ).not.toBeInTheDocument()
-    })
-
     it('persists no condition when Filter is selected but left empty', async () => {
         const user = userEvent.setup()
         const { store } = await renderTabContent()

@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-18T15:46:42.175Z\n"
-"PO-Revision-Date: 2026-11-18T15:46:42.176Z\n"
+"POT-Creation-Date: 2026-11-19T14:34:40.520Z\n"
+"PO-Revision-Date: 2026-11-19T14:34:40.521Z\n"
 
 msgid "Network error"
 msgstr "Network error"
@@ -325,6 +325,18 @@ msgstr "Not valid with program indicators"
 msgid "Nothing selected. Add items to the layout to get started."
 msgstr "Nothing selected. Add items to the layout to get started."
 
+msgid "Add at least one dimension to columns or rows"
+msgstr "Add at least one dimension to columns or rows"
+
+msgid "Add at least one dimension to columns"
+msgstr "Add at least one dimension to columns"
+
+msgid "Select at least one period"
+msgstr "Select at least one period"
+
+msgid "Select at least one organisation unit"
+msgstr "Select at least one organisation unit"
+
 msgid "One row for each {{- outputTypeLabel}}"
 msgstr "One row for each {{- outputTypeLabel}}"
 
@@ -364,8 +376,12 @@ msgstr "Chart options"
 msgid "Convert to {{- visType}}"
 msgstr "Convert to {{- visType}}"
 
-msgid "{{- names}} will be removed. Are you sure?"
-msgstr "{{- names}} will be removed. Are you sure?"
+msgid ""
+"{{- names}} will be removed because program indicators are not supported in "
+"pivot tables. Are you sure?"
+msgstr ""
+"{{- names}} will be removed because program indicators are not supported in "
+"pivot tables. Are you sure?"
 
 msgid "Cancel"
 msgstr "Cancel"
@@ -481,6 +497,18 @@ msgstr "Normal"
 
 msgid "Compact"
 msgstr "Compact"
+
+msgid "Fix column headers to top of table"
+msgstr "Fix column headers to top of table"
+
+msgid "There aren’t any column headers because Columns is empty."
+msgstr "There aren’t any column headers because Columns is empty."
+
+msgid "Fix row headers to left of table"
+msgstr "Fix row headers to left of table"
+
+msgid "There aren’t any row headers because Rows is empty."
+msgstr "There aren’t any row headers because Rows is empty."
 
 msgid "Font size"
 msgstr "Font size"
@@ -1120,6 +1148,16 @@ msgstr ""
 "This request returns more data than the server allows. Reduce the amount of "
 "data and try again, for example by choosing fewer items, adding filters, or "
 "choosing a shorter period."
+
+msgid "Date range not supported"
+msgstr "Date range not supported"
+
+msgid ""
+"Date ranges aren’t supported in rows or columns yet. Move the period to "
+"filter or use a fixed or relative selection."
+msgstr ""
+"Date ranges aren’t supported in rows or columns yet. Move the period to "
+"filter or use a fixed or relative selection."
 
 msgid "Top limit too high"
 msgstr "Top limit too high"
