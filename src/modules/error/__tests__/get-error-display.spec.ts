@@ -94,6 +94,14 @@ describe('getErrorDisplay', () => {
         expect(display.retryable).toBeFalsy()
     })
 
+    it('maps an unsupported date range to a non-retryable screen that suggests a fix', () => {
+        const display = getErrorDisplay(engineError({ errorCode: 'E7270' }))
+
+        expect(display.title).toBe('Date range not supported')
+        expect(display.description).toContain('Move the period to filter')
+        expect(display.retryable).toBeFalsy()
+    })
+
     it('offers a retry for a code that can succeed on a second attempt', () => {
         const display = getErrorDisplay(engineError({ errorCode: 'E7131' }))
 
@@ -162,7 +170,7 @@ describe('getErrorDisplay', () => {
     })
 
     it('uses the database icon when the data or its metadata is the problem', () => {
-        const dataCodes = ['E7132', 'E7142', 'E7128', 'E7226', 'E7245']
+        const dataCodes = ['E7132', 'E7142', 'E7128', 'E7226', 'E7245', 'E7270']
 
         for (const errorCode of dataCodes) {
             expect(getErrorDisplay(engineError({ errorCode })).icon).toBe(
@@ -203,6 +211,7 @@ describe('getErrorDisplay', () => {
             'E7226',
             'E7236',
             'E7245',
+            'E7270',
         ]
 
         for (const errorCode of allCodes) {

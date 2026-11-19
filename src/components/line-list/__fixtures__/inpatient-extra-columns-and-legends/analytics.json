@@ -114,8 +114,7 @@
             "valueType": "NUMBER",
             "type": "java.lang.Double",
             "hidden": false,
-            "meta": true,
-            "legendSet": "TBxGTceyzwy"
+            "meta": true
         },
         {
             "name": "ReQEl5V3z6p",
@@ -148,10 +147,6 @@
                 "code": "K221",
                 "name": "K221 Ulcer of oesophagus"
             },
-            "GWuQsWJDGvN": {
-                "uid": "GWuQsWJDGvN",
-                "name": "140 - 160"
-            },
             "qrur9Dvnyt5": {
                 "uid": "qrur9Dvnyt5",
                 "code": "DE_3000003",
@@ -183,13 +178,13 @@
                 "aggregationType": "AVERAGE",
                 "totalAggregationType": "SUM"
             },
-            "NxQrJ3icPkE": {
-                "uid": "NxQrJ3icPkE",
-                "name": "0 - 20"
-            },
             "xVezsaEXU3k": {
                 "uid": "xVezsaEXU3k",
                 "name": "70 - 80"
+            },
+            "NxQrJ3icPkE": {
+                "uid": "NxQrJ3icPkE",
+                "name": "0 - 20"
             },
             "syPAJAlKvXN": {
                 "uid": "syPAJAlKvXN",
@@ -212,14 +207,6 @@
                 "uid": "p7aYknGe7pk",
                 "code": "T924",
                 "name": "T924 Sequelae of injury of nerve of upper limb"
-            },
-            "sxFVvKLpE0y": {
-                "uid": "sxFVvKLpE0y",
-                "name": "0 - 100"
-            },
-            "B1X4JyH4Mdw": {
-                "uid": "B1X4JyH4Mdw",
-                "name": "180 - 200"
             },
             "vepINo5FwN4": {
                 "uid": "vepINo5FwN4",
@@ -277,10 +264,6 @@
                 "uid": "vogjvk3xroZ",
                 "code": "M862",
                 "name": "M862 Subacute osteomyelitis"
-            },
-            "BHlWGFLIU20": {
-                "uid": "BHlWGFLIU20",
-                "name": "120 - 140"
             },
             "asV4IvE6f5j": {
                 "uid": "asV4IvE6f5j",
@@ -976,10 +959,6 @@
                 "code": "W847",
                 "name": "W847 Unspecified threat to breathing, farm"
             },
-            "CivTksSoCt0": {
-                "uid": "CivTksSoCt0",
-                "name": "100 - 120"
-            },
             "O1Z4F3rXkWh": {
                 "uid": "O1Z4F3rXkWh",
                 "code": "A839",
@@ -1102,10 +1081,6 @@
                 "uid": "E9Sw1QJSRGs",
                 "code": "R636",
                 "name": "R636 Insufficient intake of food and water due to self neglect"
-            },
-            "eySqrYxteI7": {
-                "uid": "eySqrYxteI7",
-                "name": "200+"
             },
             "y8dhx0pZF1u": {
                 "uid": "y8dhx0pZF1u",
@@ -1341,10 +1316,6 @@
                 "aggregationType": "AVERAGE",
                 "totalAggregationType": "SUM"
             },
-            "wgbW2ZQnlIc": {
-                "uid": "wgbW2ZQnlIc",
-                "name": "160 - 180"
-            },
             "GD5g4PS5knO": {
                 "uid": "GD5g4PS5knO",
                 "code": "T941",
@@ -1402,15 +1373,7 @@
             "Zj7UnCAulEk.eMyVanycQSC": [],
             "b8hd33dWjR6": [],
             "Zj7UnCAulEk.msodh3rEMJa": [],
-            "gWxh7DiRmG7": [
-                "sxFVvKLpE0y",
-                "CivTksSoCt0",
-                "BHlWGFLIU20",
-                "GWuQsWJDGvN",
-                "wgbW2ZQnlIc",
-                "B1X4JyH4Mdw",
-                "eySqrYxteI7"
-            ],
+            "gWxh7DiRmG7": [],
             "Zj7UnCAulEk.fWIAEtYVEGk": [
                 "yeod5tOXpkP",
                 "gj2fKKyp8OH",
@@ -1612,7 +1575,7 @@
             "47.06",
             "14",
             "1",
-            "85.0000000000000000",
+            "85",
             "34"
         ],
         [
@@ -1646,7 +1609,7 @@
             "17.53",
             "14",
             "1",
-            "117.0000000000000000",
+            "117",
             "24"
         ],
         [
@@ -1799,7 +1762,7 @@
             "5.38",
             "14",
             "1",
-            "188.0000000000000000",
+            "188",
             "19"
         ],
         [
@@ -1833,7 +1796,7 @@
             "10.39",
             "14",
             "1",
-            "152.0000000000000000",
+            "152",
             "24"
         ],
         [
@@ -1884,7 +1847,7 @@
             "16.97",
             "14",
             "1",
-            "161.0000000000000000",
+            "161",
             "44"
         ],
         [
@@ -1901,7 +1864,7 @@
             "25.4",
             "14",
             "1",
-            "166.0000000000000000",
+            "166",
             "70"
         ],
         [
@@ -1918,7 +1881,7 @@
             "18.21",
             "14",
             "1",
-            "180.0000000000000000",
+            "180",
             "59"
         ],
         [
@@ -1969,7 +1932,7 @@
             "67.27",
             "14",
             "1",
-            "96.0000000000000000",
+            "96",
             "62"
         ],
         [
@@ -2122,7 +2085,7 @@
             "51.9",
             "14",
             "1",
-            "102.0000000000000000",
+            "102",
             "54"
         ],
         [
@@ -2156,7 +2119,7 @@
             "35.81",
             "14",
             "1",
-            "107.0000000000000000",
+            "107",
             "41"
         ],
         [
@@ -2207,7 +2170,7 @@
             "63.76",
             "14",
             "1",
-            "107.0000000000000000",
+            "107",
             "73"
         ],
         [
@@ -2292,7 +2255,7 @@
             "31.96",
             "14",
             "1",
-            "148.0000000000000000",
+            "148",
             "70"
         ],
         [
@@ -2309,7 +2272,7 @@
             "15.06",
             "14",
             "1",
-            "167.0000000000000000",
+            "167",
             "42"
         ],
         [
@@ -2343,7 +2306,7 @@
             "25.28",
             "14",
             "1",
-            "164.0000000000000000",
+            "164",
             "68"
         ],
         [
@@ -2462,7 +2425,7 @@
             "31.74",
             "14",
             "1",
-            "142.0000000000000000",
+            "142",
             "64"
         ],
         [
@@ -2513,7 +2476,7 @@
             "7.76",
             "14",
             "1",
-            "148.0000000000000000",
+            "148",
             "17"
         ],
         [
@@ -2530,7 +2493,7 @@
             "26.56",
             "14",
             "1",
-            "160.0000000000000000",
+            "160",
             "68"
         ],
         [
@@ -2785,7 +2748,7 @@
             "186.73",
             "14",
             "1",
-            "59.0000000000000000",
+            "59",
             "65"
         ],
         [
@@ -2972,7 +2935,7 @@
             "35.8",
             "14",
             "1",
-            "90.0000000000000000",
+            "90",
             "29"
         ],
         [

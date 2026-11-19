@@ -52,12 +52,14 @@ export const registerAppListeners = () => {
 
     startAppListening({
         actionCreator: setVisUiConfigVisualizationType,
-        effect: (action, { dispatch }) => {
+        effect: (action, { dispatch, getState }) => {
             setLastUsedVisualizationTypeToLocalStorage(action.payload)
 
-            // Changing visualization type resets the title configuration to Auto generated
-            dispatch(setVisUiConfigOption({ key: 'title', value: '' }))
-            dispatch(setVisUiConfigOption({ key: 'hideTitle', value: false }))
+            /* A custom title rarely fits another visualization type, so it is
+             * reset to Auto generated. A hidden title stays hidden. */
+            if (!getState().visUiConfig.options.hideTitle) {
+                dispatch(setVisUiConfigOption({ key: 'title', value: '' }))
+            }
         },
     })
 

@@ -123,7 +123,11 @@ describe('VisualizationTypeSelector', () => {
         )
 
         const modal = await screen.findByTestId('conversion-confirmation-modal')
-        expect(within(modal).getByText(/My PI/)).toBeInTheDocument()
+        expect(
+            within(modal).getByText(
+                'My PI will be removed because program indicators are not supported in pivot tables. Are you sure?'
+            )
+        ).toBeInTheDocument()
         expect(getVisUiConfigVisualizationType(store.getState())).toBe(
             'LINE_LIST'
         )

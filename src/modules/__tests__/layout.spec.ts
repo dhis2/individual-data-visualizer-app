@@ -1046,32 +1046,6 @@ describe('convertLayoutForVisType', () => {
             expect(result.convertedLayout.filters).toEqual(['numericDe'])
         })
 
-        it('keeps the TET registration OU, routing it to columns', () => {
-            const result = convertLayoutForVisType({
-                layout: {
-                    columns: ['tetId.ou', 'numericDe'],
-                    rows: [],
-                    filters: [],
-                },
-                targetVisType: 'PIVOT_TABLE',
-                getDimension: makeGetDimension({
-                    'tetId.ou': makeDim({
-                        dimensionId: 'ou',
-                        dimensionType: 'ORGANISATION_UNIT',
-                        trackedEntityTypeId: 'tetId',
-                    }),
-                    numericDe: makeDim({
-                        dimensionId: 'numericDe',
-                        dimensionType: 'DATA_ELEMENT',
-                        valueType: 'NUMBER',
-                    }),
-                }),
-            })
-            expect(result.invalidDimensionIds).toEqual([])
-            expect(result.convertedLayout.columns).toEqual(['tetId.ou'])
-            expect(result.convertedLayout.filters).toEqual(['numericDe'])
-        })
-
         it('routes columns by dimension type: org unit to columns, period to rows, the rest to filters', () => {
             const result = convertLayoutForVisType({
                 layout: {

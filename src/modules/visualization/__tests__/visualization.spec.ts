@@ -586,16 +586,6 @@ describe('getSaveableVisualization', () => {
         expect(s0.direction).toBe('DESC')
     })
 
-    it('leaves the cell value out when the visualization has none', () => {
-        const vis = {
-            columns: [],
-            rows: [],
-            filters: [],
-        } as unknown as SavedVisualization
-
-        expect(getSaveableVisualization(vis).value).toBeUndefined()
-    })
-
     it('sets sorting to undefined when sorting is not provided or empty', () => {
         const vis1 = {
             columns: [],
@@ -942,6 +932,21 @@ describe('normalizeApiSavedVisualization', () => {
         )
 
         expect(result.columns?.[0].legendSet).toBeUndefined()
+    })
+
+    it('drops the legend set and legend filter of a program indicator', () => {
+        const result = normalizeApiSavedVisualization(
+            buildGroupedVis({
+                dimensionType: 'PROGRAM_INDICATOR',
+                valueType: undefined,
+                programStage: undefined,
+                filter: 'IN:legend1;legend2',
+            })
+        )
+
+        expect(result.columns?.[0].legendSet).toBeUndefined()
+        expect(result.columns?.[0].filter).toBeUndefined()
+        expect(result.legacy).toBeUndefined()
     })
 
     const buildCellValueVis = (

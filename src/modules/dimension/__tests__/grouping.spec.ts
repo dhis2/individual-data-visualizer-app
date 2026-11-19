@@ -40,10 +40,13 @@ describe('isLegendGroupingFilter', () => {
 })
 
 describe('canDimensionHaveLegendSets', () => {
-    it('accepts a program indicator with no valueType', () => {
+    it('rejects a program indicator, even with a numeric valueType', () => {
         expect(
-            canDimensionHaveLegendSets({ dimensionType: 'PROGRAM_INDICATOR' })
-        ).toBe(true)
+            canDimensionHaveLegendSets({
+                dimensionType: 'PROGRAM_INDICATOR',
+                valueType: 'NUMBER',
+            })
+        ).toBe(false)
     })
 
     it('accepts a numeric data element', () => {
@@ -148,6 +151,56 @@ describe('dropInvalidGrouping', () => {
         ],
     ])('drops a legend set on %s', (_label, overrides) => {
         expect(drop(numericDim(overrides)).legendSet).toBeUndefined()
+    })
+
+    describe('on a program indicator', () => {
+        const programIndicatorDim = (
+            overrides: Partial<DimensionRecord> = {}
+        ) =>
+            numericDim({
+                dimensionType: 'PROGRAM_INDICATOR',
+                valueType: undefined,
+                ...overrides,
+            })
+
+        it('drops the legend set', () => {
+            expect(drop(programIndicatorDim()).legendSet).toBeUndefined()
+        })
+
+        it('drops the legend set and its legend filter', () => {
+            const result = drop(
+                programIndicatorDim({ filter: 'IN:legend1;legend2' })
+            )
+
+            expect(result.legendSet).toBeUndefined()
+            expect(result.filter).toBeUndefined()
+        })
+
+        it('drops the legend set and keeps a raw-value filter', () => {
+            const result = drop(programIndicatorDim({ filter: 'GE:18' }))
+
+            expect(result.legendSet).toBeUndefined()
+            expect(result.filter).toBe('GE:18')
+        })
+
+        it('keeps an IN filter without a legend set', () => {
+            const dim = programIndicatorDim({
+                legendSet: undefined,
+                filter: 'IN:1;2',
+            })
+
+            expect(drop(dim)).toBe(dim)
+        })
+    })
+
+    /* An IN filter on a non-numeric data element picks options, not legends. */
+    it('keeps an option set IN filter when dropping the legend set', () => {
+        const result = drop(
+            numericDim({ valueType: 'TEXT', filter: 'IN:code1;code2' })
+        )
+
+        expect(result.legendSet).toBeUndefined()
+        expect(result.filter).toBe('IN:code1;code2')
     })
 
     it('leaves a dimension without a legend set untouched', () => {
