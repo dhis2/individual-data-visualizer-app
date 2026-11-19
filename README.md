@@ -444,7 +444,7 @@ Data that stays the same for the app's lifecycle is loaded once, before anything
     - `useOrgUnitLevels`
 - `PluginCachedDataProvider` (in `src/dashboard-plugin.tsx`) loads only the relative period names. Read it with `usePluginCachedData`.
 
-Both are built on `CachedDataProvider` (`src/components/app-wrapper/cached-data/`). It runs an app-runtime query and one async hook (for data that comes from a hook rather than a query, such as `useRelativePeriodsNames` from `@dhis2/analytics`), and passes both through a transformation. While either is loading it shows a loader; if either fails it shows an error instead of the app.
+Each one calls its own hooks (an app-runtime query, `useRelativePeriodsNames` from `@dhis2/analytics`, …), transforms the results, and passes the transformed data, plus any error, to `CachedDataProvider` (`src/components/app-wrapper/cached-data/`). That component shows a loader while the data is `undefined`, an error instead of the app if loading failed, and otherwise puts the data in a context shared by the app and the plugin. The typed hooks read from that context. `useAppCachedData` throws when the data comes from the plugin, so the plugin can't use the app's data by mistake.
 
 The relative period names end up in the metadata store, so components read them from there, not from the cached data.
 

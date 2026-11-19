@@ -1,40 +1,27 @@
-import { CachedDataProvider } from '@components/app-wrapper/cached-data/cached-data-provider'
 import {
-    type RelativePeriodsNamesData,
-    useRelativePeriodsNamesData,
-} from '@components/app-wrapper/cached-data/relative-periods-names'
+    CachedDataProvider,
+    useCachedData,
+    type CachedData,
+} from '@components/app-wrapper/cached-data/cached-data-provider'
+import { useRelativePeriodsNames } from '@dhis2/analytics'
 import { freeze } from '@reduxjs/toolkit'
-import { createContext, useContext, type FC, type ReactNode } from 'react'
+import type { FC, ReactNode } from 'react'
 
-export type PluginCachedData = RelativePeriodsNamesData
-
-const PluginCachedDataContext = createContext<PluginCachedData | null>(null)
-
-const pluginDataTransformation = (
-    _queryData: unknown,
-    asyncData: RelativePeriodsNamesData
-): PluginCachedData => freeze(asyncData)
+export type PluginCachedData = CachedData
 
 export const PluginCachedDataProvider: FC<{ children: ReactNode }> = ({
     children,
-}) => (
-    <CachedDataProvider
-        context={PluginCachedDataContext}
-        useAsyncData={useRelativePeriodsNamesData}
-        transformation={pluginDataTransformation}
-    >
-        {children}
-    </CachedDataProvider>
-)
+}) => {
+    const { relativePeriodsNames, loading, error } = useRelativePeriodsNames()
 
-export const usePluginCachedData = (): PluginCachedData => {
-    const pluginCachedData = useContext(PluginCachedDataContext)
-
-    if (!pluginCachedData) {
-        throw new Error(
-            'usePluginCachedData must be used within a PluginCachedDataProvider'
-        )
-    }
-
-    return pluginCachedData
+    return (
+        <CachedDataProvider
+            data={loading ? undefined : freeze({ relativePeriodsNames })}
+            error={error}
+        >
+            {children}
+        </CachedDataProvider>
+    )
 }
+
+export const usePluginCachedData = (): PluginCachedData => useCachedData()

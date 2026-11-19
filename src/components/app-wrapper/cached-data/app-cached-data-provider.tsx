@@ -1,9 +1,13 @@
-import { CachedDataProvider } from '@components/app-wrapper/cached-data/cached-data-provider'
 import {
-    type RelativePeriodsNamesData,
-    useRelativePeriodsNamesData,
-} from '@components/app-wrapper/cached-data/relative-periods-names'
-import { useCurrentUserInfo } from '@dhis2/app-runtime'
+    CachedDataProvider,
+    useCachedData,
+    type CachedData,
+} from '@components/app-wrapper/cached-data/cached-data-provider'
+import { useRelativePeriodsNames } from '@dhis2/analytics'
+/* useDataQuery, not the RTK-query hooks: the Redux store is created from this
+ * data, so it does not exist yet. */
+// eslint-disable-next-line no-restricted-imports
+import { useCurrentUserInfo, useDataQuery } from '@dhis2/app-runtime'
 import type { Query } from '@dhis2/app-service-data'
 import { freeze } from '@reduxjs/toolkit'
 import type {
@@ -12,7 +16,7 @@ import type {
     PickWithFieldFilters,
     SystemSettings,
 } from '@types'
-import { createContext, useContext, type FC, type ReactNode } from 'react'
+import type { FC, ReactNode } from 'react'
 
 const rootOrgUnitsFields = ['id', 'displayName', 'name', 'path'] as const
 const orgUnitLevelsFields = ['id', 'level', 'displayName', 'name'] as const
@@ -84,12 +88,8 @@ export type TransformedAppCachedData = {
     systemSettings: TransformedSystemSettings
     rootOrgUnits: RootOrgUnitsData
     orgUnitLevels: OrgUnitLevelsData
-    relativePeriodsNames: RelativePeriodsNamesData['relativePeriodsNames']
+    relativePeriodsNames: CachedData['relativePeriodsNames']
 }
-
-const AppCachedDataContext = createContext<TransformedAppCachedData | null>(
-    null
-)
 
 const toCurrentUserData = ({
     id,
@@ -107,7 +107,7 @@ const toCurrentUserData = ({
 
 const providerDataTransformation = (
     { systemSettings, rootOrgUnits, orgUnitLevels }: AppCachedQueryData,
-    { relativePeriodsNames }: RelativePeriodsNamesData,
+    relativePeriodsNames: CachedData['relativePeriodsNames'],
     currentUser: CurrentUserData
 ): TransformedAppCachedData => {
     const displayNameProperty: DisplayNameProperty =
@@ -154,38 +154,44 @@ export const AppCachedDataProvider: FC<{ children: ReactNode }> = ({
     children,
 }) => {
     const currentUserInfo = useCurrentUserInfo()
+    const queryResult = useDataQuery<AppCachedQueryData>(query)
+    const relativePeriods = useRelativePeriodsNames()
 
     if (!currentUserInfo) {
         throw new Error('Current user info is not available')
     }
 
-    const currentUser = toCurrentUserData(currentUserInfo)
+    const data =
+        queryResult.data && !relativePeriods.loading
+            ? providerDataTransformation(
+                  queryResult.data,
+                  relativePeriods.relativePeriodsNames,
+                  toCurrentUserData(currentUserInfo)
+              )
+            : undefined
 
     return (
         <CachedDataProvider
-            context={AppCachedDataContext}
-            query={query}
-            useAsyncData={useRelativePeriodsNamesData}
-            transformation={(
-                queryData: AppCachedQueryData,
-                asyncData: RelativePeriodsNamesData
-            ) => providerDataTransformation(queryData, asyncData, currentUser)}
+            data={data}
+            error={queryResult.error ?? relativePeriods.error}
         >
             {children}
         </CachedDataProvider>
     )
 }
 
-export const useAppCachedData = (): TransformedAppCachedData => {
-    const appCachedData = useContext(AppCachedDataContext)
+const isAppCachedData = (
+    cachedData: CachedData
+): cachedData is TransformedAppCachedData => 'currentUser' in cachedData
 
-    if (!appCachedData) {
-        throw new Error(
-            'useAppCachedData must be used within an AppCachedDataProvider'
-        )
+export const useAppCachedData = (): TransformedAppCachedData => {
+    const cachedData = useCachedData()
+
+    if (!isAppCachedData(cachedData)) {
+        throw new Error('useAppCachedData can only be used in the app')
     }
 
-    return appCachedData
+    return cachedData
 }
 export const useCurrentUser = (): TransformedAppCachedData['currentUser'] => {
     const { currentUser } = useAppCachedData()
