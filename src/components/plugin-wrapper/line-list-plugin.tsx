@@ -2,7 +2,8 @@ import { LineList } from '@components/line-list'
 import type {
     ColumnHeaderClickFn,
     DataSortFn,
-    PaginateFn,
+    PageChangeFn,
+    PageSizeChangeFn,
 } from '@components/line-list/types'
 import { transformVisualizationForAnalyticsRequest } from '@modules/analytics-request'
 import { logger } from '@modules/logger'
@@ -60,8 +61,8 @@ export const LineListPlugin: FC<LineListPluginProps> = ({
         } as CurrentVisualization
     }, [visualization, sorting])
 
-    const onPaginate = useCallback<PaginateFn>(
-        ({ page, pageSize }) => {
+    const onPageChange = useCallback<PageChangeFn>(
+        (page) => {
             void fetchAnalyticsData({
                 visualization:
                     transformVisualizationForAnalyticsRequest(
@@ -71,6 +72,27 @@ export const LineListPlugin: FC<LineListPluginProps> = ({
                 displayProperty,
                 onResponseReceived,
                 page,
+            })
+        },
+        [
+            displayProperty,
+            relativePeriodDate,
+            eventVisualization,
+            onResponseReceived,
+            fetchAnalyticsData,
+        ]
+    )
+
+    const onPageSizeChange = useCallback<PageSizeChangeFn>(
+        (pageSize) => {
+            void fetchAnalyticsData({
+                visualization:
+                    transformVisualizationForAnalyticsRequest(
+                        eventVisualization
+                    ),
+                relativePeriodDate,
+                displayProperty,
+                onResponseReceived,
                 pageSize,
             })
         },
@@ -130,7 +152,8 @@ export const LineListPlugin: FC<LineListPluginProps> = ({
             filterText={filterText}
             analyticsData={data}
             onDataSort={onDataSort}
-            onPaginate={onPaginate}
+            onPageChange={onPageChange}
+            onPageSizeChange={onPageSizeChange}
             visualization={eventVisualization}
             isFetching={isFetching}
             requestedPage={requestedPage}

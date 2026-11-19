@@ -29,7 +29,8 @@ import type {
     DataSortFn,
     DataSortPayload,
     RequestedPage,
-    PaginateFn,
+    PageChangeFn,
+    PageSizeChangeFn,
 } from './types'
 import { useTransformedLineListData } from './use-transformed-line-list-data'
 
@@ -56,7 +57,8 @@ const ModalHeightConstrainer: FC<PropsWithChildren> = ({ children }) => {
 type LineListProps = {
     analyticsData: LineListAnalyticsData
     onDataSort: DataSortFn
-    onPaginate: PaginateFn
+    onPageChange: PageChangeFn
+    onPageSizeChange: PageSizeChangeFn
     visualization: CurrentVisualization
     isFetching?: boolean
     requestedPage?: RequestedPage | null
@@ -78,7 +80,8 @@ export const LineList: FC<LineListProps> = (props) =>
 const LineListInternal: FC<LineListProps> = ({
     analyticsData,
     onDataSort,
-    onPaginate,
+    onPageChange,
+    onPageSizeChange,
     visualization,
     isFetching = false,
     requestedPage = null,
@@ -219,7 +222,8 @@ const LineListInternal: FC<LineListProps> = ({
                                     visualization={visualization}
                                     requestedPage={requestedPage}
                                     isDisconnected={isDisconnected}
-                                    onPaginate={onPaginate}
+                                    onPageChange={onPageChange}
+                                    onPageSizeChange={onPageSizeChange}
                                 />
                             </DataTableRow>
                         </DataTableFoot>
