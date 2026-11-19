@@ -80,14 +80,36 @@ const metadata = {
     },
 }
 
+const period = {
+    id: 'lastUpdated',
+    name: 'Last updated on',
+    dimensionType: 'PERIOD',
+    valueType: 'DATE',
+}
+
+const orgUnit = {
+    id: 'ou',
+    name: 'Organisation unit',
+    dimensionType: 'ORGANISATION_UNIT',
+    valueType: 'ORGANISATION_UNIT',
+}
+
 const buildMockOptions = (outputType: OutputType, columns: string[]) => ({
-    metadata,
+    metadata: { ...metadata, [period.id]: period, [orgUnit.id]: orgUnit },
     partialStore: {
         preloadedState: {
             visUiConfig: {
                 ...visUiConfigInitialState,
                 outputType,
-                layout: { ...visUiConfigInitialState.layout, columns },
+                layout: {
+                    ...visUiConfigInitialState.layout,
+                    columns,
+                    filters: [period.id, orgUnit.id],
+                },
+                itemsByDimension: {
+                    [period.id]: ['LAST_12_MONTHS'],
+                    [orgUnit.id]: ['USER_ORGUNIT'],
+                },
             },
         } as Partial<RootState>,
     },
