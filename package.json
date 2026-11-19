@@ -26,6 +26,7 @@
         "@commitlint/config-conventional": "^21.2.4",
         "@cypress/grep": "^7.0.0",
         "@cypress/vite-dev-server": "^7.3.4",
+        "@dhis2/app-service-config": "^3.17.6",
         "@dhis2/app-service-data": "^3.17.4",
         "@dhis2/app-service-user": "^3.17.4",
         "@dhis2/cli-app-scripts": "^12.11.9",

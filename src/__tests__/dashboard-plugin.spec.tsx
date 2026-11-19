@@ -1,5 +1,6 @@
 import { useMetadataStore } from '@components/app-wrapper/metadata-provider/metadata-provider'
 import { getVisualizationTitle } from '@modules/visualization/title'
+import type { AnalyticsModule } from '@test-utils/relative-periods-names-stub'
 import { render, screen, waitFor } from '@testing-library/react'
 import type { CurrentVisualization, DashboardPluginProps } from '@types'
 import { useEffect, type FC } from 'react'
@@ -41,14 +42,20 @@ vi.mock('@dhis2/app-runtime', async (importOriginal) => ({
     useDataQuery: () => queryResult,
 }))
 
-vi.mock('@dhis2/analytics', async (importOriginal) => ({
-    ...(await importOriginal<object>()),
-    DashboardPluginWrapper: ({
-        children,
-    }: {
-        children: (props: object) => unknown
-    }) => children({ displayProperty: 'name' }),
-}))
+vi.mock('@dhis2/analytics', async (importOriginal) => {
+    const analytics = await importOriginal<AnalyticsModule>()
+    const { stubUseRelativePeriodsNames } =
+        await import('@test-utils/relative-periods-names-stub')
+    return {
+        ...analytics,
+        useRelativePeriodsNames: stubUseRelativePeriodsNames(analytics),
+        DashboardPluginWrapper: ({
+            children,
+        }: {
+            children: (props: object) => unknown
+        }) => children({ displayProperty: 'name' }),
+    }
+})
 
 const cellValueItemsSeen = vi.hoisted(() => ({
     onRender: [] as unknown[],
