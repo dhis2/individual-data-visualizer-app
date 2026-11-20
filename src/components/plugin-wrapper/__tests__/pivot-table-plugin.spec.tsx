@@ -215,4 +215,57 @@ describe('PivotTablePlugin', () => {
         expect(pivotTable).toHaveAttribute('data-legend-strategy', 'FIXED')
         expect(pivotTable).toHaveAttribute('data-legend-set-id', 'ls1')
     })
+
+    describe('legend key', () => {
+        const renderWithLegend = ({
+            showKey,
+            isInDashboard = false,
+        }: {
+            showKey: boolean
+            isInDashboard?: boolean
+        }) =>
+            render(
+                <MockMetadataProvider>
+                    <PivotTablePlugin
+                        displayProperty="name"
+                        visualization={{
+                            ...visualization,
+                            legend: {
+                                strategy: 'BY_DATA_ITEM',
+                                style: 'FILL',
+                                showKey,
+                            } as CurrentVisualization['legend'],
+                        }}
+                        isInDashboard={isInDashboard}
+                        isInModal={false}
+                        onResponseReceived={vi.fn()}
+                    />
+                </MockMetadataProvider>
+            )
+
+        it('shows the legend key when the option is on', () => {
+            renderWithLegend({ showKey: true })
+
+            expect(
+                screen.getByTestId('visualization-legend-key')
+            ).toBeInTheDocument()
+        })
+
+        it('hides the legend key when the option is off', () => {
+            renderWithLegend({ showKey: false })
+
+            expect(
+                screen.queryByTestId('visualization-legend-key')
+            ).not.toBeInTheDocument()
+        })
+
+        it('offers a toggle for the legend key on a dashboard', () => {
+            renderWithLegend({ showKey: false, isInDashboard: true })
+
+            expect(screen.getByTestId('legend-key-toggler')).toBeInTheDocument()
+            expect(
+                screen.queryByTestId('visualization-legend-key')
+            ).not.toBeInTheDocument()
+        })
+    })
 })

@@ -1,3 +1,4 @@
+import { LegendKey } from '@components/shared/legend-key'
 import { PivotTable } from '@dhis2/analytics'
 import {
     getAnalyticsRequestHeaderName,
@@ -12,6 +13,7 @@ import {
     getPivotTableEngineLegend,
 } from './hooks/legend-sets'
 import { usePivotTableAnalyticsData } from './hooks/use-pivot-table-analytics-data'
+import classes from './styles/pivot-table-plugin.module.css'
 
 const formatVisualizationForPivotTableEngine = (
     visualization: CurrentVisualization,
@@ -57,7 +59,6 @@ export const PivotTablePlugin: FC<PivotTablePluginProps> = ({
     relativePeriodDate,
     onResponseReceived,
     filterText,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     isInDashboard,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     isInModal,
@@ -106,11 +107,22 @@ export const PivotTablePlugin: FC<PivotTablePluginProps> = ({
     }
 
     return (
-        <PivotTable
-            visualization={eventVisualization}
-            data={data}
-            legendSets={legendSets}
-            filterText={filterText}
-        />
+        <div className={classes.grid}>
+            <div className={classes.table}>
+                <PivotTable
+                    visualization={eventVisualization}
+                    data={data}
+                    legendSets={legendSets}
+                    filterText={filterText}
+                />
+            </div>
+            <div className={classes.endColumn} data-test="end-column">
+                <LegendKey
+                    isInDashboard={isInDashboard}
+                    legendSets={legendSets}
+                    showKey={visualization.legend?.showKey ?? false}
+                />
+            </div>
+        </div>
     )
 }

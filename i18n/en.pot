@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-19T14:34:40.520Z\n"
-"PO-Revision-Date: 2026-11-19T14:34:40.521Z\n"
+"POT-Creation-Date: 2026-11-20T11:11:36.391Z\n"
+"PO-Revision-Date: 2026-11-20T11:11:36.393Z\n"
 
 msgid "Network error"
 msgstr "Network error"
@@ -404,12 +404,6 @@ msgstr "No event"
 msgid "Sort by \"{{- column}}\" and update"
 msgstr "Sort by \"{{- column}}\" and update"
 
-msgid "Hide legend key"
-msgstr "Hide legend key"
-
-msgid "Show legend key"
-msgstr "Show legend key"
-
 msgid ""
 "This line list may show data that was not available when the interpretation "
 "was written."
@@ -555,6 +549,9 @@ msgstr "Select from legends"
 msgid "Loading legends"
 msgstr "Loading legends"
 
+msgid "Show legend key"
+msgstr "Show legend key"
+
 msgid "Limit"
 msgstr "Limit"
 
@@ -638,6 +635,9 @@ msgstr "Show without filters"
 
 msgid "Page {{page}} not found, returned to page {{shownPage}}"
 msgstr "Page {{page}} not found, returned to page {{shownPage}}"
+
+msgid "Hide legend key"
+msgstr "Hide legend key"
 
 msgid "Create a {{- visType}} before updating"
 msgstr "Create a {{- visType}} before updating"
