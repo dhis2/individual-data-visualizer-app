@@ -11,14 +11,17 @@ vi.mock('@dhis2/analytics', async (importOriginal) => ({
     ...(await importOriginal<object>()),
     PivotTable: ({
         filterText,
+        legendSets,
         visualization,
     }: {
         filterText?: string
+        legendSets?: { id: string }[]
         visualization: CurrentVisualization
     }) => (
         <div
             data-test="pivot-table"
             data-filter-text={filterText}
+            data-legend-set-ids={legendSets?.map(({ id }) => id).join(',')}
             data-fix-column-headers={visualization.fixColumnHeaders}
             data-fix-row-headers={visualization.fixRowHeaders}
             data-filter-dimensions={visualization.filters
@@ -46,6 +49,7 @@ vi.mock(
             {
                 isFetching: false,
                 data: { headers: [], rows: [], metaData: {} },
+                legendSets: [{ id: 'ls1', name: 'Weight bands', legends: [] }],
             },
         ],
     })
@@ -164,6 +168,25 @@ describe('PivotTablePlugin', () => {
         expect(screen.getByTestId('pivot-table')).toHaveAttribute(
             'data-filter-dimensions',
             ''
+        )
+    })
+
+    it('hands the fetched legend sets to the pivot table', () => {
+        render(
+            <MockMetadataProvider>
+                <PivotTablePlugin
+                    displayProperty="name"
+                    visualization={visualization}
+                    isInDashboard={false}
+                    isInModal={false}
+                    onResponseReceived={vi.fn()}
+                />
+            </MockMetadataProvider>
+        )
+
+        expect(screen.getByTestId('pivot-table')).toHaveAttribute(
+            'data-legend-set-ids',
+            'ls1'
         )
     })
 })

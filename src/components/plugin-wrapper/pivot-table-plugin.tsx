@@ -65,7 +65,8 @@ export const PivotTablePlugin: FC<PivotTablePluginProps> = ({
         [visualization]
     )
 
-    const [fetchAnalyticsData, { data }] = usePivotTableAnalyticsData()
+    const [fetchAnalyticsData, { data, legendSets }] =
+        usePivotTableAnalyticsData()
 
     // TODO: implement onDataSorted and any other function/callback that cannot rely on the Redux store
 
@@ -96,6 +97,7 @@ export const PivotTablePlugin: FC<PivotTablePluginProps> = ({
         <PivotTable
             visualization={eventVisualization}
             data={data}
+            legendSets={legendSets}
             filterText={filterText}
         />
     )

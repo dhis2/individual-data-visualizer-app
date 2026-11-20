@@ -9,6 +9,11 @@ import { getSingleProgramFromVisualization } from '@modules/visualization/progra
 import type { CurrentUser, CurrentVisualization, MetadataStore } from '@types'
 import { useCallback, useState } from 'react'
 import { useErrorBoundary } from 'react-error-boundary'
+import {
+    fetchLegendSets,
+    getFixedLegendSetIds,
+    type FetchedLegendSet,
+} from './legend-sets'
 import { getAnalyticsEndpoint } from './query-tools-common'
 import {
     getAdaptedVisualization,
@@ -110,6 +115,7 @@ type FetchAnalyticsDataFn = (
 type AnalyticsDataState = {
     isFetching: boolean
     data: PivotTableAnalyticsData | null
+    legendSets: FetchedLegendSet[]
 }
 type UseAnalyticsDataResult = [FetchAnalyticsDataFn, AnalyticsDataState]
 
@@ -122,6 +128,7 @@ const usePivotTableAnalyticsData = (): UseAnalyticsDataResult => {
     const [state, setState] = useState<AnalyticsDataState>({
         isFetching: false,
         data: null,
+        legendSets: [],
     })
 
     const { reserve, release } = useInFlightDedup()
@@ -174,9 +181,15 @@ const usePivotTableAnalyticsData = (): UseAnalyticsDataResult => {
                     }
                 )
 
+                const legendSets = await fetchLegendSets({
+                    legendSetIds: getFixedLegendSetIds(visualization),
+                    dataEngine,
+                })
+
                 setState({
                     data: analyticsData,
                     isFetching: false,
+                    legendSets,
                 })
 
                 onResponseReceived()
@@ -184,7 +197,7 @@ const usePivotTableAnalyticsData = (): UseAnalyticsDataResult => {
                 logger.error('PT fetch error', error)
                 if (isAbortError(error)) {
                     setState((prevState) => ({
-                        data: prevState.data,
+                        ...prevState,
                         isFetching: false,
                     }))
                 } else {
@@ -194,7 +207,14 @@ const usePivotTableAnalyticsData = (): UseAnalyticsDataResult => {
                 release(requestSignature)
             }
         },
-        [analyticsEngine, metadataStore, reserve, release, showBoundary]
+        [
+            analyticsEngine,
+            dataEngine,
+            metadataStore,
+            reserve,
+            release,
+            showBoundary,
+        ]
     )
 
     return [fetchAnalyticsData, state]

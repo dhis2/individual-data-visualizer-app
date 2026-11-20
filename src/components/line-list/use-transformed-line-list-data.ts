@@ -2,12 +2,12 @@ import {
     useMetadataStore,
     type UseMetadataStoreReturnValue,
 } from '@components/app-wrapper/metadata-provider/metadata-provider'
+import type { FetchedLegendSet } from '@components/plugin-wrapper/hooks/legend-sets'
 import {
     getDataItemLegendSetId,
     type AnalyticsResponseMetadataItems,
     type LineListAnalyticsData,
     type LineListAnalyticsDataHeader,
-    type LineListLegendSet,
     type LineListRowContext,
 } from '@components/plugin-wrapper/hooks/use-line-list-analytics-data'
 import { getColorByValueFromLegendSet, formatValue } from '@dhis2/analytics'
@@ -62,7 +62,7 @@ type TransformedLineListHeader = Omit<
     /* Resolved from the fetched legend sets based on legend strategy; not
      * every header carries one (e.g. non-numeric columns, or visualizations
      * without a legend). */
-    legendSet?: LineListLegendSet
+    legendSet?: FetchedLegendSet
     /* Stage/program disambiguation suffix, combined with `column` at render. */
     dimensionSuffix?: string
 }
@@ -71,7 +71,7 @@ type ResolveLegendSetArgs = {
     header: LineListAnalyticsDataHeader
     legend: CurrentVisualization['legend']
     metaDataItems: AnalyticsResponseMetadataItems
-    legendSets: LineListLegendSet[]
+    legendSets: FetchedLegendSet[]
 }
 
 type TransformHeadersArgs = {
@@ -171,7 +171,7 @@ const resolveLegendSet = ({
     legend,
     metaDataItems,
     legendSets,
-}: ResolveLegendSetArgs): LineListLegendSet | undefined => {
+}: ResolveLegendSetArgs): FetchedLegendSet | undefined => {
     if (!legendSets.length || !isValueTypeNumeric(header.valueType)) {
         return undefined
     }

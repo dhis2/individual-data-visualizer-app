@@ -14,12 +14,16 @@ import type {
     CurrentUser,
     CurrentVisualization,
     GridHeader,
-    LegendSet,
     MetadataInputItem,
     UserOrgUnitMetadataItem,
 } from '@types'
 import { useCallback, useRef, useState } from 'react'
 import { useErrorBoundary } from 'react-error-boundary'
+import {
+    fetchLegendSets,
+    getFixedLegendSetIds,
+    type FetchedLegendSet,
+} from './legend-sets'
 import { getAnalyticsEndpoint } from './query-tools-common'
 import {
     getAdaptedVisualization,
@@ -40,8 +44,6 @@ export type LineListRowContext = Record<
     Record<string, { valueStatus?: string } | undefined> | undefined
 >
 
-export type LineListLegendSet = Pick<LegendSet, 'id' | 'name' | 'legends'>
-
 export type LineListAnalyticsDataHeader = GridHeader & {
     /* Canonical store ID for this column, computed once here so the
      * wire-to-canonical translation happens exactly once per response. */
@@ -56,7 +58,7 @@ export type LineListAnalyticsData = {
     metaDataItems: AnalyticsResponseMetadataItems
     /* The legend sets the visualization's legend strategy refers to,
      * fetched here so the transformation stays synchronous. */
-    legendSets: LineListLegendSet[]
+    legendSets: FetchedLegendSet[]
 }
 
 export type LineListAnalyticsResponse = {
@@ -175,57 +177,6 @@ const fetchAnalyticsDataForLL = async ({
     return rawResponse
 }
 
-const legendSetsQuery = {
-    resource: 'legendSets',
-    params: (variables: Record<string, unknown>) => ({
-        // legend sets and legends have no shortName, so the name always comes from displayName
-        fields: 'id,displayName~rename(name),legends[id,displayName~rename(name),startValue,endValue,color]',
-        filter: `id:in:[${(variables.ids as string[]).join(',')}]`,
-    }),
-}
-
-const apiFetchLegendSetsByIds = async ({
-    dataEngine,
-    ids,
-    signal,
-}: {
-    dataEngine: ReturnType<typeof useDataEngine>
-    ids: string[]
-    signal: AbortSignal
-}): Promise<LineListLegendSet[]> => {
-    const legendSetsData = (await dataEngine.query(
-        { legendSets: legendSetsQuery },
-        {
-            variables: { ids },
-            signal,
-        }
-    )) as { legendSets: { legendSets: LineListLegendSet[] } }
-
-    return legendSetsData.legendSets.legendSets
-}
-
-const fetchLegendSets = async ({
-    legendSetIds,
-    dataEngine,
-    signal,
-}: {
-    legendSetIds: string[]
-    dataEngine: ReturnType<typeof useDataEngine>
-    signal: AbortSignal
-}): Promise<LineListLegendSet[]> => {
-    if (!legendSetIds.length) {
-        return []
-    }
-
-    const legendSets = await apiFetchLegendSetsByIds({
-        dataEngine,
-        ids: legendSetIds,
-        signal,
-    })
-
-    return legendSets
-}
-
 /* Analytics only sets a header's legendSet when the column is grouped by it */
 const isGroupedByLegend = (header: GridHeader) => Boolean(header.legendSet)
 
@@ -249,7 +200,7 @@ export const collectLegendSetIdsToFetch = (
 ): string[] => {
     const { legend } = visualization
     if (legend?.strategy === 'FIXED') {
-        return legend.set?.id ? [legend.set.id] : []
+        return getFixedLegendSetIds(visualization)
     }
     if (legend?.strategy === 'BY_DATA_ITEM') {
         const ids = headers
@@ -267,7 +218,7 @@ export const toLineListAnalyticsData = ({
 }: {
     response: LineListAnalyticsResponse
     visualization: CurrentVisualization
-    legendSets?: LineListLegendSet[]
+    legendSets?: FetchedLegendSet[]
 }): LineListAnalyticsData => ({
     headers: response.headers.map((header) => ({
         ...header,
