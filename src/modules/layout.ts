@@ -59,7 +59,6 @@ export const buildAxis = (
             dimensionId: dim.dimensionId ?? id,
             programId: dim.programId,
             outputType: visUiConfig.outputType,
-            visualizationType: visUiConfig.visualizationType,
         })
         const programId =
             dimensionId === 'registrationOu'

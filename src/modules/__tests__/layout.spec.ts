@@ -380,6 +380,68 @@ describe('buildAxis', () => {
         }
     )
 
+    it.each([
+        ['EVENT', 'LINE_LIST'],
+        ['ENROLLMENT', 'LINE_LIST'],
+        ['TRACKED_ENTITY_INSTANCE', 'LINE_LIST'],
+        ['EVENT', 'PIVOT_TABLE'],
+        ['ENROLLMENT', 'PIVOT_TABLE'],
+    ] as const)(
+        'keeps the event and enrollment org units apart in an %s %s',
+        (outputType, visualizationType) => {
+            const store = makeStore({
+                dims: {
+                    'stage.ou': makeDim({
+                        id: 'stage.ou',
+                        dimensionId: 'ou',
+                        dimensionType: 'ORGANISATION_UNIT',
+                        programId: 'prog',
+                        programStageId: 'stage',
+                    }),
+                    'prog.enrollmentOu': makeDim({
+                        id: 'prog.enrollmentOu',
+                        dimensionId: 'enrollmentOu',
+                        dimensionType: 'ORGANISATION_UNIT',
+                        programId: 'prog',
+                    }),
+                },
+            })
+            const visUiConfig = {
+                visualizationType,
+                outputType,
+                layout: {
+                    columns: ['stage.ou', 'prog.enrollmentOu'],
+                    rows: [],
+                    filters: [],
+                },
+                itemsByDimension: {
+                    'stage.ou': ['Bo'],
+                    'prog.enrollmentOu': ['Bombali'],
+                },
+                conditionsByDimension: {},
+                repetitionsByDimension: {},
+            } as unknown as VisUiConfigState
+
+            expect(
+                buildAxis(visUiConfig.layout.columns, visUiConfig, store)
+            ).toEqual([
+                {
+                    dimension: 'ou',
+                    dimensionType: 'ORGANISATION_UNIT',
+                    items: [{ id: 'Bo' }],
+                    program: { id: 'prog' },
+                    programStage: { id: 'stage' },
+                },
+                {
+                    dimension: 'enrollmentOu',
+                    dimensionType: 'ORGANISATION_UNIT',
+                    items: [{ id: 'Bombali' }],
+                    program: { id: 'prog' },
+                },
+            ])
+        }
+    )
+
     it('throws when metadata lookup returns undefined for a dimension', () => {
         const input = {
             layout: { columns: ['unknown.dim'], rows: [], filters: [] },
