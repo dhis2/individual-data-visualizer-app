@@ -1,3 +1,4 @@
+import { LegendKey } from '@components/shared/legend-key'
 import { PivotTable } from '@dhis2/analytics'
 import {
     getAnalyticsRequestHeaderName,
@@ -7,10 +8,16 @@ import { isActiveFilterDimensionRecord } from '@modules/dimension/active-filter'
 import { logger } from '@modules/logger'
 import type { CurrentUser, CurrentVisualization, DimensionArray } from '@types'
 import { type FC, useEffect, useMemo } from 'react'
+import {
+    type FetchedLegendSet,
+    getPivotTableEngineLegend,
+} from './hooks/legend-sets'
 import { usePivotTableAnalyticsData } from './hooks/use-pivot-table-analytics-data'
+import classes from './styles/pivot-table-plugin.module.css'
 
 const formatVisualizationForPivotTableEngine = (
-    visualization: CurrentVisualization
+    visualization: CurrentVisualization,
+    legendSet: FetchedLegendSet | undefined
 ): CurrentVisualization => {
     const formatDimensions = (dimensions: DimensionArray): DimensionArray =>
         dimensions.map((dim) => ({
@@ -32,6 +39,7 @@ const formatVisualizationForPivotTableEngine = (
         filters: formatDimensions(
             visualization.filters.filter(isActiveFilterDimensionRecord)
         ),
+        legend: getPivotTableEngineLegend(visualization.legend, legendSet),
     }
 }
 
@@ -51,21 +59,27 @@ export const PivotTablePlugin: FC<PivotTablePluginProps> = ({
     relativePeriodDate,
     onResponseReceived,
     filterText,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     isInDashboard,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     isInModal,
 }) => {
+    const [fetchAnalyticsData, { data, legendSet }] =
+        usePivotTableAnalyticsData()
+
     // the dimension ids need to be formatted to match the ones returned in the analytics metaData, otherwise the PT engine fails to lookup the metadata
     const eventVisualization = useMemo(
         () =>
             formatVisualizationForPivotTableEngine(
-                transformVisualizationForAnalyticsRequest(visualization)
+                transformVisualizationForAnalyticsRequest(visualization),
+                legendSet
             ),
-        [visualization]
+        [visualization, legendSet]
     )
 
-    const [fetchAnalyticsData, { data }] = usePivotTableAnalyticsData()
+    const legendSets = useMemo(
+        () => (legendSet ? [legendSet] : []),
+        [legendSet]
+    )
 
     // TODO: implement onDataSorted and any other function/callback that cannot rely on the Redux store
 
@@ -93,10 +107,22 @@ export const PivotTablePlugin: FC<PivotTablePluginProps> = ({
     }
 
     return (
-        <PivotTable
-            visualization={eventVisualization}
-            data={data}
-            filterText={filterText}
-        />
+        <div className={classes.grid}>
+            <div className={classes.table}>
+                <PivotTable
+                    visualization={eventVisualization}
+                    data={data}
+                    legendSets={legendSets}
+                    filterText={filterText}
+                />
+            </div>
+            <div className={classes.endColumn} data-test="end-column">
+                <LegendKey
+                    isInDashboard={isInDashboard}
+                    legendSets={legendSets}
+                    showKey={visualization.legend?.showKey ?? false}
+                />
+            </div>
+        </div>
     )
 }
