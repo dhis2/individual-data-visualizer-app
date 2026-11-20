@@ -384,10 +384,10 @@ therefore sets it only for TRACKED_ENTITY_INSTANCE.
 **Org unit scopes**: the app uses distinct dimension IDs for different org unit scopes:
 
 - **Event org unit**: `ou` with `programStage` → compound `stageId.ou`
-- **Enrollment org unit**: `enrollmentOu` → compound `programId.enrollmentOu`.
-  `toAppLocalDimensions` renames API `ou` (with program, no programStage) to `enrollmentOu`
-  at the API → app-local boundary. `toEventVisualizationDimensionId` does the inverse on
-  save — but only in some outputType/visType combinations (see table below).
+- **Enrollment org unit**: `enrollmentOu` → compound `programId.enrollmentOu`. It is saved as
+  `enrollmentOu` with a program qualifier whatever the outputType or visType. A saved
+  visualization may carry it as `ou` with a program but no programStage;
+  `normalizeApiSavedVisualization` renames that to `enrollmentOu` on load.
 - **Registration org unit**: `ou` with `trackedEntityType` (no program/stage) → compound
   `tetId.ou`, whatever the outputType. It shares the `ou` dimension ID with the event org unit;
   the prefix (stageId vs trackedEntityTypeId) distinguishes them, and so does the absence of a
@@ -396,34 +396,33 @@ therefore sets it only for TRACKED_ENTITY_INSTANCE.
   eventVisualizations, `REGISTRATION_OU` in the analytics request and `registrationou` as the
   response header (`registrationouname` in a line list).
 
-**Org unit POST translation by outputType/visType/scope**: `toEventVisualizationDimensionId`
-maps the app-local org unit IDs to the eventVisualizations POST dimension on save. The event org
-unit is always `ou`. The registration org unit (an `ou` without `programId`) is `ou` for
-TRACKED_ENTITY_INSTANCE and `registrationOu` otherwise; `buildAxis` qualifies `registrationOu`
-with the layout's program. The enrollment org unit is accepted as `enrollmentOu` only in
-EVENT/TEI LINE_LIST mode; otherwise it must be sent as bare `ou`:
+**Org unit POST translation by outputType**: `toEventVisualizationDimensionId` maps the
+app-local org unit IDs to the eventVisualizations POST dimension on save:
 
-| outputType                | visType       | Enrollment OU  | Registration OU  |
-| ------------------------- | ------------- | -------------- | ---------------- |
-| `EVENT`                   | `LINE_LIST`   | `enrollmentOu` | `registrationOu` |
-| `ENROLLMENT`              | `LINE_LIST`   | `ou`           | `registrationOu` |
-| `TRACKED_ENTITY_INSTANCE` | `LINE_LIST`   | `enrollmentOu` | `ou`             |
-| `EVENT`                   | `PIVOT_TABLE` | `ou`           | `registrationOu` |
-| `ENROLLMENT`              | `PIVOT_TABLE` | `ou`           | `registrationOu` |
+| Org unit     | Saved as                                                                  |
+| ------------ | ------------------------------------------------------------------------- |
+| Event        | `ou` with program and programStage                                        |
+| Enrollment   | `enrollmentOu` with program                                               |
+| Registration | `ou` for TRACKED_ENTITY_INSTANCE, `registrationOu` with program otherwise |
 
-The reverse (load) direction is shape-based — `toAppLocalDimensions` rewrites
-`dim.dimension === 'ou'` with a `program` but no `programStage` to `enrollmentOu`. It leaves
-the stage event OU (`{dimension: 'ou', programStage: {id}}`) and the TEI registration OU
-(`{dimension: 'ou'}`, no program/stage) as `ou`, and rewrites `registrationOu` to `ou`, dropping
-its program qualifier so it reads like the TEI registration OU.
+`buildAxis` qualifies `registrationOu` with the layout's program. In EVENT and ENROLLMENT
+visualizations the backend keeps one item list for every `ou` dimension, so the enrollment org
+unit must not be saved as `ou`: its items would be merged with the event org unit's.
+
+The reverse (load) direction is shape-based. `normalizeApiSavedVisualization` rewrites an `ou`
+with a `program` but no `programStage` to `enrollmentOu`, without marking the visualization
+legacy. `toAppLocalDimensions` rewrites `registrationOu` to `ou`, dropping its program qualifier
+so it reads like the TEI registration OU. The stage event OU (`{dimension: 'ou', programStage:
+{id}}`) and the TEI registration OU (`{dimension: 'ou'}`, no program/stage) stay `ou`.
 
 ### Save/load translation at the visualization API boundary
 
 **Loading** (API → frontend), in order:
 
 1. `normalizeApiSavedVisualization` (`@modules/visualization/normalize-legacy`) brings the API
-   payload to app shape: upgrades legacy dimensions and strips the dropped legacy dimensions
-   (`DROPPED_LEGACY_DIMENSIONS` in `@modules/dimension/ids`). It also keeps the top-level
+   payload to app shape: upgrades legacy dimensions, strips the dropped legacy dimensions
+   (`DROPPED_LEGACY_DIMENSIONS` in `@modules/dimension/ids`) and renames an enrollment org unit
+   saved as `ou` to `enrollmentOu`. It also keeps the top-level
    `aggregationType` with the cell `value`: it drops the type when there is no value, fills a
    missing one with `DEFAULT`, and turns `DEFAULT` into AVERAGE for an item that aggregates by NONE
    (see [Cell value aggregation type](#cell-value-aggregation-type)).
@@ -434,8 +433,7 @@ its program qualifier so it reads like the TEI registration OU.
 2. `getVisualizationUiConfig` (`@modules/visualization/ui-config`) derives `visUiConfig` — layout
    arrays, items, conditions and options — from the normalized visualization. It applies two
    dimension translations on the way:
-    - `toAppLocalDimensions` (`@modules/dimension/translation`) renames API `ou` with a program but
-      no programStage to `enrollmentOu`, and `registrationOu` to `ou`.
+    - `toAppLocalDimensions` (`@modules/dimension/translation`) renames `registrationOu` to `ou`.
     - `getCompoundDimensionId` (`@modules/dimension/ids`) builds the canonical app-local compound ID
       from each `DimensionRecord`, reading its `program` and `programStage`. A stage dimension
       becomes `stageId.dimensionId` (dropping the programId) whatever the outputType; an

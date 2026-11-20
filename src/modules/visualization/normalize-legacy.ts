@@ -12,7 +12,6 @@ import {
     outputTypeTimeDimensionMap,
     timeFieldTimeDimensionMap,
 } from '@modules/dimension/time'
-import { toEventVisualizationDimensionId } from '@modules/dimension/translation'
 import { isPopulatedString } from '@modules/utils/guards'
 import type {
     ApiSavedVisualization,
@@ -20,7 +19,6 @@ import type {
     DimensionRecord,
     OutputType,
     SavedVisualization,
-    VisualizationType,
 } from '@types'
 
 /* Dimension types whose values are not bound to any program or stage —
@@ -50,7 +48,6 @@ const LEGACY_DIMENSION_ID_RENAMES: Record<string, DimensionId> = {
  * and timeField are consumed here and dropped from the result. */
 type LegacyDimensionContext = {
     outputType: OutputType | undefined
-    visualizationType: VisualizationType
     timeField: string | undefined
     programRef: { id: string } | undefined
     stageRef: { id: string } | undefined
@@ -114,39 +111,18 @@ const applyProgramStageContext = (
     return out
 }
 
-// A legacy vis stored the enrollment org unit as bare `ou`; this app uses
-// `enrollmentOu` where the wire form needs it (EVENT/TEI LINE_LIST). Upgrade
-// with the same rule the save path uses — a no-op for ENROLLMENT/PIVOT (where
-// `ou` is canonical) and for the stage event OU (which has a programStage).
-const upgradeLegacyEnrollmentOu = (
-    dim: DimensionRecord,
-    context: LegacyDimensionContext,
-    vis: SavedVisualization
-): DimensionRecord => {
-    if (
-        !context.outputType ||
-        dim.dimension !== 'ou' ||
-        !dim.program?.id ||
-        dim.programStage
-    ) {
-        return dim
-    }
-    const canonicalOu = toEventVisualizationDimensionId({
-        dimensionId: 'enrollmentOu',
-        programId: dim.program.id,
-        outputType: context.outputType,
-        visualizationType: context.visualizationType,
-    })
-    if (canonicalOu === dim.dimension) {
-        return dim
-    }
-    vis.legacy = true
-    return { ...dim, dimension: canonicalOu }
-}
+/* The enrollment org unit used to be saved as `ou` with a program and no
+ * stage for ENROLLMENT line lists and pivot tables. Only this app saved that
+ * form without any other legacy signal, so the rename does not flip `legacy`
+ * and the next save writes `enrollmentOu`. */
+const upgradeEnrollmentOu = (dim: DimensionRecord): DimensionRecord =>
+    dim.dimension === 'ou' && dim.program?.id && !dim.programStage
+        ? { ...dim, dimension: 'enrollmentOu' }
+        : dim
 
 /* Normalise one dimension, in order: materialise a legacy `pe`, rename old IDs,
  * then — unless the dim takes no program/stage context — propagate top-level
- * program/programStage and upgrade a legacy enrollment `ou`. The rename runs
+ * program/programStage and rename an enrollment `ou`. The rename runs
  * before the context check so a meta dim renamed from a legacy ID (e.g.
  * `createdDate` → `created`) is recognised as context-free. Steps flip
  * `vis.legacy` as they upgrade the shape. */
@@ -162,11 +138,7 @@ const normalizeLegacyDimension = (
     if (dimensionTakesNoProgramContext(renamed)) {
         return renamed
     }
-    return upgradeLegacyEnrollmentOu(
-        applyProgramStageContext(renamed, context),
-        context,
-        vis
-    )
+    return upgradeEnrollmentOu(applyProgramStageContext(renamed, context))
 }
 
 type CellValue = NonNullable<SavedVisualization['value']>
@@ -226,6 +198,8 @@ const normalizeLegacyValue = (
  *   other, though no known client saves that. `DEFAULT` on an item that
  *   aggregates by NONE becomes the fallback type the app saves for such an
  *   item; ER let users save that combination. Neither implies `legacy`.
+ * - Rename an `ou` with a program and no stage, the enrollment org unit, to
+ *   `enrollmentOu`. This app saved that form, so it does not imply `legacy`.
  *
  * Out of scope (handled downstream — these run on every load, not just legacy
  * visualizations, so they do not imply the `legacy` flag):
@@ -252,7 +226,6 @@ export const normalizeApiSavedVisualization = (
     const normalizedVis = rest as SavedVisualization
     const context: LegacyDimensionContext = {
         outputType: rest.outputType as OutputType | undefined,
-        visualizationType: rest.type as VisualizationType,
         timeField,
         programRef: program ? { id: program.id } : undefined,
         stageRef: programStage ? { id: programStage.id } : undefined,

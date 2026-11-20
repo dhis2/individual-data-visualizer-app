@@ -8,7 +8,6 @@ import type {
     DimensionArray,
     DimensionRecord,
     OutputType,
-    VisualizationType,
 } from '@types'
 
 export const transformDimensions = (
@@ -69,12 +68,10 @@ export const combineAllDimensionsFromVisualization = (
 /**
  * Forward: API → app-local dimension IDs on a DimensionArray.
  *
- * The eventVisualizations API uses bare `ou` for three org units, told apart
- * by their qualifiers: with a `programStage` it is the event OU, with only a
- * `program` the enrollment OU (app-local `enrollmentOu`), and with neither
- * the TEI registration OU. EVENT and ENROLLMENT visualizations store the
- * registration OU as `registrationOu` with a program qualifier, which is
- * dropped so it reads like the TEI one.
+ * The eventVisualizations API uses bare `ou` for the event OU (with a
+ * `programStage`) and for the TEI registration OU (without qualifiers). EVENT
+ * and ENROLLMENT visualizations store the registration OU as `registrationOu`
+ * with a program qualifier, which is dropped so it reads like the TEI one.
  */
 export const toAppLocalDimensions = (dims: DimensionArray): DimensionArray =>
     dims.map((dim) => {
@@ -88,9 +85,6 @@ export const toAppLocalDimensions = (dims: DimensionArray): DimensionArray =>
             delete stripped.programStage
             return stripped
         }
-        if (dim.dimension === 'ou' && dim.program && !dim.programStage) {
-            return { ...dim, dimension: 'enrollmentOu' }
-        }
         if (dim.dimension === 'registrationOu') {
             const registrationOu = { ...dim, dimension: 'ou' }
             delete registrationOu.program
@@ -103,31 +97,22 @@ export const toAppLocalDimensions = (dims: DimensionArray): DimensionArray =>
  * Inverse: app-local dim → eventVisualizations POST `dimension` ID.
  *
  * The registration OU is an `ou` without a program qualifier: bare `ou` for
- * TRACKED_ENTITY_INSTANCE and `registrationOu` otherwise. The POST endpoint
- * accepts the enrollment OU as `enrollmentOu` only in EVENT/TEI `LINE_LIST`
- * mode; otherwise it must be sent as bare `ou`. See the "Org unit scopes"
- * table in CLAUDE.md for the authoritative mapping.
+ * TRACKED_ENTITY_INSTANCE and `registrationOu` otherwise. Every other
+ * dimension, the enrollment OU (`enrollmentOu`) included, keeps its ID.
  */
 export const toEventVisualizationDimensionId = ({
     dimensionId,
     programId,
     outputType,
-    visualizationType,
 }: {
     dimensionId: string
     programId?: string
     outputType: OutputType
-    visualizationType: VisualizationType
 }): string => {
     if (dimensionId === 'ou' && !programId) {
         return outputType === 'TRACKED_ENTITY_INSTANCE'
             ? 'ou'
             : 'registrationOu'
     }
-    if (dimensionId !== 'enrollmentOu') {
-        return dimensionId
-    }
-    return outputType === 'ENROLLMENT' || visualizationType === 'PIVOT_TABLE'
-        ? 'ou'
-        : 'enrollmentOu'
+    return dimensionId
 }
