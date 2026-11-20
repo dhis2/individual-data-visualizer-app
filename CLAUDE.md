@@ -558,10 +558,21 @@ IDs, named via `metaData.items`.
   dimension filters by legend (`IN:legendId;legendId`) through a transfer instead of by raw value.
 - **Legacy**: a saved `legendSet` without a filter is grouping. The Line Listing app saved it when
   a user picked a legend set but no legends, and showed the legend names.
-- **Colouring**: a line list with the "By data item" legend strategy colours each numeric column
-  with the legend set assigned to its data item, read from `metaData.items[<header name>].legendSet`
-  in the analytics response, not from the layout. A grouped column is not coloured: its header
-  carries the grouping `legendSet` and its values are legend IDs.
+- **Colouring**: the legend option colours values with a legend set, either one chosen for the whole
+  visualization (FIXED) or the one assigned to each data item ("By data item"). A data item with
+  several legend sets is coloured by its first, as ordered on the item; analytics picks the same one.
+    - **Line list**: "By data item" colours each numeric column with the legend set analytics names
+      in `metaData.items[<header name>].legendSet`, not from the layout. A grouped column is not
+      coloured: its header carries the grouping `legendSet` and its values are legend IDs.
+    - **Pivot table**: the only data item is the cell value, and the aggregate response names no
+      legend set for it, so the plugin fetches the item's legend sets from `dataElements` or
+      `trackedEntityAttributes` (`fetchPivotTableLegendSet` in
+      `@components/plugin-wrapper/hooks/legend-sets`). The `@dhis2/analytics` engine reads a data
+      item's legend set only from a `dx` dimension, which these tables don't have, so the resolved
+      set is handed to it as a FIXED one (`getPivotTableEngineLegend`). A table without a cell value
+      has nothing to colour by data item. Totals and subtotals are never coloured.
+    - **Legend key**: both types render the shared `LegendKey` (`@components/shared/legend-key`)
+      beside the table when "Show legend key" is on; on a dashboard it gets a show/hide toggle.
 
 ## Testing & Linting Workflow for AI Agents
 
