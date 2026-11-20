@@ -24,6 +24,8 @@ vi.mock('@dhis2/analytics', async (importOriginal) => ({
             data-legend-set-ids={legendSets?.map(({ id }) => id).join(',')}
             data-fix-column-headers={visualization.fixColumnHeaders}
             data-fix-row-headers={visualization.fixRowHeaders}
+            data-legend-strategy={visualization.legend?.strategy}
+            data-legend-set-id={visualization.legend?.set?.id}
             data-filter-dimensions={visualization.filters
                 .map(({ dimension }) => dimension)
                 .join(',')}
@@ -49,7 +51,7 @@ vi.mock(
             {
                 isFetching: false,
                 data: { headers: [], rows: [], metaData: {} },
-                legendSets: [{ id: 'ls1', name: 'Weight bands', legends: [] }],
+                legendSet: { id: 'ls1', name: 'Weight bands', legends: [] },
             },
         ],
     })
@@ -171,7 +173,7 @@ describe('PivotTablePlugin', () => {
         )
     })
 
-    it('hands the fetched legend sets to the pivot table', () => {
+    it('hands the fetched legend set to the pivot table', () => {
         render(
             <MockMetadataProvider>
                 <PivotTablePlugin
@@ -188,5 +190,29 @@ describe('PivotTablePlugin', () => {
             'data-legend-set-ids',
             'ls1'
         )
+    })
+
+    it('hands the fetched legend set to the pivot table as a fixed one', () => {
+        render(
+            <MockMetadataProvider>
+                <PivotTablePlugin
+                    displayProperty="name"
+                    visualization={{
+                        ...visualization,
+                        legend: {
+                            strategy: 'BY_DATA_ITEM',
+                            style: 'FILL',
+                        } as CurrentVisualization['legend'],
+                    }}
+                    isInDashboard={false}
+                    isInModal={false}
+                    onResponseReceived={vi.fn()}
+                />
+            </MockMetadataProvider>
+        )
+
+        const pivotTable = screen.getByTestId('pivot-table')
+        expect(pivotTable).toHaveAttribute('data-legend-strategy', 'FIXED')
+        expect(pivotTable).toHaveAttribute('data-legend-set-id', 'ls1')
     })
 })

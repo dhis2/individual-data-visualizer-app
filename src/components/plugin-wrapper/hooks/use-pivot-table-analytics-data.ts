@@ -9,11 +9,7 @@ import { getSingleProgramFromVisualization } from '@modules/visualization/progra
 import type { CurrentUser, CurrentVisualization, MetadataStore } from '@types'
 import { useCallback, useState } from 'react'
 import { useErrorBoundary } from 'react-error-boundary'
-import {
-    fetchLegendSets,
-    getFixedLegendSetIds,
-    type FetchedLegendSet,
-} from './legend-sets'
+import { fetchPivotTableLegendSet, type FetchedLegendSet } from './legend-sets'
 import { getAnalyticsEndpoint } from './query-tools-common'
 import {
     getAdaptedVisualization,
@@ -115,7 +111,7 @@ type FetchAnalyticsDataFn = (
 type AnalyticsDataState = {
     isFetching: boolean
     data: PivotTableAnalyticsData | null
-    legendSets: FetchedLegendSet[]
+    legendSet?: FetchedLegendSet
 }
 type UseAnalyticsDataResult = [FetchAnalyticsDataFn, AnalyticsDataState]
 
@@ -128,7 +124,6 @@ const usePivotTableAnalyticsData = (): UseAnalyticsDataResult => {
     const [state, setState] = useState<AnalyticsDataState>({
         isFetching: false,
         data: null,
-        legendSets: [],
     })
 
     const { reserve, release } = useInFlightDedup()
@@ -181,15 +176,16 @@ const usePivotTableAnalyticsData = (): UseAnalyticsDataResult => {
                     }
                 )
 
-                const legendSets = await fetchLegendSets({
-                    legendSetIds: getFixedLegendSetIds(visualization),
+                const legendSet = await fetchPivotTableLegendSet({
+                    visualization,
+                    metadataStore,
                     dataEngine,
                 })
 
                 setState({
                     data: analyticsData,
                     isFetching: false,
-                    legendSets,
+                    legendSet,
                 })
 
                 onResponseReceived()

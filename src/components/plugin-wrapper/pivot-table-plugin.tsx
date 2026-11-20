@@ -7,10 +7,15 @@ import { isActiveFilterDimensionRecord } from '@modules/dimension/active-filter'
 import { logger } from '@modules/logger'
 import type { CurrentUser, CurrentVisualization, DimensionArray } from '@types'
 import { type FC, useEffect, useMemo } from 'react'
+import {
+    type FetchedLegendSet,
+    getPivotTableEngineLegend,
+} from './hooks/legend-sets'
 import { usePivotTableAnalyticsData } from './hooks/use-pivot-table-analytics-data'
 
 const formatVisualizationForPivotTableEngine = (
-    visualization: CurrentVisualization
+    visualization: CurrentVisualization,
+    legendSet: FetchedLegendSet | undefined
 ): CurrentVisualization => {
     const formatDimensions = (dimensions: DimensionArray): DimensionArray =>
         dimensions.map((dim) => ({
@@ -32,6 +37,7 @@ const formatVisualizationForPivotTableEngine = (
         filters: formatDimensions(
             visualization.filters.filter(isActiveFilterDimensionRecord)
         ),
+        legend: getPivotTableEngineLegend(visualization.legend, legendSet),
     }
 }
 
@@ -56,17 +62,23 @@ export const PivotTablePlugin: FC<PivotTablePluginProps> = ({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     isInModal,
 }) => {
+    const [fetchAnalyticsData, { data, legendSet }] =
+        usePivotTableAnalyticsData()
+
     // the dimension ids need to be formatted to match the ones returned in the analytics metaData, otherwise the PT engine fails to lookup the metadata
     const eventVisualization = useMemo(
         () =>
             formatVisualizationForPivotTableEngine(
-                transformVisualizationForAnalyticsRequest(visualization)
+                transformVisualizationForAnalyticsRequest(visualization),
+                legendSet
             ),
-        [visualization]
+        [visualization, legendSet]
     )
 
-    const [fetchAnalyticsData, { data, legendSets }] =
-        usePivotTableAnalyticsData()
+    const legendSets = useMemo(
+        () => (legendSet ? [legendSet] : []),
+        [legendSet]
+    )
 
     // TODO: implement onDataSorted and any other function/callback that cannot rely on the Redux store
 

@@ -34,3 +34,16 @@ const ITEM_BASED_DIMENSION_TYPES: ReadonlySet<DimensionType> = new Set([
  * conditions. */
 export const isItemBasedDimensionType = (dimensionType: DimensionType) =>
     ITEM_BASED_DIMENSION_TYPES.has(dimensionType)
+
+const DATA_ITEM_RESOURCE_BY_DIMENSION_TYPE: Partial<
+    Record<DimensionType, string>
+> = {
+    DATA_ELEMENT: 'dataElements',
+    PROGRAM_ATTRIBUTE: 'trackedEntityAttributes',
+}
+
+/* The metadata endpoint of the data element or attribute behind a dimension,
+ * where its legend sets are assigned. Other dimension types have none. */
+export const getDataItemResource = (
+    dimensionType: DimensionType
+): string | undefined => DATA_ITEM_RESOURCE_BY_DIMENSION_TYPE[dimensionType]

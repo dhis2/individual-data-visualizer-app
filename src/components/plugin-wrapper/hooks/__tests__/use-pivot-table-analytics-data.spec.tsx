@@ -100,14 +100,14 @@ describe('usePivotTableAnalyticsData', () => {
             })
         )
 
-        expect(state.legendSets).toEqual([legendSet])
+        expect(state.legendSet).toEqual(legendSet)
     })
 
     it('fetches no legend sets without a legend', async () => {
         const { state, legendSetsResolver } =
             await renderAndFetch(buildVisualization())
 
-        expect(state.legendSets).toEqual([])
+        expect(state.legendSet).toBeUndefined()
         expect(legendSetsResolver).not.toHaveBeenCalled()
     })
 })
