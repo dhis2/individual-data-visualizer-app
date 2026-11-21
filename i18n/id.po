@@ -13,7 +13,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2026-11-11T08:39:41.472Z\n"
+"POT-Creation-Date: 2026-11-19T14:34:40.520Z\n"
 "PO-Revision-Date: 2026-07-23 07:34+0000\n"
 "Last-Translator: Viktor Varland <viktor@dhis2.org>, 2026\n"
 "Language-Team: Indonesian (https://app.transifex.com/hisp-uio/teams/100509/id/)\n"
@@ -22,6 +22,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: id\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Network error"
+msgstr ""
+
+msgid "This app could not retrieve required data."
+msgstr ""
 
 msgid ""
 "Some dimensions were not added because they cannot be used in a "
@@ -288,9 +294,6 @@ msgstr ""
 msgid "Update {{- trackedEntityTypeName}} list"
 msgstr ""
 
-msgid "Not valid with registration org. unit"
-msgstr ""
-
 msgid "Not valid with categories or category option group sets"
 msgstr ""
 
@@ -328,6 +331,18 @@ msgid "Not valid with program indicators"
 msgstr ""
 
 msgid "Nothing selected. Add items to the layout to get started."
+msgstr ""
+
+msgid "Add at least one dimension to columns or rows"
+msgstr ""
+
+msgid "Add at least one dimension to columns"
+msgstr ""
+
+msgid "Select at least one period"
+msgstr ""
+
+msgid "Select at least one organisation unit"
 msgstr ""
 
 msgid "One row for each {{- outputTypeLabel}}"
@@ -369,7 +384,9 @@ msgstr "Pilihan diagram"
 msgid "Convert to {{- visType}}"
 msgstr ""
 
-msgid "{{- names}} will be removed. Are you sure?"
+msgid ""
+"{{- names}} will be removed because program indicators are not supported in "
+"pivot tables. Are you sure?"
 msgstr ""
 
 msgid "Cancel"
@@ -481,6 +498,18 @@ msgstr "Normal"
 
 msgid "Compact"
 msgstr "Padat"
+
+msgid "Fix column headers to top of table"
+msgstr ""
+
+msgid "There aren’t any column headers because Columns is empty."
+msgstr ""
+
+msgid "Fix row headers to left of table"
+msgstr ""
+
+msgid "There aren’t any row headers because Rows is empty."
+msgstr ""
 
 msgid "Font size"
 msgstr "Ukuran huruf"
@@ -1098,6 +1127,14 @@ msgid ""
 "choosing a shorter period."
 msgstr ""
 
+msgid "Date range not supported"
+msgstr ""
+
+msgid ""
+"Date ranges aren’t supported in rows or columns yet. Move the period to "
+"filter or use a fixed or relative selection."
+msgstr ""
+
 msgid "Top limit too high"
 msgstr ""
 
@@ -1159,105 +1196,6 @@ msgstr "Subunit pengguna"
 
 msgid "User sub-x2-units"
 msgstr "Sub-x2-unit pengguna"
-
-msgid "Today"
-msgstr "Hari ini"
-
-msgid "Yesterday"
-msgstr "Kemarin"
-
-msgid "Last 3 days"
-msgstr "3 hari terakhir"
-
-msgid "Last 7 days"
-msgstr "7 hari terakhir"
-
-msgid "Last 14 days"
-msgstr "14 hari terakhir"
-
-msgid "This week"
-msgstr "Minggu ini"
-
-msgid "Last week"
-msgstr "Minggu lalu"
-
-msgid "Last 4 weeks"
-msgstr "4 minggu terakhir"
-
-msgid "Last 12 weeks"
-msgstr "12 minggu terakhir"
-
-msgid "Last 52 weeks"
-msgstr "52 minggu terakhir"
-
-msgid "Weeks this year"
-msgstr "Mingguan tahun ini"
-
-msgid "This month"
-msgstr "Bulan ini"
-
-msgid "Last month"
-msgstr "Bulan lalu"
-
-msgid "Last 3 months"
-msgstr "3 bulan terakhir"
-
-msgid "Last 6 months"
-msgstr "6 bulan terakhir"
-
-msgid "Last 12 months"
-msgstr "12 bulan terakhir"
-
-msgid "Months this year"
-msgstr "Bulanan tahun ini"
-
-msgid "This bimonth"
-msgstr "Dwiwulan ini"
-
-msgid "Last bimonth"
-msgstr "Dwiwulan yang lalu"
-
-msgid "Last 6 bimonths"
-msgstr "6 dwiwulan yang lalu"
-
-msgid "Bimonths this year"
-msgstr "Dwiwulan tahun ini"
-
-msgid "This quarter"
-msgstr "Triwulan ini"
-
-msgid "Last quarter"
-msgstr "Triwulan yang lalu"
-
-msgid "Last 4 quarters"
-msgstr "4 triwulan terakhir"
-
-msgid "Quarters this year"
-msgstr "Triwulanan tahun ini"
-
-msgid "This six-month"
-msgstr "6 bulan ini"
-
-msgid "Last six-month"
-msgstr "Semester lalu"
-
-msgid "Last 2 six-months"
-msgstr "2 semester terakhir"
-
-msgid "This financial year"
-msgstr "Anggaran tahun ini"
-
-msgid "Last financial year"
-msgstr "Anggaran tahun lalu"
-
-msgid "Last 5 financial years"
-msgstr "5 tahun finansial terakhir"
-
-msgid "This year"
-msgstr "Tahun ini"
-
-msgid "Last year"
-msgstr "Tahun lalu"
 
 msgid "Period"
 msgstr "Periode"

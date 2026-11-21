@@ -2,33 +2,39 @@
 # Manuel Silva <manuel@dhis2.org>, 2026
 # Pablo Pajuelo Cabezas <pablo@dhis2.org>, 2026
 # Carlos Tejo Alonso, 2026
+# Prabhjot Singh, 2026
 # Gabriela Rodriguez <grodriguezcoronado@gmail.com>, 2026
 # Bruno Raimbault, 2026
 # Marta Vila <marta@dhis2.org>, 2026
 # Milagros Rodríguez, 2026
 # Sergio Valenzuela <sergio.valenzuela@ehas.org>, 2026
-# Andres Miguel Rubio, 2026
 # ericbp <ericbarredap@gmail.com>, 2026
-# Prabhjot Singh, 2026
+# Andres Miguel Rubio, 2026
 # Pablo Del Médico, 2026
-# Enzo Nicolas Rossi <enzo@dhis2.org>, 2026
-# Janeth Cruz, 2026
 # Viktor Varland <viktor@dhis2.org>, 2026
 # Alison Andrade <aandrade@ippfwhr.org>, 2026
 # Philip Larsen Donnelly, 2026
+# Janeth Cruz, 2026
+# Enzo Nicolas Rossi <enzo@dhis2.org>, 2026
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2026-11-11T08:39:41.472Z\n"
+"POT-Creation-Date: 2026-11-19T14:34:40.520Z\n"
 "PO-Revision-Date: 2026-07-23 07:34+0000\n"
-"Last-Translator: Philip Larsen Donnelly, 2026\n"
+"Last-Translator: Enzo Nicolas Rossi <enzo@dhis2.org>, 2026\n"
 "Language-Team: Spanish (https://app.transifex.com/hisp-uio/teams/100509/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: es\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+msgid "Network error"
+msgstr "Error de red"
+
+msgid "This app could not retrieve required data."
+msgstr "Esta aplicación no pudo recuperar los datos requeridos."
 
 msgid ""
 "Some dimensions were not added because they cannot be used in a "
@@ -299,9 +305,6 @@ msgstr ""
 msgid "Update {{- trackedEntityTypeName}} list"
 msgstr ""
 
-msgid "Not valid with registration org. unit"
-msgstr ""
-
 msgid "Not valid with categories or category option group sets"
 msgstr ""
 
@@ -339,6 +342,18 @@ msgid "Not valid with program indicators"
 msgstr ""
 
 msgid "Nothing selected. Add items to the layout to get started."
+msgstr ""
+
+msgid "Add at least one dimension to columns or rows"
+msgstr ""
+
+msgid "Add at least one dimension to columns"
+msgstr ""
+
+msgid "Select at least one period"
+msgstr ""
+
+msgid "Select at least one organisation unit"
 msgstr ""
 
 msgid "One row for each {{- outputTypeLabel}}"
@@ -380,7 +395,9 @@ msgstr "Opciones del gráfico"
 msgid "Convert to {{- visType}}"
 msgstr ""
 
-msgid "{{- names}} will be removed. Are you sure?"
+msgid ""
+"{{- names}} will be removed because program indicators are not supported in "
+"pivot tables. Are you sure?"
 msgstr ""
 
 msgid "Cancel"
@@ -500,6 +517,18 @@ msgstr "Normal"
 
 msgid "Compact"
 msgstr "Compacto"
+
+msgid "Fix column headers to top of table"
+msgstr "Fijar encabezados de columna en la parte superior de la tabla"
+
+msgid "There aren’t any column headers because Columns is empty."
+msgstr "No hay encabezados de columna porque las columnas están vacías."
+
+msgid "Fix row headers to left of table"
+msgstr "Fijar encabezados de fila a la izquierda de la tabla"
+
+msgid "There aren’t any row headers because Rows is empty."
+msgstr "No hay encabezados de fila porque las filas están vacías."
 
 msgid "Font size"
 msgstr "Tamaño de fuente"
@@ -1123,6 +1152,14 @@ msgid ""
 "choosing a shorter period."
 msgstr ""
 
+msgid "Date range not supported"
+msgstr ""
+
+msgid ""
+"Date ranges aren’t supported in rows or columns yet. Move the period to "
+"filter or use a fixed or relative selection."
+msgstr ""
+
 msgid "Top limit too high"
 msgstr ""
 
@@ -1184,105 +1221,6 @@ msgstr "Subunidades de usuario"
 
 msgid "User sub-x2-units"
 msgstr "Sub-unidades de usuario -x2"
-
-msgid "Today"
-msgstr "Hoy"
-
-msgid "Yesterday"
-msgstr "Ayer"
-
-msgid "Last 3 days"
-msgstr "Últimos 3 días"
-
-msgid "Last 7 days"
-msgstr "Últimos 7 diass"
-
-msgid "Last 14 days"
-msgstr "Últimos 14 días"
-
-msgid "This week"
-msgstr "Esta semana"
-
-msgid "Last week"
-msgstr "Última semana"
-
-msgid "Last 4 weeks"
-msgstr "Últimas 4 semanas"
-
-msgid "Last 12 weeks"
-msgstr "Últimas 12 semanas"
-
-msgid "Last 52 weeks"
-msgstr "Últimas 52 semanas"
-
-msgid "Weeks this year"
-msgstr "Semanas de este año"
-
-msgid "This month"
-msgstr "Este mes"
-
-msgid "Last month"
-msgstr "Mes anterior"
-
-msgid "Last 3 months"
-msgstr "Últimos 3 meses"
-
-msgid "Last 6 months"
-msgstr "Últimos 6 meses"
-
-msgid "Last 12 months"
-msgstr "Ultimos 12 meses"
-
-msgid "Months this year"
-msgstr "Meses este año"
-
-msgid "This bimonth"
-msgstr "Este bimestre"
-
-msgid "Last bimonth"
-msgstr "Último bimestre"
-
-msgid "Last 6 bimonths"
-msgstr "Últimos 6 bimestres"
-
-msgid "Bimonths this year"
-msgstr "Bimestres de este año"
-
-msgid "This quarter"
-msgstr "Este trimestre"
-
-msgid "Last quarter"
-msgstr "El trimestre pasado"
-
-msgid "Last 4 quarters"
-msgstr "Últimos 4 trimestres"
-
-msgid "Quarters this year"
-msgstr "Trimestres de este año"
-
-msgid "This six-month"
-msgstr "Este semestre"
-
-msgid "Last six-month"
-msgstr "Último semestre"
-
-msgid "Last 2 six-months"
-msgstr "Últimos 2 semestres"
-
-msgid "This financial year"
-msgstr "Este año fiscal"
-
-msgid "Last financial year"
-msgstr "Último ejercicio financiero"
-
-msgid "Last 5 financial years"
-msgstr "Últimos 5 ejercicios financieros"
-
-msgid "This year"
-msgstr "Este año"
-
-msgid "Last year"
-msgstr "El año pasado"
 
 msgid "Period"
 msgstr "Periodo"

@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2026-11-11T08:39:41.472Z\n"
+"POT-Creation-Date: 2026-11-19T14:34:40.520Z\n"
 "PO-Revision-Date: 2026-07-23 07:34+0000\n"
 "Last-Translator: easylin <lin_xd@126.com>, 2026\n"
 "Language-Team: Chinese (https://app.transifex.com/hisp-uio/teams/100509/zh/)\n"
@@ -18,6 +18,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: zh\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Network error"
+msgstr "网络错误"
+
+msgid "This app could not retrieve required data."
+msgstr "此应用无法检索所需数据。"
 
 msgid ""
 "Some dimensions were not added because they cannot be used in a "
@@ -30,12 +36,14 @@ msgid ""
 msgstr "某些维度未被添加，因为它们无法与{{- layoutTetName}} 的维度结合使用：{{list}} 。"
 
 msgid "This app needs a newer version of DHIS2"
-msgstr ""
+msgstr "此应用需要更新版的DHIS2"
 
 msgid ""
 "This server is running version {{currentVersion}}. Individual Data "
 "Visualizer needs {{requiredVersion}} or later."
 msgstr ""
+"该服务器正在运行{{currentVersion}} 版本。Individual Data "
+"Visualizer需要{{requiredVersion}} 或更高版本。"
 
 msgid "Changes not applied"
 msgstr "更改未应用"
@@ -284,9 +292,6 @@ msgstr "切换到{{- trackedEntityTypeName}} 列表"
 msgid "Update {{- trackedEntityTypeName}} list"
 msgstr "更新{{- trackedEntityTypeName}} 列表"
 
-msgid "Not valid with registration org. unit"
-msgstr "不适用于注册组织单位"
-
 msgid "Not valid with categories or category option group sets"
 msgstr "不适用于分类或分类选项组集"
 
@@ -303,7 +308,7 @@ msgid "Not valid with multiple programs"
 msgstr "不可与多个项目同时使用"
 
 msgid "Not valid with tracked entity attributes and event programs"
-msgstr ""
+msgstr "不适用于受监控的实体属性及事件计划"
 
 msgid "Not valid with multiple program stages"
 msgstr "不适用于包含多个程序阶段的情况"
@@ -325,6 +330,18 @@ msgstr "不适用于项目指标"
 
 msgid "Nothing selected. Add items to the layout to get started."
 msgstr "尚未选择任何内容。请将项目添加到布局中以开始操作。"
+
+msgid "Add at least one dimension to columns or rows"
+msgstr ""
+
+msgid "Add at least one dimension to columns"
+msgstr ""
+
+msgid "Select at least one period"
+msgstr ""
+
+msgid "Select at least one organisation unit"
+msgstr ""
 
 msgid "One row for each {{- outputTypeLabel}}"
 msgstr "每项占一行{{- outputTypeLabel}}"
@@ -365,8 +382,10 @@ msgstr "图表选项"
 msgid "Convert to {{- visType}}"
 msgstr "转换为{{- visType}}"
 
-msgid "{{- names}} will be removed. Are you sure?"
-msgstr "{{- names}} 将被删除。您确定吗？"
+msgid ""
+"{{- names}} will be removed because program indicators are not supported in "
+"pivot tables. Are you sure?"
+msgstr ""
 
 msgid "Cancel"
 msgstr "取消"
@@ -401,34 +420,34 @@ msgid ""
 msgstr "该行列表可能会显示编写解释时不可用的数据。"
 
 msgid "Page number"
-msgstr ""
+msgstr "页码"
 
 msgid "Pagination options"
-msgstr ""
+msgstr "分页选项"
 
 msgid "Rows per page (view only)"
-msgstr ""
+msgstr "每页显示行数（仅供查看）"
 
 msgid "Not available offline"
 msgstr "离线不可用"
 
 msgid "Previous page"
-msgstr ""
+msgstr "上一页"
 
 msgid "Next page"
-msgstr ""
+msgstr "下一页"
 
 msgid "{{- formattedCount}} enrollment"
 msgid_plural "{{- formattedCount}} enrollment"
-msgstr[0] ""
+msgstr[0] "{{- formattedCount}} 注册人数"
 
 msgid "{{- formattedCount}} tracked entity"
 msgid_plural "{{- formattedCount}} tracked entity"
-msgstr[0] ""
+msgstr[0] "{{- formattedCount}} 受监控实体"
 
 msgid "{{- formattedCount}} event"
 msgid_plural "{{- formattedCount}} event"
-msgstr[0] ""
+msgstr[0] "{{- formattedCount}} 活动"
 
 msgid "most recent"
 msgstr "最近的"
@@ -477,6 +496,18 @@ msgstr "适度"
 
 msgid "Compact"
 msgstr "紧凑"
+
+msgid "Fix column headers to top of table"
+msgstr "将列标题固定到表格顶部"
+
+msgid "There aren’t any column headers because Columns is empty."
+msgstr "没有任何列标题，因为 列是空的。"
+
+msgid "Fix row headers to left of table"
+msgstr "将行标题固定到表格的左侧"
+
+msgid "There aren’t any row headers because Rows is empty."
+msgstr "没有任何行标题，因为 行是空的。"
 
 msgid "Font size"
 msgstr "字体大小"
@@ -605,7 +636,7 @@ msgid "Show without filters"
 msgstr "显示无过滤器"
 
 msgid "Page {{page}} not found, returned to page {{shownPage}}"
-msgstr ""
+msgstr "页面{{page}} 未找到，已返回当前页面{{shownPage}}"
 
 msgid "Create a {{- visType}} before updating"
 msgstr "在更新之前创建一个{{- visType}} "
@@ -1094,6 +1125,14 @@ msgid ""
 "choosing a shorter period."
 msgstr "此请求返回的数据量超出了服务器允许的范围。请减少数据量后重试，例如选择更少的项目、添加筛选条件或选择更短的时间范围。"
 
+msgid "Date range not supported"
+msgstr ""
+
+msgid ""
+"Date ranges aren’t supported in rows or columns yet. Move the period to "
+"filter or use a fixed or relative selection."
+msgstr ""
+
 msgid "Top limit too high"
 msgstr "上限过高"
 
@@ -1156,105 +1195,6 @@ msgstr "我的下属机构"
 msgid "User sub-x2-units"
 msgstr "用户二级下属机构"
 
-msgid "Today"
-msgstr "今天"
-
-msgid "Yesterday"
-msgstr "昨天"
-
-msgid "Last 3 days"
-msgstr "最近三天"
-
-msgid "Last 7 days"
-msgstr "最近7天"
-
-msgid "Last 14 days"
-msgstr "最近14天"
-
-msgid "This week"
-msgstr "本周"
-
-msgid "Last week"
-msgstr "上周"
-
-msgid "Last 4 weeks"
-msgstr "最近 4 周"
-
-msgid "Last 12 weeks"
-msgstr "最近 12 周"
-
-msgid "Last 52 weeks"
-msgstr "最近52周"
-
-msgid "Weeks this year"
-msgstr "今年的几周"
-
-msgid "This month"
-msgstr "本月"
-
-msgid "Last month"
-msgstr "上月"
-
-msgid "Last 3 months"
-msgstr "最近3个月"
-
-msgid "Last 6 months"
-msgstr "最近6个月"
-
-msgid "Last 12 months"
-msgstr "最近12月"
-
-msgid "Months this year"
-msgstr "今年的月份"
-
-msgid "This bimonth"
-msgstr "本俩月"
-
-msgid "Last bimonth"
-msgstr "最近俩月"
-
-msgid "Last 6 bimonths"
-msgstr "最近6个俩月"
-
-msgid "Bimonths this year"
-msgstr "今年的俩月"
-
-msgid "This quarter"
-msgstr "本季度"
-
-msgid "Last quarter"
-msgstr "最近一季"
-
-msgid "Last 4 quarters"
-msgstr "最近 4 个季度"
-
-msgid "Quarters this year"
-msgstr "今年的季度"
-
-msgid "This six-month"
-msgstr "本六个月"
-
-msgid "Last six-month"
-msgstr "最近六个月"
-
-msgid "Last 2 six-months"
-msgstr "最近2个半年"
-
-msgid "This financial year"
-msgstr "本财年"
-
-msgid "Last financial year"
-msgstr "上一财政年"
-
-msgid "Last 5 financial years"
-msgstr "最近 5 个财政年度"
-
-msgid "This year"
-msgstr "今年"
-
-msgid "Last year"
-msgstr "去年"
-
 msgid "Period"
 msgstr "期间"
 
@@ -1288,10 +1228,10 @@ msgstr "事件"
 msgid ""
 "Track or compare changes over time. Recommend period as category. (adjust "
 "for IDV)"
-msgstr ""
+msgstr "跟踪或比较随时间推移的变化。建议将“时间段”作为分类。（根据IDV进行调整）"
 
 msgid "View data and indicators in a manipulatable table. (adjust for IDV)"
-msgstr ""
+msgstr "在可交互表格中查看数据和指标。（已进行IDV调整）"
 
 msgctxt "Application title"
 msgid "__MANIFEST_APP_TITLE"

@@ -1,22 +1,28 @@
 # Translators:
 # channara rin, 2026
 # Kiry Heng, 2026
-# Em Le <em.hispvietnam@gmail.com>, 2026
 # Viktor Varland <viktor@dhis2.org>, 2026
 # Philip Larsen Donnelly, 2026
+# Em Le <em.hispvietnam@gmail.com>, 2026
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2026-11-11T08:39:41.472Z\n"
+"POT-Creation-Date: 2026-11-19T14:34:40.520Z\n"
 "PO-Revision-Date: 2026-07-23 07:34+0000\n"
-"Last-Translator: Philip Larsen Donnelly, 2026\n"
+"Last-Translator: Em Le <em.hispvietnam@gmail.com>, 2026\n"
 "Language-Team: Khmer (https://app.transifex.com/hisp-uio/teams/100509/km/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: km\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Network error"
+msgstr "បណ្ដាញមានបញ្ហា"
+
+msgid "This app could not retrieve required data."
+msgstr ""
 
 msgid ""
 "Some dimensions were not added because they cannot be used in a "
@@ -283,9 +289,6 @@ msgstr ""
 msgid "Update {{- trackedEntityTypeName}} list"
 msgstr ""
 
-msgid "Not valid with registration org. unit"
-msgstr ""
-
 msgid "Not valid with categories or category option group sets"
 msgstr ""
 
@@ -323,6 +326,18 @@ msgid "Not valid with program indicators"
 msgstr ""
 
 msgid "Nothing selected. Add items to the layout to get started."
+msgstr ""
+
+msgid "Add at least one dimension to columns or rows"
+msgstr ""
+
+msgid "Add at least one dimension to columns"
+msgstr ""
+
+msgid "Select at least one period"
+msgstr ""
+
+msgid "Select at least one organisation unit"
 msgstr ""
 
 msgid "One row for each {{- outputTypeLabel}}"
@@ -364,7 +379,9 @@ msgstr "ជម្រើសនៃតារាង"
 msgid "Convert to {{- visType}}"
 msgstr ""
 
-msgid "{{- names}} will be removed. Are you sure?"
+msgid ""
+"{{- names}} will be removed because program indicators are not supported in "
+"pivot tables. Are you sure?"
 msgstr ""
 
 msgid "Cancel"
@@ -476,6 +493,18 @@ msgstr "ធម្មតា"
 
 msgid "Compact"
 msgstr "បង្រួម"
+
+msgid "Fix column headers to top of table"
+msgstr "កំណត់ក្បាលជួរឈរអោយនៅខាងលើតារាង"
+
+msgid "There aren’t any column headers because Columns is empty."
+msgstr "មិនមានក្បាលជួរឈរទេព្រោះជួរឈរនេះគឺទទេ។"
+
+msgid "Fix row headers to left of table"
+msgstr "កំណត់ក្បាលជួរដេកអោយនៅខាងឆ្វេងតារាង"
+
+msgid "There aren’t any row headers because Rows is empty."
+msgstr "មិនមានក្បាលជួរដេកទេព្រោះជួរដេកនេះគឺទទេ។"
 
 msgid "Font size"
 msgstr "ទំហំពុម្ពអក្សរ"
@@ -1096,6 +1125,14 @@ msgid ""
 "choosing a shorter period."
 msgstr ""
 
+msgid "Date range not supported"
+msgstr ""
+
+msgid ""
+"Date ranges aren’t supported in rows or columns yet. Move the period to "
+"filter or use a fixed or relative selection."
+msgstr ""
+
 msgid "Top limit too high"
 msgstr ""
 
@@ -1157,105 +1194,6 @@ msgstr "User sub-units"
 
 msgid "User sub-x2-units"
 msgstr "User sub-x2-units"
-
-msgid "Today"
-msgstr "ថ្ងៃនេះ"
-
-msgid "Yesterday"
-msgstr "កាលពីម្សិលមិញ"
-
-msgid "Last 3 days"
-msgstr "៣ថ្ងៃចុងក្រោយ"
-
-msgid "Last 7 days"
-msgstr "៧ថ្ងៃចុងក្រោយ"
-
-msgid "Last 14 days"
-msgstr "១៤ថ្ងៃចុងក្រោយ"
-
-msgid "This week"
-msgstr "សប្តាហ៍នេះ"
-
-msgid "Last week"
-msgstr "សប្តាហ៍មុន"
-
-msgid "Last 4 weeks"
-msgstr "៤សប្តាហ៍ចុងក្រោយ"
-
-msgid "Last 12 weeks"
-msgstr "១២សប្តាហ៍ចុងក្រោយ"
-
-msgid "Last 52 weeks"
-msgstr "៥២សប្តាហ៍ចុងក្រោយ"
-
-msgid "Weeks this year"
-msgstr "ជាសប្ដាហ៍ក្នុងឆ្នាំនេះ"
-
-msgid "This month"
-msgstr "ខែនេះ"
-
-msgid "Last month"
-msgstr "ខែមុន"
-
-msgid "Last 3 months"
-msgstr "៣ខែចុងក្រោយ"
-
-msgid "Last 6 months"
-msgstr "៦ខែចុងក្រោយ"
-
-msgid "Last 12 months"
-msgstr "១២ខែចុងក្រោយ"
-
-msgid "Months this year"
-msgstr "ជាខែក្នុងឆ្នាំនេះ"
-
-msgid "This bimonth"
-msgstr "រយៈពេល២ខែនេះ"
-
-msgid "Last bimonth"
-msgstr "រយៈពេល២ខែមុន"
-
-msgid "Last 6 bimonths"
-msgstr "រយៈពេល២ខែ៦ដងមុន"
-
-msgid "Bimonths this year"
-msgstr "ជារយៈពេល២ខែម្តងក្នុងឆ្នាំនេះ"
-
-msgid "This quarter"
-msgstr "ត្រីមាសនេះ"
-
-msgid "Last quarter"
-msgstr "ត្រីមាសចុងក្រោយ"
-
-msgid "Last 4 quarters"
-msgstr "៤ត្រីមាសចុងក្រោយ"
-
-msgid "Quarters this year"
-msgstr "ជាត្រីមាសក្នុងឆ្នាំនេះ"
-
-msgid "This six-month"
-msgstr "ឆមាសនេះ"
-
-msgid "Last six-month"
-msgstr "ឆមាសមុន"
-
-msgid "Last 2 six-months"
-msgstr "២ឆមាសចុងក្រោយ"
-
-msgid "This financial year"
-msgstr "ឆ្នាំហិរញ្ញវត្ថុនេះ"
-
-msgid "Last financial year"
-msgstr "ឆ្នាំហិរញ្ញវត្ថុមុន"
-
-msgid "Last 5 financial years"
-msgstr "៥ឆ្នាំហិរញ្ញវត្ថុចុងក្រោយ"
-
-msgid "This year"
-msgstr "ឆ្នាំនេះ"
-
-msgid "Last year"
-msgstr "ឆ្នាំមុន"
 
 msgid "Period"
 msgstr "កំឡុងពេល"

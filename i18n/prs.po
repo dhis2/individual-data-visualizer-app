@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2026-11-11T08:39:41.472Z\n"
+"POT-Creation-Date: 2026-11-19T14:34:40.520Z\n"
 "PO-Revision-Date: 2026-07-23 07:34+0000\n"
 "Last-Translator: Philip Larsen Donnelly, 2026\n"
 "Language-Team: Persian (Afghanistan) (https://app.transifex.com/hisp-uio/teams/100509/fa_AF/)\n"
@@ -14,6 +14,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: fa_AF\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "Network error"
+msgstr ""
+
+msgid "This app could not retrieve required data."
+msgstr ""
 
 msgid ""
 "Some dimensions were not added because they cannot be used in a "
@@ -281,9 +287,6 @@ msgstr ""
 msgid "Update {{- trackedEntityTypeName}} list"
 msgstr ""
 
-msgid "Not valid with registration org. unit"
-msgstr ""
-
 msgid "Not valid with categories or category option group sets"
 msgstr ""
 
@@ -321,6 +324,18 @@ msgid "Not valid with program indicators"
 msgstr ""
 
 msgid "Nothing selected. Add items to the layout to get started."
+msgstr ""
+
+msgid "Add at least one dimension to columns or rows"
+msgstr ""
+
+msgid "Add at least one dimension to columns"
+msgstr ""
+
+msgid "Select at least one period"
+msgstr ""
+
+msgid "Select at least one organisation unit"
 msgstr ""
 
 msgid "One row for each {{- outputTypeLabel}}"
@@ -362,7 +377,9 @@ msgstr "د چارټ انتخابونه"
 msgid "Convert to {{- visType}}"
 msgstr ""
 
-msgid "{{- names}} will be removed. Are you sure?"
+msgid ""
+"{{- names}} will be removed because program indicators are not supported in "
+"pivot tables. Are you sure?"
 msgstr ""
 
 msgid "Cancel"
@@ -477,6 +494,18 @@ msgstr "عادی"
 
 msgid "Compact"
 msgstr "متراکم"
+
+msgid "Fix column headers to top of table"
+msgstr ""
+
+msgid "There aren’t any column headers because Columns is empty."
+msgstr ""
+
+msgid "Fix row headers to left of table"
+msgstr ""
+
+msgid "There aren’t any row headers because Rows is empty."
+msgstr ""
 
 msgid "Font size"
 msgstr "سایز خط"
@@ -1095,6 +1124,14 @@ msgid ""
 "choosing a shorter period."
 msgstr ""
 
+msgid "Date range not supported"
+msgstr ""
+
+msgid ""
+"Date ranges aren’t supported in rows or columns yet. Move the period to "
+"filter or use a fixed or relative selection."
+msgstr ""
+
 msgid "Top limit too high"
 msgstr ""
 
@@ -1156,105 +1193,6 @@ msgstr "زیر-واحد ها استفاده کننده گان"
 
 msgid "User sub-x2-units"
 msgstr "زیر- x2-واحد های استفاده کننده گان"
-
-msgid "Today"
-msgstr "امروز"
-
-msgid "Yesterday"
-msgstr "دیروز"
-
-msgid "Last 3 days"
-msgstr "3 روز گذشته"
-
-msgid "Last 7 days"
-msgstr "7 روز گذشته"
-
-msgid "Last 14 days"
-msgstr "14 روز گذشته"
-
-msgid "This week"
-msgstr "هفته جاری"
-
-msgid "Last week"
-msgstr "هفته گذشته"
-
-msgid "Last 4 weeks"
-msgstr "4 هفته گذشته"
-
-msgid "Last 12 weeks"
-msgstr "12 هفته گذشته"
-
-msgid "Last 52 weeks"
-msgstr "52 هفته گذشته"
-
-msgid "Weeks this year"
-msgstr ""
-
-msgid "This month"
-msgstr "ماه جاری"
-
-msgid "Last month"
-msgstr "ماه گذشته"
-
-msgid "Last 3 months"
-msgstr "3 ماهه گذشته"
-
-msgid "Last 6 months"
-msgstr "6 ماه گذشته"
-
-msgid "Last 12 months"
-msgstr "12 ماهه گذشته"
-
-msgid "Months this year"
-msgstr "ماه های سال هذا"
-
-msgid "This bimonth"
-msgstr ""
-
-msgid "Last bimonth"
-msgstr ""
-
-msgid "Last 6 bimonths"
-msgstr ""
-
-msgid "Bimonths this year"
-msgstr ""
-
-msgid "This quarter"
-msgstr "سه ماهه جاری"
-
-msgid "Last quarter"
-msgstr "سه ماهه آخیر"
-
-msgid "Last 4 quarters"
-msgstr "4 سه ماهه آخیر"
-
-msgid "Quarters this year"
-msgstr "ربع های سال هذا"
-
-msgid "This six-month"
-msgstr "شش-ماه جاری"
-
-msgid "Last six-month"
-msgstr "شش-ماهه گذشته"
-
-msgid "Last 2 six-months"
-msgstr "2 شش-ماهه گذشته"
-
-msgid "This financial year"
-msgstr "سال مالی جاری"
-
-msgid "Last financial year"
-msgstr "سال گذشته مالی"
-
-msgid "Last 5 financial years"
-msgstr "5 سال گذشته مالی"
-
-msgid "This year"
-msgstr "سال جاری"
-
-msgid "Last year"
-msgstr "سال گذشته"
 
 msgid "Period"
 msgstr "دوره"

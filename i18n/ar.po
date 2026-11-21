@@ -1,23 +1,29 @@
 # Translators:
 # Andres Miguel Rubio, 2026
 # Mozafar Haider, 2026
-# Nadiia <semchuk@aph.org.ua>, 2026
 # Viktor Varland <viktor@dhis2.org>, 2026
 # Philip Larsen Donnelly, 2026
 # Hamza <7amza.it@gmail.com>, 2026
+# Nadiia <semchuk@aph.org.ua>, 2026
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2026-11-11T08:39:41.472Z\n"
+"POT-Creation-Date: 2026-11-19T14:34:40.520Z\n"
 "PO-Revision-Date: 2026-07-23 07:34+0000\n"
-"Last-Translator: Hamza <7amza.it@gmail.com>, 2026\n"
+"Last-Translator: Nadiia <semchuk@aph.org.ua>, 2026\n"
 "Language-Team: Arabic (https://app.transifex.com/hisp-uio/teams/100509/ar/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+msgid "Network error"
+msgstr "خطأ في الشبكة"
+
+msgid "This app could not retrieve required data."
+msgstr ""
 
 msgid ""
 "Some dimensions were not added because they cannot be used in a "
@@ -289,9 +295,6 @@ msgstr ""
 msgid "Update {{- trackedEntityTypeName}} list"
 msgstr ""
 
-msgid "Not valid with registration org. unit"
-msgstr ""
-
 msgid "Not valid with categories or category option group sets"
 msgstr ""
 
@@ -329,6 +332,18 @@ msgid "Not valid with program indicators"
 msgstr ""
 
 msgid "Nothing selected. Add items to the layout to get started."
+msgstr ""
+
+msgid "Add at least one dimension to columns or rows"
+msgstr ""
+
+msgid "Add at least one dimension to columns"
+msgstr ""
+
+msgid "Select at least one period"
+msgstr ""
+
+msgid "Select at least one organisation unit"
 msgstr ""
 
 msgid "One row for each {{- outputTypeLabel}}"
@@ -370,7 +385,9 @@ msgstr "خيارات المخطط البياني"
 msgid "Convert to {{- visType}}"
 msgstr ""
 
-msgid "{{- names}} will be removed. Are you sure?"
+msgid ""
+"{{- names}} will be removed because program indicators are not supported in "
+"pivot tables. Are you sure?"
 msgstr ""
 
 msgid "Cancel"
@@ -497,6 +514,18 @@ msgstr "عادي"
 
 msgid "Compact"
 msgstr "مضغوط"
+
+msgid "Fix column headers to top of table"
+msgstr ""
+
+msgid "There aren’t any column headers because Columns is empty."
+msgstr ""
+
+msgid "Fix row headers to left of table"
+msgstr ""
+
+msgid "There aren’t any row headers because Rows is empty."
+msgstr ""
 
 msgid "Font size"
 msgstr "حجم الخط"
@@ -1121,6 +1150,14 @@ msgid ""
 "choosing a shorter period."
 msgstr ""
 
+msgid "Date range not supported"
+msgstr ""
+
+msgid ""
+"Date ranges aren’t supported in rows or columns yet. Move the period to "
+"filter or use a fixed or relative selection."
+msgstr ""
+
 msgid "Top limit too high"
 msgstr ""
 
@@ -1182,105 +1219,6 @@ msgstr "وحدات المستخدم الفرعية"
 
 msgid "User sub-x2-units"
 msgstr "وحدات المستخدم الفرعية من المستوى الثاني"
-
-msgid "Today"
-msgstr "اليوم"
-
-msgid "Yesterday"
-msgstr "الأمس"
-
-msgid "Last 3 days"
-msgstr "آخر 3 أيام"
-
-msgid "Last 7 days"
-msgstr "آخر 7 أيام"
-
-msgid "Last 14 days"
-msgstr "آخر 14 يوم"
-
-msgid "This week"
-msgstr "هذا الأسبوع"
-
-msgid "Last week"
-msgstr "الأسبوع الماضي"
-
-msgid "Last 4 weeks"
-msgstr "آخر 4 أسابيع"
-
-msgid "Last 12 weeks"
-msgstr "آخر 12 أسبوع"
-
-msgid "Last 52 weeks"
-msgstr "آخر 52 أسبوع"
-
-msgid "Weeks this year"
-msgstr "أسابيع السنة الحالية"
-
-msgid "This month"
-msgstr "الشهر الحالي"
-
-msgid "Last month"
-msgstr "الشهر الماضي"
-
-msgid "Last 3 months"
-msgstr "آخر 3 أشهر"
-
-msgid "Last 6 months"
-msgstr "آخر 6 أشهر"
-
-msgid "Last 12 months"
-msgstr "آخر 12 شهر"
-
-msgid "Months this year"
-msgstr "أشهر السنة الحالية"
-
-msgid "This bimonth"
-msgstr "الشهرين الحاليين"
-
-msgid "Last bimonth"
-msgstr "آخر شهرين"
-
-msgid "Last 6 bimonths"
-msgstr "آخر 6 أزواج شهرية"
-
-msgid "Bimonths this year"
-msgstr "كل شهرين هذا العام"
-
-msgid "This quarter"
-msgstr "ربع السنة الحالي"
-
-msgid "Last quarter"
-msgstr "ربع السنة الماضي"
-
-msgid "Last 4 quarters"
-msgstr "آخر 4 أرباع السنة"
-
-msgid "Quarters this year"
-msgstr "أرباع السنة الحالية"
-
-msgid "This six-month"
-msgstr "الستة أشهر الحالية"
-
-msgid "Last six-month"
-msgstr "آخر ستة-أشهر"
-
-msgid "Last 2 six-months"
-msgstr "آخر فترتي ستة أشهر (نصفي سنة)"
-
-msgid "This financial year"
-msgstr "السنة المالية الحالية"
-
-msgid "Last financial year"
-msgstr "السنة المالية الماضية"
-
-msgid "Last 5 financial years"
-msgstr "آخر 5 سنوات مالية"
-
-msgid "This year"
-msgstr "السنة الحالية"
-
-msgid "Last year"
-msgstr "السنة الماضية"
 
 msgid "Period"
 msgstr "الفترة الزمنية"
