@@ -260,7 +260,14 @@ export const useToolbarActions = () => {
             )
 
             if (data) {
-                // Navigate to the new visualization
+                /* Loaded before navigating, so the canvas reloads in place, as
+                 * after a save, and keeps its page size */
+                await dispatch(
+                    tLoadSavedVisualization({
+                        id: data,
+                        updateStatistics: false,
+                    })
+                )
                 dispatch(setNavigationState({ visualizationId: data }))
             } else if (error) {
                 onError(error as EngineError)
