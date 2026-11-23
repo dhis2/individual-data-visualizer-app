@@ -1,6 +1,7 @@
 import { api } from '@api/api'
 import type { BaseQueryApiWithExtraArg } from '@api/custom-base-query'
 import { parseEngineError } from '@api/parse-engine-error'
+import { getDataItemResource } from '@modules/dimension/dimension-type'
 import { extractPlainDimensionId } from '@modules/dimension/ids'
 import type {
     DimensionType,
@@ -11,11 +12,6 @@ import type {
 type GetLegendSetsByDimensionQueryArgs = {
     dimensionType: DimensionType
     dimensionId: string
-}
-
-const resourceByDimensionType: Partial<Record<DimensionType, string>> = {
-    DATA_ELEMENT: 'dataElements',
-    PROGRAM_ATTRIBUTE: 'trackedEntityAttributes',
 }
 
 /* Legends are contiguous value ranges, but come back in arbitrary order. They
@@ -39,7 +35,7 @@ export const legendSetsApi = api.injectEndpoints({
             ) {
                 const { engine, metadataStore } = apiArg.extra
 
-                const resource = resourceByDimensionType[dimensionType]
+                const resource = getDataItemResource(dimensionType)
 
                 if (!resource) {
                     return { data: [] }

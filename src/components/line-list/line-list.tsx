@@ -1,4 +1,5 @@
 import type { LineListAnalyticsData } from '@components/plugin-wrapper/hooks/use-line-list-analytics-data'
+import { LegendKey } from '@components/shared/legend-key'
 import { useDhis2ConnectionStatus } from '@dhis2/app-runtime'
 import {
     DataTable,
@@ -19,7 +20,6 @@ import {
 import { BodyCell } from './body-cell'
 import { HeaderCell } from './header-cell'
 import { HeadingRow } from './heading-row'
-import { LegendKey } from './legend-key'
 import { NoTimeDimensionWarning } from './no-time-dimension-warning'
 import { PaginationBar } from './pagination-bar/pagination-bar'
 import { ScrollBox } from './scroll-box'

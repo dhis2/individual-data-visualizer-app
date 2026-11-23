@@ -5,8 +5,8 @@ import type {
     OptionsTabKeyPivotTable,
 } from '@types'
 import type { FC } from 'react'
+import { LegendTab } from './tabs/legend-tab'
 import { LineListDataTab } from './tabs/line-list-data-tab'
-import { LineListLegendTab } from './tabs/line-list-legend-tab'
 import { LineListStyleTab } from './tabs/line-list-style-tab'
 import { PivotTableDataTab } from './tabs/pivot-table-data-tab'
 import { PivotTableStyleTab } from './tabs/pivot-table-style-tab'
@@ -24,7 +24,7 @@ export const OptionsTabContent: FC<OptionsTabContentProps> = ({
             case 'data':
                 return <LineListDataTab />
             case 'legend':
-                return <LineListLegendTab />
+                return <LegendTab />
             case 'style':
                 return <LineListStyleTab />
         }
@@ -32,6 +32,8 @@ export const OptionsTabContent: FC<OptionsTabContentProps> = ({
         switch (tabKey as OptionsTabKeyPivotTable) {
             case 'data':
                 return <PivotTableDataTab />
+            case 'legend':
+                return <LegendTab />
             case 'style':
                 return <PivotTableStyleTab />
         }

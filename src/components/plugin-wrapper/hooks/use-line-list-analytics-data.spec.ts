@@ -9,6 +9,7 @@ import { renderHookWithAppWrapper } from '@test-utils/app-wrapper'
 import { waitFor } from '@testing-library/react'
 import type { ApiSavedVisualization, CurrentVisualization } from '@types'
 import { describe, it, expect, beforeEach, vi } from 'vitest'
+import type { FetchedLegendSet } from './legend-sets'
 import {
     collectLegendSetIdsToFetch,
     toLineListAnalyticsData,
@@ -16,7 +17,6 @@ import {
     type LineListAnalyticsData,
     type LineListAnalyticsDataHeader,
     type LineListAnalyticsResponse,
-    type LineListLegendSet,
 } from './use-line-list-analytics-data'
 
 const simpleLineList = loadLineListFixture('e2e-enrollment')
@@ -107,7 +107,7 @@ describe('toLineListAnalyticsData', () => {
                 largeLineListWithLegend.response as unknown as LineListAnalyticsResponse,
             visualization: largeLineListWithLegendVis as CurrentVisualization,
             legendSets:
-                largeLineListWithLegend.legendSets as unknown as LineListLegendSet[],
+                largeLineListWithLegend.legendSets as unknown as FetchedLegendSet[],
         })
 
         const weightHeader = analyticsData.headers.find(
