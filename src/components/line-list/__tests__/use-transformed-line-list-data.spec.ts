@@ -261,6 +261,47 @@ describe('formatCellValue', () => {
         ).toBe('60 - 70')
     })
 
+    const formatStatusValue = (
+        name: string,
+        rawValue: string,
+        metaDataItems: FormatCellValueMetaDataItems = {}
+    ) =>
+        formatCellValue({
+            rawValue,
+            header: { name, valueType: 'TEXT' } as FormatCellValueHeader,
+            visualization,
+            metaDataItems,
+            isUndefined: false,
+        })
+
+    it.each([
+        ['eventstatus', 'SCHEDULE', 'Scheduled'],
+        ['Zj7UnCAulEk.eventstatus', 'SCHEDULE', 'Scheduled'],
+        ['Zj7UnCAulEk.eventstatus', 'ACTIVE', 'Active'],
+        ['programstatus', 'CANCELLED', 'Cancelled'],
+        ['programstatus', 'COMPLETED', 'Completed'],
+    ])('renders the %s value %s as %s', (name, rawValue, statusName) => {
+        expect(formatStatusValue(name, rawValue).formattedValue).toBe(
+            statusName
+        )
+    })
+
+    /* Filtering on a status makes analytics return the status names in
+     * metaData.items, with SCHEDULE named "Schedule". */
+    it('renders a scheduled event status as Scheduled when the response metadata names it Schedule', () => {
+        expect(
+            formatStatusValue('Zj7UnCAulEk.eventstatus', 'SCHEDULE', {
+                SCHEDULE: { name: 'Schedule' },
+            } as unknown as FormatCellValueMetaDataItems)
+        ).toEqual({ value: 'SCHEDULE', formattedValue: 'Scheduled' })
+    })
+
+    it('renders a status the app has no name for as the raw value', () => {
+        expect(formatStatusValue('eventstatus', 'SKIPPED').formattedValue).toBe(
+            'SKIPPED'
+        )
+    })
+
     const formatDateValue = (name: string) =>
         formatCellValue({
             rawValue: '2025-08-23 14:30:00.0',

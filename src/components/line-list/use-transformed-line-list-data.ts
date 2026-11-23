@@ -322,22 +322,27 @@ export const formatCellValue = ({
     metaDataItems,
     isUndefined,
 }: FormatCellValueArgs): { value: string; formattedValue: string } => {
+    // header.name might be prefixed with programStage.id
+    const dimensionId = extractPlainDimensionId(header.name)
+
+    /* A filtered status dimension brings the status names into the response
+     * metadata, where analytics calls SCHEDULE "Schedule". The app's own
+     * names are used instead, looked up by the raw status. */
+    if (dimensionId && STATUS_HEADER_NAMES.has(dimensionId)) {
+        return {
+            value: rawValue,
+            formattedValue: isStatus(rawValue)
+                ? getStatusName(rawValue)
+                : rawValue,
+        }
+    }
+
     const value = resolveCellValue({
         rawValue,
         header,
         metaDataItems,
         isUndefined,
     })
-
-    // header.name might be prefixed with programStage.id
-    const dimensionId = extractPlainDimensionId(header.name)
-
-    if (dimensionId && STATUS_HEADER_NAMES.has(dimensionId)) {
-        return {
-            value,
-            formattedValue: isStatus(value) ? getStatusName(value) : value,
-        }
-    }
 
     if (DATE_VALUE_TYPES.includes(header.valueType)) {
         return {
