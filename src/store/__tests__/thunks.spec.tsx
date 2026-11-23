@@ -1,3 +1,4 @@
+import lineListWithoutSort from '@components/plugin-wrapper/__fixtures__/inpatient-cases-5-to-15-years-this-year.json'
 import { FetchError } from '@dhis2/app-runtime'
 import eventPivotTableAttributeValue from '@modules/visualization/__fixtures__/round-trip/saved/event-pivot-table-attribute-value.json'
 import { getLastUsedVisualizationTypeFromLocalStorage } from '@modules/visualization/local-storage'
@@ -303,6 +304,22 @@ describe('tLoadSavedVisualization', () => {
         expect(getCurrentVis(store.getState()).value).toEqual({
             id: 'OvY4VVhSDeJ',
         })
+    })
+
+    it('drops an unsaved sort when the visualization reloads', async () => {
+        const { store } = await renderHookWithAppWrapper(() => null, {
+            queryData: {
+                eventVisualizations: () => lineListWithoutSort,
+            },
+        } as unknown as MockOptions)
+        await store.dispatch(tLoadSavedVisualization({ id: 'TIuOzZ0ID0V' }))
+        store.dispatch(
+            tSetCurrentVisSorting({ dimension: 'ouname', direction: 'ASC' })
+        )
+
+        await store.dispatch(tLoadSavedVisualization({ id: 'TIuOzZ0ID0V' }))
+
+        expect(getCurrentVis(store.getState()).sorting ?? []).toEqual([])
     })
 
     it('keeps a failed fetch as a fetch error instead of a runtime one', async () => {

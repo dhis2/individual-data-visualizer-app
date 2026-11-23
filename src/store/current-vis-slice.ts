@@ -23,10 +23,9 @@ export const currentVisSlice = createSlice({
          * Without spreading, reloading the same visualization would maintain
          * referential equality, preventing React effects from triggering.
          */
-        setCurrentVis: (
-            state,
-            action: PayloadAction<CurrentVisualization>
-        ) => ({ ...state, ...action.payload }),
+        setCurrentVis: (_, action: PayloadAction<CurrentVisualization>) => ({
+            ...action.payload,
+        }),
     },
     selectors: {
         getCurrentVis: (state) => state,
