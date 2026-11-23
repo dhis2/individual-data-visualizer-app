@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2026-11-11T08:39:41.472Z\n"
+"POT-Creation-Date: 2026-11-19T14:34:40.520Z\n"
 "PO-Revision-Date: 2026-07-23 07:34+0000\n"
 "Last-Translator: easylin <lin_xd@126.com>, 2026\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/hisp-uio/teams/100509/zh_CN/)\n"
@@ -16,6 +16,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Network error"
+msgstr "网络错误"
+
+msgid "This app could not retrieve required data."
+msgstr ""
 
 msgid ""
 "Some dimensions were not added because they cannot be used in a "
@@ -282,9 +288,6 @@ msgstr ""
 msgid "Update {{- trackedEntityTypeName}} list"
 msgstr ""
 
-msgid "Not valid with registration org. unit"
-msgstr ""
-
 msgid "Not valid with categories or category option group sets"
 msgstr ""
 
@@ -322,6 +325,18 @@ msgid "Not valid with program indicators"
 msgstr ""
 
 msgid "Nothing selected. Add items to the layout to get started."
+msgstr ""
+
+msgid "Add at least one dimension to columns or rows"
+msgstr ""
+
+msgid "Add at least one dimension to columns"
+msgstr ""
+
+msgid "Select at least one period"
+msgstr ""
+
+msgid "Select at least one organisation unit"
 msgstr ""
 
 msgid "One row for each {{- outputTypeLabel}}"
@@ -363,7 +378,9 @@ msgstr ""
 msgid "Convert to {{- visType}}"
 msgstr ""
 
-msgid "{{- names}} will be removed. Are you sure?"
+msgid ""
+"{{- names}} will be removed because program indicators are not supported in "
+"pivot tables. Are you sure?"
 msgstr ""
 
 msgid "Cancel"
@@ -475,6 +492,18 @@ msgstr "适度"
 
 msgid "Compact"
 msgstr "紧凑"
+
+msgid "Fix column headers to top of table"
+msgstr "将列标题固定到表格顶部"
+
+msgid "There aren’t any column headers because Columns is empty."
+msgstr "没有任何列标题，因为 列是空的。"
+
+msgid "Fix row headers to left of table"
+msgstr "将行标题固定到表格的左侧"
+
+msgid "There aren’t any row headers because Rows is empty."
+msgstr "没有任何行标题，因为 行是空的。"
 
 msgid "Font size"
 msgstr "字体大小"
@@ -1092,6 +1121,14 @@ msgid ""
 "choosing a shorter period."
 msgstr ""
 
+msgid "Date range not supported"
+msgstr ""
+
+msgid ""
+"Date ranges aren’t supported in rows or columns yet. Move the period to "
+"filter or use a fixed or relative selection."
+msgstr ""
+
 msgid "Top limit too high"
 msgstr ""
 
@@ -1153,105 +1190,6 @@ msgstr "我的下属机构"
 
 msgid "User sub-x2-units"
 msgstr "该用户2级下属机构"
-
-msgid "Today"
-msgstr "今天"
-
-msgid "Yesterday"
-msgstr "昨天"
-
-msgid "Last 3 days"
-msgstr "最近3天"
-
-msgid "Last 7 days"
-msgstr "最近7天"
-
-msgid "Last 14 days"
-msgstr "最近14天"
-
-msgid "This week"
-msgstr "本年"
-
-msgid "Last week"
-msgstr "上周"
-
-msgid "Last 4 weeks"
-msgstr "最近4周"
-
-msgid "Last 12 weeks"
-msgstr "最近12周"
-
-msgid "Last 52 weeks"
-msgstr "最近52周"
-
-msgid "Weeks this year"
-msgstr "今年的星期"
-
-msgid "This month"
-msgstr "本月"
-
-msgid "Last month"
-msgstr "上月"
-
-msgid "Last 3 months"
-msgstr "最近3个月"
-
-msgid "Last 6 months"
-msgstr "最近6个月"
-
-msgid "Last 12 months"
-msgstr "最近12月"
-
-msgid "Months this year"
-msgstr "今年的月份"
-
-msgid "This bimonth"
-msgstr "本俩月"
-
-msgid "Last bimonth"
-msgstr "最近俩月"
-
-msgid "Last 6 bimonths"
-msgstr "最近6个俩月"
-
-msgid "Bimonths this year"
-msgstr "今年的俩月"
-
-msgid "This quarter"
-msgstr "本季度"
-
-msgid "Last quarter"
-msgstr "最近一季"
-
-msgid "Last 4 quarters"
-msgstr "最近4个季度"
-
-msgid "Quarters this year"
-msgstr "今年的季度"
-
-msgid "This six-month"
-msgstr "本六个月"
-
-msgid "Last six-month"
-msgstr "最近六个月"
-
-msgid "Last 2 six-months"
-msgstr "最近2个半年"
-
-msgid "This financial year"
-msgstr "本财年"
-
-msgid "Last financial year"
-msgstr "上一财政年"
-
-msgid "Last 5 financial years"
-msgstr "最近5个财政年"
-
-msgid "This year"
-msgstr "今年"
-
-msgid "Last year"
-msgstr "去年"
 
 msgid "Period"
 msgstr "期间"

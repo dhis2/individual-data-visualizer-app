@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2026-11-11T08:39:41.472Z\n"
+"POT-Creation-Date: 2026-11-19T14:34:40.520Z\n"
 "PO-Revision-Date: 2026-07-23 07:34+0000\n"
 "Last-Translator: Jaime Bosque <jaime.bosque@dhis2.org>, 2026\n"
 "Language-Team: Spanish (Latin America) (https://app.transifex.com/hisp-uio/teams/100509/es_419/)\n"
@@ -15,6 +15,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: es_419\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+msgid "Network error"
+msgstr ""
+
+msgid "This app could not retrieve required data."
+msgstr ""
 
 msgid ""
 "Some dimensions were not added because they cannot be used in a "
@@ -283,9 +289,6 @@ msgstr ""
 msgid "Update {{- trackedEntityTypeName}} list"
 msgstr ""
 
-msgid "Not valid with registration org. unit"
-msgstr ""
-
 msgid "Not valid with categories or category option group sets"
 msgstr ""
 
@@ -323,6 +326,18 @@ msgid "Not valid with program indicators"
 msgstr ""
 
 msgid "Nothing selected. Add items to the layout to get started."
+msgstr ""
+
+msgid "Add at least one dimension to columns or rows"
+msgstr ""
+
+msgid "Add at least one dimension to columns"
+msgstr ""
+
+msgid "Select at least one period"
+msgstr ""
+
+msgid "Select at least one organisation unit"
 msgstr ""
 
 msgid "One row for each {{- outputTypeLabel}}"
@@ -364,7 +379,9 @@ msgstr ""
 msgid "Convert to {{- visType}}"
 msgstr ""
 
-msgid "{{- names}} will be removed. Are you sure?"
+msgid ""
+"{{- names}} will be removed because program indicators are not supported in "
+"pivot tables. Are you sure?"
 msgstr ""
 
 msgid "Cancel"
@@ -481,6 +498,18 @@ msgid "Normal"
 msgstr ""
 
 msgid "Compact"
+msgstr ""
+
+msgid "Fix column headers to top of table"
+msgstr ""
+
+msgid "There aren’t any column headers because Columns is empty."
+msgstr ""
+
+msgid "Fix row headers to left of table"
+msgstr ""
+
+msgid "There aren’t any row headers because Rows is empty."
 msgstr ""
 
 msgid "Font size"
@@ -1101,6 +1130,14 @@ msgid ""
 "choosing a shorter period."
 msgstr ""
 
+msgid "Date range not supported"
+msgstr ""
+
+msgid ""
+"Date ranges aren’t supported in rows or columns yet. Move the period to "
+"filter or use a fixed or relative selection."
+msgstr ""
+
 msgid "Top limit too high"
 msgstr ""
 
@@ -1162,105 +1199,6 @@ msgstr ""
 
 msgid "User sub-x2-units"
 msgstr ""
-
-msgid "Today"
-msgstr "Hoy"
-
-msgid "Yesterday"
-msgstr "Ayer"
-
-msgid "Last 3 days"
-msgstr ""
-
-msgid "Last 7 days"
-msgstr ""
-
-msgid "Last 14 days"
-msgstr ""
-
-msgid "This week"
-msgstr "Esta semana"
-
-msgid "Last week"
-msgstr "Última semana"
-
-msgid "Last 4 weeks"
-msgstr ""
-
-msgid "Last 12 weeks"
-msgstr ""
-
-msgid "Last 52 weeks"
-msgstr ""
-
-msgid "Weeks this year"
-msgstr "Semanas de este año"
-
-msgid "This month"
-msgstr "Este mes"
-
-msgid "Last month"
-msgstr "Mes anterior"
-
-msgid "Last 3 months"
-msgstr "Últimos 3 meses"
-
-msgid "Last 6 months"
-msgstr ""
-
-msgid "Last 12 months"
-msgstr ""
-
-msgid "Months this year"
-msgstr "Meses este año"
-
-msgid "This bimonth"
-msgstr "Este bimestre"
-
-msgid "Last bimonth"
-msgstr "Último bimestre"
-
-msgid "Last 6 bimonths"
-msgstr ""
-
-msgid "Bimonths this year"
-msgstr "Bimestres de este año"
-
-msgid "This quarter"
-msgstr "Este trimestre"
-
-msgid "Last quarter"
-msgstr "El trimestre pasado"
-
-msgid "Last 4 quarters"
-msgstr ""
-
-msgid "Quarters this year"
-msgstr "Trimestres de este año"
-
-msgid "This six-month"
-msgstr ""
-
-msgid "Last six-month"
-msgstr ""
-
-msgid "Last 2 six-months"
-msgstr ""
-
-msgid "This financial year"
-msgstr "Este año fiscal"
-
-msgid "Last financial year"
-msgstr "Último ejercicio financiero"
-
-msgid "Last 5 financial years"
-msgstr ""
-
-msgid "This year"
-msgstr "Este año"
-
-msgid "Last year"
-msgstr "El año pasado"
 
 msgid "Period"
 msgstr "Periodo"

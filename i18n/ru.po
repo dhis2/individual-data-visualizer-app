@@ -5,21 +5,27 @@
 # Viktor Varland <viktor@dhis2.org>, 2026
 # Yury Rogachev <yury@dhis2.org>, 2026
 # Saurabh Leekha <saurabh.leekha@hispindia.org>, 2026
-# Nadiia <semchuk@aph.org.ua>, 2026
 # Philip Larsen Donnelly, 2026
+# Nadiia <semchuk@aph.org.ua>, 2026
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2026-11-11T08:39:41.472Z\n"
+"POT-Creation-Date: 2026-11-19T14:34:40.520Z\n"
 "PO-Revision-Date: 2026-07-23 07:34+0000\n"
-"Last-Translator: Philip Larsen Donnelly, 2026\n"
+"Last-Translator: Nadiia <semchuk@aph.org.ua>, 2026\n"
 "Language-Team: Russian (https://app.transifex.com/hisp-uio/teams/100509/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+msgid "Network error"
+msgstr "Ошибка сети"
+
+msgid "This app could not retrieve required data."
+msgstr ""
 
 msgid ""
 "Some dimensions were not added because they cannot be used in a "
@@ -289,9 +295,6 @@ msgstr ""
 msgid "Update {{- trackedEntityTypeName}} list"
 msgstr ""
 
-msgid "Not valid with registration org. unit"
-msgstr ""
-
 msgid "Not valid with categories or category option group sets"
 msgstr ""
 
@@ -329,6 +332,18 @@ msgid "Not valid with program indicators"
 msgstr ""
 
 msgid "Nothing selected. Add items to the layout to get started."
+msgstr ""
+
+msgid "Add at least one dimension to columns or rows"
+msgstr ""
+
+msgid "Add at least one dimension to columns"
+msgstr ""
+
+msgid "Select at least one period"
+msgstr ""
+
+msgid "Select at least one organisation unit"
 msgstr ""
 
 msgid "One row for each {{- outputTypeLabel}}"
@@ -370,7 +385,9 @@ msgstr "Параметры диаграммы"
 msgid "Convert to {{- visType}}"
 msgstr ""
 
-msgid "{{- names}} will be removed. Are you sure?"
+msgid ""
+"{{- names}} will be removed because program indicators are not supported in "
+"pivot tables. Are you sure?"
 msgstr ""
 
 msgid "Cancel"
@@ -491,6 +508,18 @@ msgstr "Стандартный"
 
 msgid "Compact"
 msgstr "Компактный"
+
+msgid "Fix column headers to top of table"
+msgstr ""
+
+msgid "There aren’t any column headers because Columns is empty."
+msgstr ""
+
+msgid "Fix row headers to left of table"
+msgstr ""
+
+msgid "There aren’t any row headers because Rows is empty."
+msgstr ""
 
 msgid "Font size"
 msgstr "Размер шрифта"
@@ -1113,6 +1142,14 @@ msgid ""
 "choosing a shorter period."
 msgstr ""
 
+msgid "Date range not supported"
+msgstr ""
+
+msgid ""
+"Date ranges aren’t supported in rows or columns yet. Move the period to "
+"filter or use a fixed or relative selection."
+msgstr ""
+
 msgid "Top limit too high"
 msgstr ""
 
@@ -1174,105 +1211,6 @@ msgstr "Пользовательские подразделения"
 
 msgid "User sub-x2-units"
 msgstr "Пользовательские подразделения на два уровня ниже"
-
-msgid "Today"
-msgstr "Сегодня"
-
-msgid "Yesterday"
-msgstr "Вчера"
-
-msgid "Last 3 days"
-msgstr "Последние 3 дня"
-
-msgid "Last 7 days"
-msgstr "Последние 7 дней"
-
-msgid "Last 14 days"
-msgstr "Последние 14 дней"
-
-msgid "This week"
-msgstr "Текущая неделя"
-
-msgid "Last week"
-msgstr "Прошлая неделя"
-
-msgid "Last 4 weeks"
-msgstr "Прошлые 4 недели"
-
-msgid "Last 12 weeks"
-msgstr "Прошлые 12 недель"
-
-msgid "Last 52 weeks"
-msgstr "Последние 52 недели"
-
-msgid "Weeks this year"
-msgstr "Недели этого года"
-
-msgid "This month"
-msgstr "Текущий месяц"
-
-msgid "Last month"
-msgstr "Прошлый месяц"
-
-msgid "Last 3 months"
-msgstr "Прошлые 3 месяца"
-
-msgid "Last 6 months"
-msgstr "Последние 6 месяцев"
-
-msgid "Last 12 months"
-msgstr "Прошлые 12 месяцев"
-
-msgid "Months this year"
-msgstr "Месяцы этого года"
-
-msgid "This bimonth"
-msgstr "Этот бимесяц"
-
-msgid "Last bimonth"
-msgstr "Прошлый бимесяц"
-
-msgid "Last 6 bimonths"
-msgstr "Прошлые 6 бимесяцев"
-
-msgid "Bimonths this year"
-msgstr "Бимесяцы этого года"
-
-msgid "This quarter"
-msgstr "Этот квартал"
-
-msgid "Last quarter"
-msgstr "Последний квартал"
-
-msgid "Last 4 quarters"
-msgstr "Прошлые 4 квартала"
-
-msgid "Quarters this year"
-msgstr "Кварталы этого года"
-
-msgid "This six-month"
-msgstr "Это полугодие"
-
-msgid "Last six-month"
-msgstr "Прошлое полугодие"
-
-msgid "Last 2 six-months"
-msgstr "Последние два полугодия"
-
-msgid "This financial year"
-msgstr "Этот финансовый год"
-
-msgid "Last financial year"
-msgstr "Прошлый финансовый год"
-
-msgid "Last 5 financial years"
-msgstr "Прошлые 5 финансовых лет"
-
-msgid "This year"
-msgstr "Этот год"
-
-msgid "Last year"
-msgstr "Прошлый год"
 
 msgid "Period"
 msgstr "Период"

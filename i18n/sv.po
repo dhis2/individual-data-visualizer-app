@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2026-10-22T12:48:15.232Z\n"
+"POT-Creation-Date: 2026-11-19T14:34:40.520Z\n"
 "PO-Revision-Date: 2026-07-23 07:34+0000\n"
 "Last-Translator: Viktor Varland <viktor@dhis2.org>, 2026\n"
 "Language-Team: Swedish (https://app.transifex.com/hisp-uio/teams/100509/sv/)\n"
@@ -15,6 +15,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: sv\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Network error"
+msgstr ""
+
+msgid "This app could not retrieve required data."
+msgstr ""
 
 msgid ""
 "Some dimensions were not added because they cannot be used in a "
@@ -26,7 +32,12 @@ msgid ""
 "layoutTetName}} dimensions: {{list}}."
 msgstr ""
 
-msgid "Only numeric data items can be used as the cell value."
+msgid "This app needs a newer version of DHIS2"
+msgstr ""
+
+msgid ""
+"This server is running version {{currentVersion}}. Individual Data "
+"Visualizer needs {{requiredVersion}} or later."
 msgstr ""
 
 msgid "Changes not applied"
@@ -164,24 +175,6 @@ msgstr ""
 msgid "No options"
 msgstr ""
 
-msgid "Data value set"
-msgstr ""
-
-msgid "JSON"
-msgstr "JSON"
-
-msgid "XML"
-msgstr "XML"
-
-msgid "Other formats"
-msgstr ""
-
-msgid "JRXML"
-msgstr ""
-
-msgid "Raw data SQL"
-msgstr ""
-
 msgid "HTML"
 msgstr ""
 
@@ -191,14 +184,17 @@ msgstr ""
 msgid "Plain data source"
 msgstr ""
 
+msgid "JSON"
+msgstr "JSON"
+
+msgid "XML"
+msgstr "XML"
+
 msgid "Microsoft Excel"
 msgstr ""
 
 msgid "CSV"
 msgstr "CSV"
-
-msgid "Advanced"
-msgstr ""
 
 msgid "Download data from this date"
 msgstr ""
@@ -292,9 +288,6 @@ msgstr ""
 msgid "Update {{- trackedEntityTypeName}} list"
 msgstr ""
 
-msgid "Not valid with registration org. unit"
-msgstr ""
-
 msgid "Not valid with categories or category option group sets"
 msgstr ""
 
@@ -308,6 +301,9 @@ msgid "Not valid without a program"
 msgstr ""
 
 msgid "Not valid with multiple programs"
+msgstr ""
+
+msgid "Not valid with tracked entity attributes and event programs"
 msgstr ""
 
 msgid "Not valid with multiple program stages"
@@ -331,10 +327,25 @@ msgstr ""
 msgid "Nothing selected. Add items to the layout to get started."
 msgstr ""
 
+msgid "Add at least one dimension to columns or rows"
+msgstr ""
+
+msgid "Add at least one dimension to columns"
+msgstr ""
+
+msgid "Select at least one period"
+msgstr ""
+
+msgid "Select at least one organisation unit"
+msgstr ""
+
 msgid "One row for each {{- outputTypeLabel}}"
 msgstr ""
 
 msgid "Use item default ({{- aggregationType}})"
+msgstr ""
+
+msgid "Only numeric data items can be used as the cell value."
 msgstr ""
 
 msgid "Value"
@@ -367,7 +378,9 @@ msgstr ""
 msgid "Convert to {{- visType}}"
 msgstr ""
 
-msgid "{{- names}} will be removed. Are you sure?"
+msgid ""
+"{{- names}} will be removed because program indicators are not supported in "
+"pivot tables. Are you sure?"
 msgstr ""
 
 msgid "Cancel"
@@ -402,14 +415,38 @@ msgid ""
 "was written."
 msgstr ""
 
-msgid "Rows per page"
+msgid "Page number"
 msgstr ""
 
-msgid "Page {{- page}}, row {{- firstItem}}-{{- lastItem}}"
+msgid "Pagination options"
+msgstr ""
+
+msgid "Rows per page (view only)"
 msgstr ""
 
 msgid "Not available offline"
 msgstr ""
+
+msgid "Previous page"
+msgstr ""
+
+msgid "Next page"
+msgstr ""
+
+msgid "{{- formattedCount}} enrollment"
+msgid_plural "{{- formattedCount}} enrollment"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "{{- formattedCount}} tracked entity"
+msgid_plural "{{- formattedCount}} tracked entity"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "{{- formattedCount}} event"
+msgid_plural "{{- formattedCount}} event"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "most recent"
 msgstr "senaste"
@@ -457,6 +494,18 @@ msgid "Normal"
 msgstr "Vanligt"
 
 msgid "Compact"
+msgstr ""
+
+msgid "Fix column headers to top of table"
+msgstr ""
+
+msgid "There aren’t any column headers because Columns is empty."
+msgstr ""
+
+msgid "Fix row headers to left of table"
+msgstr ""
+
+msgid "There aren’t any row headers because Rows is empty."
 msgstr ""
 
 msgid "Font size"
@@ -583,6 +632,9 @@ msgid "Filters are not applied to Event visualizations"
 msgstr ""
 
 msgid "Show without filters"
+msgstr ""
+
+msgid "Page {{page}} not found, returned to page {{shownPage}}"
 msgstr ""
 
 msgid "Create a {{- visType}} before updating"
@@ -1073,6 +1125,14 @@ msgid ""
 "choosing a shorter period."
 msgstr ""
 
+msgid "Date range not supported"
+msgstr ""
+
+msgid ""
+"Date ranges aren’t supported in rows or columns yet. Move the period to "
+"filter or use a fixed or relative selection."
+msgstr ""
+
 msgid "Top limit too high"
 msgstr ""
 
@@ -1135,105 +1195,6 @@ msgstr "Användarunderenheter"
 msgid "User sub-x2-units"
 msgstr "Användarunder x2-enheter"
 
-msgid "Today"
-msgstr ""
-
-msgid "Yesterday"
-msgstr ""
-
-msgid "Last 3 days"
-msgstr ""
-
-msgid "Last 7 days"
-msgstr ""
-
-msgid "Last 14 days"
-msgstr ""
-
-msgid "This week"
-msgstr "Denna vecka"
-
-msgid "Last week"
-msgstr "Förra veckan"
-
-msgid "Last 4 weeks"
-msgstr "Senaste 4 veckorna"
-
-msgid "Last 12 weeks"
-msgstr "Senast 12 veckor"
-
-msgid "Last 52 weeks"
-msgstr "Senast 52 veckor"
-
-msgid "Weeks this year"
-msgstr ""
-
-msgid "This month"
-msgstr "Den här månaden"
-
-msgid "Last month"
-msgstr "Förra månaden"
-
-msgid "Last 3 months"
-msgstr "Senaste 3 månaderna"
-
-msgid "Last 6 months"
-msgstr "Senaste 6 månaderna"
-
-msgid "Last 12 months"
-msgstr "Senaste 12 månaderna"
-
-msgid "Months this year"
-msgstr "Månader i år"
-
-msgid "This bimonth"
-msgstr ""
-
-msgid "Last bimonth"
-msgstr ""
-
-msgid "Last 6 bimonths"
-msgstr ""
-
-msgid "Bimonths this year"
-msgstr ""
-
-msgid "This quarter"
-msgstr "detta kvartal"
-
-msgid "Last quarter"
-msgstr "Förra kvartalet"
-
-msgid "Last 4 quarters"
-msgstr "Senaste 4 kvartal"
-
-msgid "Quarters this year"
-msgstr "Kvartalen i år"
-
-msgid "This six-month"
-msgstr "Denna sexmånaders"
-
-msgid "Last six-month"
-msgstr "Senast sex månader"
-
-msgid "Last 2 six-months"
-msgstr "Senaste 2 sex månader"
-
-msgid "This financial year"
-msgstr "Detta räkenskapsår"
-
-msgid "Last financial year"
-msgstr "Föregående räkenskapsår"
-
-msgid "Last 5 financial years"
-msgstr "Senaste 5 räkenskapsåren"
-
-msgid "This year"
-msgstr "Det här året"
-
-msgid "Last year"
-msgstr "Förra året"
-
 msgid "Period"
 msgstr "Period"
 
@@ -1266,10 +1227,10 @@ msgstr "Händelser"
 
 msgid ""
 "Track or compare changes over time. Recommend period as category. (adjust "
-"for EVER)"
+"for IDV)"
 msgstr ""
 
-msgid "View data and indicators in a manipulatable table. (adjust for EVER)"
+msgid "View data and indicators in a manipulatable table. (adjust for IDV)"
 msgstr ""
 
 msgctxt "Application title"

@@ -3,22 +3,28 @@
 # Yury Rogachev <yury@dhis2.org>, 2026
 # Wanda <wanda@frontlineaids.org>, 2026
 # Viktor Varland <viktor@dhis2.org>, 2026
-# Éva Tamási, 2026
 # Nadiia <semchuk@aph.org.ua>, 2026
 # Philip Larsen Donnelly, 2026
+# Éva Tamási, 2026
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2026-11-11T08:39:41.472Z\n"
+"POT-Creation-Date: 2026-11-19T14:34:40.520Z\n"
 "PO-Revision-Date: 2026-07-23 07:34+0000\n"
-"Last-Translator: Philip Larsen Donnelly, 2026\n"
+"Last-Translator: Éva Tamási, 2026\n"
 "Language-Team: Ukrainian (https://app.transifex.com/hisp-uio/teams/100509/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: uk\n"
 "Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+
+msgid "Network error"
+msgstr ""
+
+msgid "This app could not retrieve required data."
+msgstr ""
 
 msgid ""
 "Some dimensions were not added because they cannot be used in a "
@@ -288,9 +294,6 @@ msgstr ""
 msgid "Update {{- trackedEntityTypeName}} list"
 msgstr ""
 
-msgid "Not valid with registration org. unit"
-msgstr ""
-
 msgid "Not valid with categories or category option group sets"
 msgstr ""
 
@@ -328,6 +331,18 @@ msgid "Not valid with program indicators"
 msgstr ""
 
 msgid "Nothing selected. Add items to the layout to get started."
+msgstr ""
+
+msgid "Add at least one dimension to columns or rows"
+msgstr ""
+
+msgid "Add at least one dimension to columns"
+msgstr ""
+
+msgid "Select at least one period"
+msgstr ""
+
+msgid "Select at least one organisation unit"
 msgstr ""
 
 msgid "One row for each {{- outputTypeLabel}}"
@@ -369,7 +384,9 @@ msgstr "Параметри діаграми"
 msgid "Convert to {{- visType}}"
 msgstr ""
 
-msgid "{{- names}} will be removed. Are you sure?"
+msgid ""
+"{{- names}} will be removed because program indicators are not supported in "
+"pivot tables. Are you sure?"
 msgstr ""
 
 msgid "Cancel"
@@ -490,6 +507,18 @@ msgstr "Нормальний"
 
 msgid "Compact"
 msgstr "Компактний"
+
+msgid "Fix column headers to top of table"
+msgstr "Зафіксувати заголовки стовпців у верхній частині таблиці"
+
+msgid "There aren’t any column headers because Columns is empty."
+msgstr "Немає заголовків стовпців, оскільки стовпці порожні."
+
+msgid "Fix row headers to left of table"
+msgstr "Зафіксувати заголовки рядків у лівій частині таблиці"
+
+msgid "There aren’t any row headers because Rows is empty."
+msgstr "Немає заголовків рядків, оскільки рядки порожні."
 
 msgid "Font size"
 msgstr "Розмір шрифту"
@@ -1114,6 +1143,14 @@ msgid ""
 "choosing a shorter period."
 msgstr ""
 
+msgid "Date range not supported"
+msgstr ""
+
+msgid ""
+"Date ranges aren’t supported in rows or columns yet. Move the period to "
+"filter or use a fixed or relative selection."
+msgstr ""
+
 msgid "Top limit too high"
 msgstr ""
 
@@ -1175,105 +1212,6 @@ msgstr "Одиниці підрозділів користувачів"
 
 msgid "User sub-x2-units"
 msgstr "Підрозділи користувачів 2-го рівня"
-
-msgid "Today"
-msgstr "Сьогодні"
-
-msgid "Yesterday"
-msgstr "Вчора"
-
-msgid "Last 3 days"
-msgstr "Минулі 3 дні"
-
-msgid "Last 7 days"
-msgstr "Минулі 7 днів"
-
-msgid "Last 14 days"
-msgstr "Минулі 14 днів"
-
-msgid "This week"
-msgstr "Поточний тиждень"
-
-msgid "Last week"
-msgstr "Минулий тиждень"
-
-msgid "Last 4 weeks"
-msgstr "Минулі 4 тижні"
-
-msgid "Last 12 weeks"
-msgstr "Минулі 12 тижнів"
-
-msgid "Last 52 weeks"
-msgstr "Останні 52 тижні"
-
-msgid "Weeks this year"
-msgstr "Тижні поточного року"
-
-msgid "This month"
-msgstr "Поточний місяць"
-
-msgid "Last month"
-msgstr "Минулий місяць"
-
-msgid "Last 3 months"
-msgstr "Минулі 3 місяці"
-
-msgid "Last 6 months"
-msgstr "Останні 6 місяців"
-
-msgid "Last 12 months"
-msgstr "Минулі 12 місяців"
-
-msgid "Months this year"
-msgstr "Місяці поточного року"
-
-msgid "This bimonth"
-msgstr "Поточний двомісячний період"
-
-msgid "Last bimonth"
-msgstr "Попередній двомісячний період"
-
-msgid "Last 6 bimonths"
-msgstr "Останні 6 двомісячних періодів"
-
-msgid "Bimonths this year"
-msgstr "Двомісячні періоди поточного року"
-
-msgid "This quarter"
-msgstr "Поточний квартал"
-
-msgid "Last quarter"
-msgstr "Минулий квартал"
-
-msgid "Last 4 quarters"
-msgstr "Останні 4 квартали"
-
-msgid "Quarters this year"
-msgstr "Квартали поточного року"
-
-msgid "This six-month"
-msgstr "Поточне півріччя"
-
-msgid "Last six-month"
-msgstr "Останні шість місяців"
-
-msgid "Last 2 six-months"
-msgstr "Останні 2 півріччя"
-
-msgid "This financial year"
-msgstr "Поточний фінансовий рік"
-
-msgid "Last financial year"
-msgstr "Минулий фінансовий рік"
-
-msgid "Last 5 financial years"
-msgstr "Останні 5 фінансових років"
-
-msgid "This year"
-msgstr "Поточний рік"
-
-msgid "Last year"
-msgstr "Минулий рік"
 
 msgid "Period"
 msgstr "Період"

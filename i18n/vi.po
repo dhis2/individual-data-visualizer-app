@@ -1,23 +1,29 @@
 # Translators:
 # Andres Miguel Rubio, 2026
-# Thuy Nguyen <thuynguyen@hispvietnam.org>, 2026
 # Mai Nguyen <thanhmai.jica@gmail.com>, 2026
 # Viktor Varland <viktor@dhis2.org>, 2026
-# Em Le <em.hispvietnam@gmail.com>, 2026
 # Philip Larsen Donnelly, 2026
+# Em Le <em.hispvietnam@gmail.com>, 2026
+# Thuy Nguyen <thuynguyen@hispvietnam.org>, 2026
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2026-11-11T08:39:41.472Z\n"
+"POT-Creation-Date: 2026-11-19T14:34:40.520Z\n"
 "PO-Revision-Date: 2026-07-23 07:34+0000\n"
-"Last-Translator: Philip Larsen Donnelly, 2026\n"
+"Last-Translator: Thuy Nguyen <thuynguyen@hispvietnam.org>, 2026\n"
 "Language-Team: Vietnamese (https://app.transifex.com/hisp-uio/teams/100509/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Network error"
+msgstr "Lỗi mạng"
+
+msgid "This app could not retrieve required data."
+msgstr "Ứng dụng này không thể truy xuất dữ liệu cần thiết."
 
 msgid ""
 "Some dimensions were not added because they cannot be used in a "
@@ -284,9 +290,6 @@ msgstr ""
 msgid "Update {{- trackedEntityTypeName}} list"
 msgstr ""
 
-msgid "Not valid with registration org. unit"
-msgstr ""
-
 msgid "Not valid with categories or category option group sets"
 msgstr ""
 
@@ -324,6 +327,18 @@ msgid "Not valid with program indicators"
 msgstr ""
 
 msgid "Nothing selected. Add items to the layout to get started."
+msgstr ""
+
+msgid "Add at least one dimension to columns or rows"
+msgstr ""
+
+msgid "Add at least one dimension to columns"
+msgstr ""
+
+msgid "Select at least one period"
+msgstr ""
+
+msgid "Select at least one organisation unit"
 msgstr ""
 
 msgid "One row for each {{- outputTypeLabel}}"
@@ -365,7 +380,9 @@ msgstr "Tùy chọn biểu đồ"
 msgid "Convert to {{- visType}}"
 msgstr ""
 
-msgid "{{- names}} will be removed. Are you sure?"
+msgid ""
+"{{- names}} will be removed because program indicators are not supported in "
+"pivot tables. Are you sure?"
 msgstr ""
 
 msgid "Cancel"
@@ -479,6 +496,18 @@ msgstr "Thường"
 
 msgid "Compact"
 msgstr "Gọn"
+
+msgid "Fix column headers to top of table"
+msgstr "Cố định tiêu đề cột vào đầu bảng"
+
+msgid "There aren’t any column headers because Columns is empty."
+msgstr "Không có tiêu đề cột nào vì Cột trống."
+
+msgid "Fix row headers to left of table"
+msgstr "Sửa tiêu đề hàng ở bên trái bảng"
+
+msgid "There aren’t any row headers because Rows is empty."
+msgstr "Không có tiêu đề hàng nào vì Hàng trống."
 
 msgid "Font size"
 msgstr "Cỡ chữ"
@@ -1098,6 +1127,14 @@ msgid ""
 "choosing a shorter period."
 msgstr ""
 
+msgid "Date range not supported"
+msgstr ""
+
+msgid ""
+"Date ranges aren’t supported in rows or columns yet. Move the period to "
+"filter or use a fixed or relative selection."
+msgstr ""
+
 msgid "Top limit too high"
 msgstr ""
 
@@ -1159,105 +1196,6 @@ msgstr "Đơn vị con của người dùng"
 
 msgid "User sub-x2-units"
 msgstr "Đơn vị con cấp 2 của người dùng"
-
-msgid "Today"
-msgstr "Hôm nay"
-
-msgid "Yesterday"
-msgstr "Hôm qua"
-
-msgid "Last 3 days"
-msgstr "3 Ngày trước"
-
-msgid "Last 7 days"
-msgstr "7 Ngày trước"
-
-msgid "Last 14 days"
-msgstr "14 Ngày trước"
-
-msgid "This week"
-msgstr "Tuần này"
-
-msgid "Last week"
-msgstr "Tuần trước"
-
-msgid "Last 4 weeks"
-msgstr "4 Tuần trước"
-
-msgid "Last 12 weeks"
-msgstr "12 Tuần trước"
-
-msgid "Last 52 weeks"
-msgstr "52 Tuần trước"
-
-msgid "Weeks this year"
-msgstr "Các Tuần trong năm nay"
-
-msgid "This month"
-msgstr "Tháng này"
-
-msgid "Last month"
-msgstr "Tháng trước"
-
-msgid "Last 3 months"
-msgstr "3 Tháng trước"
-
-msgid "Last 6 months"
-msgstr "6 Tháng trước"
-
-msgid "Last 12 months"
-msgstr "12 Tháng trước"
-
-msgid "Months this year"
-msgstr "Các Tháng trong năm nay"
-
-msgid "This bimonth"
-msgstr "2-Tháng này"
-
-msgid "Last bimonth"
-msgstr "2-Tháng trước"
-
-msgid "Last 6 bimonths"
-msgstr "6 kỳ 2 tháng trước"
-
-msgid "Bimonths this year"
-msgstr "Các 2-Tháng trong năm này"
-
-msgid "This quarter"
-msgstr "Quý này"
-
-msgid "Last quarter"
-msgstr "Quý trước"
-
-msgid "Last 4 quarters"
-msgstr "4 Quý trước"
-
-msgid "Quarters this year"
-msgstr "Các Quý trong năm nay"
-
-msgid "This six-month"
-msgstr "Định kỳ 6 tháng này"
-
-msgid "Last six-month"
-msgstr "Định kỳ 6 tháng trước"
-
-msgid "Last 2 six-months"
-msgstr "2 kỳ sáu tháng - trước"
-
-msgid "This financial year"
-msgstr "Năm Tài Chính này"
-
-msgid "Last financial year"
-msgstr "Năm Tài Chính trước"
-
-msgid "Last 5 financial years"
-msgstr "5 Năm Tài Chính trước"
-
-msgid "This year"
-msgstr "Năm nay"
-
-msgid "Last year"
-msgstr "Năm trước"
 
 msgid "Period"
 msgstr "Thời điểm"
