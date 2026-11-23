@@ -200,7 +200,7 @@ describe('getVisualizationFilterText', () => {
         const vis = buildVis(
             [
                 {
-                    dimension: 'ou',
+                    dimension: 'enrollmentOu',
                     program: { id: PROGRAM_ID },
                     items: [{ id: 'ImspTQPwCqd' }],
                 },

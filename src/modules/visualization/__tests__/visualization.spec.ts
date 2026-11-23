@@ -40,7 +40,7 @@ const testCases = {
                             id: 'USER_ORGUNIT',
                         },
                     ],
-                    dimension: 'ou',
+                    dimension: 'enrollmentOu',
                     program: { id: PID },
                 },
                 {
@@ -278,7 +278,7 @@ const testCases = {
                     program: {
                         id: 'incidentDateId',
                     },
-                    dimension: 'ou',
+                    dimension: 'enrollmentOu',
                 },
                 {
                     dimensionType: 'PERIOD',
@@ -751,22 +751,52 @@ describe('normalizeApiSavedVisualization', () => {
         expect(result.legacy).toBe(true)
     })
 
-    it('upgrades a legacy EVENT+LINE_LIST enrollment `ou` to `enrollmentOu`', () => {
+    it.each([
+        ['EVENT', 'LINE_LIST'],
+        ['ENROLLMENT', 'LINE_LIST'],
+        ['TRACKED_ENTITY_INSTANCE', 'LINE_LIST'],
+        ['EVENT', 'PIVOT_TABLE'],
+        ['ENROLLMENT', 'PIVOT_TABLE'],
+    ] as const)(
+        'reads an %s %s enrollment `ou` as `enrollmentOu`, without marking it legacy',
+        (outputType, type) => {
+            const result = normalizeApiSavedVisualization(
+                buildApiVis({
+                    type,
+                    outputType,
+                    columns: [
+                        {
+                            dimension: 'ou',
+                            dimensionType: 'ORGANISATION_UNIT',
+                            program: { id: PID },
+                        },
+                    ] as ApiSavedVisualization['columns'],
+                })
+            )
+
+            expect(dimensionsOf(result)).toEqual(['enrollmentOu'])
+            expect(result.legacy).toBeUndefined()
+        }
+    )
+
+    it('reads a bare `ou` in an enrollment line list with a top-level program as a legacy `enrollmentOu`', () => {
         const result = normalizeApiSavedVisualization(
             buildApiVis({
                 type: 'LINE_LIST',
-                outputType: 'EVENT',
+                outputType: 'ENROLLMENT',
+                program: { id: PID },
                 columns: [
-                    {
-                        dimension: 'ou',
-                        dimensionType: 'ORGANISATION_UNIT',
-                        program: { id: PID },
-                    },
+                    { dimension: 'ou', dimensionType: 'ORGANISATION_UNIT' },
                 ] as ApiSavedVisualization['columns'],
-            })
+            } as Partial<ApiSavedVisualization>)
         )
 
-        expect(dimensionsOf(result)).toEqual(['enrollmentOu'])
+        expect(result.columns).toEqual([
+            expect.objectContaining({
+                dimension: 'enrollmentOu',
+                program: { id: PID },
+            }),
+        ])
         expect(result.legacy).toBe(true)
     })
 
@@ -837,24 +867,6 @@ describe('normalizeApiSavedVisualization', () => {
 
         expect(result.legacy).toBe(true)
         expect(result.hideTitle).toBe(true)
-    })
-
-    it('leaves ENROLLMENT enrollment `ou` as `ou`', () => {
-        const result = normalizeApiSavedVisualization(
-            buildApiVis({
-                type: 'LINE_LIST',
-                outputType: 'ENROLLMENT',
-                columns: [
-                    {
-                        dimension: 'ou',
-                        dimensionType: 'ORGANISATION_UNIT',
-                        program: { id: PID },
-                    },
-                ] as ApiSavedVisualization['columns'],
-            })
-        )
-
-        expect(dimensionsOf(result)).toEqual(['ou'])
     })
 
     it('leaves the stage event `ou` (with programStage) as `ou`', () => {

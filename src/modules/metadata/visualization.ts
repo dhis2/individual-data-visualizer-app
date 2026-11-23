@@ -268,8 +268,8 @@ const getFixedDimensionOverrides = (
 export const extractMetadataFromVisualization = (
     visualization: SavedVisualization
 ): MetadataInputMap => {
-    // Translate API dimension IDs to app-local IDs (e.g. ou → enrollmentOu
-    // for enrollment-scoped org units) before any downstream processing.
+    // Translate API dimension IDs to app-local IDs (e.g. registrationOu → ou
+    // for the registration org unit) before any downstream processing.
     const vis: SavedVisualization = {
         ...visualization,
         columns: toAppLocalDimensions(visualization.columns ?? []),

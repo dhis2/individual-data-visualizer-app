@@ -5,6 +5,7 @@ import legacyEventLineList from '@modules/visualization/__fixtures__/round-trip/
 import legacyEventPivotTableAttribute from '@modules/visualization/__fixtures__/round-trip/legacy/event-pivot-table-attribute.json'
 import legacyEventPivotTableCustomValue from '@modules/visualization/__fixtures__/round-trip/legacy/event-pivot-table-custom-value.json'
 import enrollmentLineList from '@modules/visualization/__fixtures__/round-trip/saved/enrollment-line-list.json'
+import enrollmentPivotTableEventAndEnrollmentOu from '@modules/visualization/__fixtures__/round-trip/saved/enrollment-pivot-table-event-and-enrollment-ou.json'
 import enrollmentPivotTable from '@modules/visualization/__fixtures__/round-trip/saved/enrollment-pivot-table.json'
 import eventLineListEventProgram from '@modules/visualization/__fixtures__/round-trip/saved/event-line-list-event-program.json'
 import eventLineListTrackerProgram from '@modules/visualization/__fixtures__/round-trip/saved/event-line-list-tracker-program.json'
@@ -150,6 +151,20 @@ const savedCases: RoundTripCase[] = [
             rows: [sidebarIds.enrollment(CHILD_PROGRAMME, 'enrollmentOu')],
             filters: [
                 sidebarIds.enrollment(CHILD_PROGRAMME, 'programStatus'),
+                sidebarIds.enrollment(CHILD_PROGRAMME, 'enrollmentDate'),
+            ],
+        },
+    },
+    {
+        name: 'an enrollment pivot table with the event and enrollment org units',
+        fixture: enrollmentPivotTableEventAndEnrollmentOu,
+        expectedLayout: {
+            columns: [
+                sidebarIds.programAttribute(CHILD_PROGRAMME, 'cejWyOfXge6'),
+            ],
+            rows: [sidebarIds.stage(CHILD_PROGRAMME, BIRTH, 'ou')],
+            filters: [
+                sidebarIds.enrollment(CHILD_PROGRAMME, 'enrollmentOu'),
                 sidebarIds.enrollment(CHILD_PROGRAMME, 'enrollmentDate'),
             ],
         },
@@ -421,4 +436,52 @@ it('keeps the fixed header options from load to save', () => {
             currentVisFromVisUiConfig as SavedVisualization
         )
     ).toMatchObject({ fixColumnHeaders: true, fixRowHeaders: true })
+})
+
+const BO = 'O6uvpzGd5pu'
+const BOMBALI = 'fdc6uOvgoji'
+
+it('saves the event and enrollment org units with their own items', () => {
+    const { currentVisFromVisUiConfig } = roundTrip(
+        enrollmentPivotTableEventAndEnrollmentOu
+    )
+    const saveable = getSaveableVisualization(
+        currentVisFromVisUiConfig as SavedVisualization
+    )
+
+    expect(saveable.rows).toEqual([
+        expect.objectContaining({
+            dimension: 'ou',
+            programStage: { id: BIRTH },
+            items: [{ id: BO }],
+        }),
+    ])
+    expect(saveable.filters).toContainEqual(
+        expect.objectContaining({
+            dimension: 'enrollmentOu',
+            program: { id: CHILD_PROGRAMME },
+            items: [{ id: BOMBALI }],
+        })
+    )
+})
+
+/* The fixture keeps the enrollment org unit as `ou` with a program, the form
+ * this app saved for ENROLLMENT and pivot table visualizations. */
+it('loads an enrollment org unit saved as `ou` and saves it as `enrollmentOu`', () => {
+    const savedVis = normalizeApiSavedVisualization(
+        enrollmentPivotTable as unknown as ApiSavedVisualization
+    )
+    const { currentVisFromVisUiConfig } = roundTrip(enrollmentPivotTable)
+
+    expect(savedVis.legacy).toBeUndefined()
+    expect(
+        getSaveableVisualization(
+            currentVisFromVisUiConfig as SavedVisualization
+        ).rows
+    ).toEqual([
+        expect.objectContaining({
+            dimension: 'enrollmentOu',
+            program: { id: CHILD_PROGRAMME },
+        }),
+    ])
 })
