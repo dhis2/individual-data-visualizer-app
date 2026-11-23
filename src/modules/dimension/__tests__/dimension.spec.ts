@@ -46,7 +46,7 @@ describe('getCreatedDimension', () => {
                 dimensionId: 'created',
                 dimensionType: 'PERIOD',
                 name: expect.any(String), // Assuming i18n.t returns a string
-                valueType: 'DATE',
+                valueType: 'DATETIME',
             },
         })
     })
@@ -362,7 +362,7 @@ describe('getFixedMetaDimensions', () => {
 
     it('assigns PERIOD dimensionType to date-based dimensions', () => {
         const result = getFixedMetaDimensions()
-        const dateDims = result.filter((d) => d.valueType === 'DATE')
+        const dateDims = result.filter((d) => d.valueType === 'DATETIME')
         expect(dateDims.map((d) => d.id)).toEqual([
             'lastUpdated',
             'created',

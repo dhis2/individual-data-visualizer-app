@@ -426,7 +426,7 @@ describe('MetadataStore', () => {
               "dimensionType": "PERIOD",
               "id": "created",
               "name": "Created on",
-              "valueType": "DATE",
+              "valueType": "DATETIME",
             },
             "createdBy": {
               "dimensionId": "createdBy",

@@ -17,7 +17,7 @@ export const getCreatedDimension = (): Partial<
         dimensionId: 'created',
         dimensionType: 'PERIOD',
         name: i18n.t('Created on'),
-        valueType: 'DATE',
+        valueType: 'DATETIME',
     },
 })
 
@@ -27,7 +27,7 @@ export const getFixedMetaDimensions = (): DimensionMetadataItem[] => [
         dimensionId: 'lastUpdated',
         name: i18n.t('Last updated on'),
         dimensionType: 'PERIOD',
-        valueType: 'DATE',
+        valueType: 'DATETIME',
     },
     {
         id: 'lastUpdatedBy',
@@ -40,7 +40,7 @@ export const getFixedMetaDimensions = (): DimensionMetadataItem[] => [
         dimensionId: 'created',
         name: i18n.t('Created on'),
         dimensionType: 'PERIOD',
-        valueType: 'DATE',
+        valueType: 'DATETIME',
     },
     {
         id: 'createdBy',
@@ -53,7 +53,7 @@ export const getFixedMetaDimensions = (): DimensionMetadataItem[] => [
         dimensionId: 'completed',
         name: i18n.t('Completed on'),
         dimensionType: 'PERIOD',
-        valueType: 'DATE',
+        valueType: 'DATETIME',
     },
 ]
 
