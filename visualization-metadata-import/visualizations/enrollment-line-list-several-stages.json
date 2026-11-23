@@ -50,7 +50,7 @@
             "hideSubtitle": true,
             "type": "LINE_LIST",
             "columnDimensions": [
-                "IpHINAT79UW.ou",
+                "IpHINAT79UW.enrollmentOu",
                 "IpHINAT79UW.enrollmentDate",
                 "IpHINAT79UW.incidentDate",
                 "IpHINAT79UW.programStatus",
@@ -64,7 +64,7 @@
             "simpleDimensions": [
                 {
                     "parent": "COLUMN",
-                    "dimension": "ou",
+                    "dimension": "enrollmentOu",
                     "program": "IpHINAT79UW",
                     "values": ["USER_ORGUNIT"]
                 },

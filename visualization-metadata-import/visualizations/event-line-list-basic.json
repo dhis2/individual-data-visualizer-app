@@ -1,0 +1,97 @@
+{
+    "eventVisualizations": [
+        {
+            "name": "IDV [Line list] [Event] Basic",
+            "regressionType": "NONE",
+            "displayDensity": "NORMAL",
+            "fontSize": "NORMAL",
+            "rawPeriods": ["LAST_12_MONTHS"],
+            "sortOrder": 0,
+            "topLimit": 0,
+            "hideEmptyRows": false,
+            "showHierarchy": false,
+            "userOrganisationUnit": true,
+            "userOrganisationUnitChildren": false,
+            "userOrganisationUnitGrandChildren": false,
+            "completedOnly": false,
+            "skipRounding": false,
+            "filterDimensions": [],
+            "organisationUnits": [],
+            "organisationUnitGroupSetDimensions": [],
+            "organisationUnitLevels": [],
+            "categoryDimensions": [],
+            "categoryOptionGroupSetDimensions": [],
+            "attributeDimensions": [],
+            "dataElementDimensions": [
+                {
+                    "dataElement": {
+                        "id": "a3kGcGDCuk6"
+                    },
+                    "programStage": {
+                        "id": "A03MvHHogjR"
+                    },
+                    "filter": "GT:2"
+                }
+            ],
+            "programIndicatorDimensions": [],
+            "itemOrganisationUnitGroups": [],
+            "digitGroupSeparator": "SPACE",
+            "hideEmptyRowItems": "NONE",
+            "hideLegend": false,
+            "noSpaceBetweenColumns": false,
+            "cumulativeValues": false,
+            "percentStackedValues": false,
+            "showData": false,
+            "colTotals": false,
+            "rowTotals": false,
+            "rowSubTotals": false,
+            "colSubTotals": false,
+            "hideTitle": true,
+            "hideSubtitle": true,
+            "showDimensionLabels": false,
+            "type": "LINE_LIST",
+            "columnDimensions": [
+                "IpHINAT79UW.A03MvHHogjR.ou",
+                "IpHINAT79UW.A03MvHHogjR.eventDate",
+                "IpHINAT79UW.A03MvHHogjR.eventStatus",
+                "IpHINAT79UW.A03MvHHogjR.a3kGcGDCuk6"
+            ],
+            "rowDimensions": [],
+            "simpleDimensions": [
+                {
+                    "parent": "COLUMN",
+                    "dimension": "ou",
+                    "program": "IpHINAT79UW",
+                    "programStage": "A03MvHHogjR",
+                    "values": ["USER_ORGUNIT"]
+                },
+                {
+                    "parent": "COLUMN",
+                    "dimension": "eventDate",
+                    "program": "IpHINAT79UW",
+                    "programStage": "A03MvHHogjR",
+                    "values": ["LAST_12_MONTHS"]
+                },
+                {
+                    "parent": "COLUMN",
+                    "dimension": "eventStatus",
+                    "program": "IpHINAT79UW",
+                    "programStage": "A03MvHHogjR",
+                    "values": ["ACTIVE", "COMPLETED"]
+                }
+            ],
+            "outputType": "EVENT",
+            "collapseDataDimensions": false,
+            "hideNaData": false,
+            "hideEmptyColumns": false,
+            "fixColumnHeaders": false,
+            "fixRowHeaders": false,
+            "legacy": false,
+            "id": "IZJmG9NHTtj",
+            "attributeValues": [],
+            "sorting": [],
+            "repetitions": [],
+            "periods": []
+        }
+    ]
+}

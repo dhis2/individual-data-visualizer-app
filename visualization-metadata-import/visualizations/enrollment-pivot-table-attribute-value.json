@@ -22,11 +22,11 @@
                 "id": "OvY4VVhSDeJ"
             },
             "columnDimensions": ["cejWyOfXge6"],
-            "rowDimensions": ["ur1Edk5Oe2n.ou"],
+            "rowDimensions": ["ur1Edk5Oe2n.enrollmentOu"],
             "simpleDimensions": [
                 {
                     "parent": "ROW",
-                    "dimension": "ou",
+                    "dimension": "enrollmentOu",
                     "program": "ur1Edk5Oe2n",
                     "values": ["USER_ORGUNIT_CHILDREN"]
                 },
