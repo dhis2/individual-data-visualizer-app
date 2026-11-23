@@ -38,16 +38,16 @@ const mockOptions = {
     } as unknown,
 } as MockOptions
 
-let saveAs: ReturnType<typeof useToolbarActions>['onSaveAs']
+let toolbarActions: ReturnType<typeof useToolbarActions>
 
-const CanvasWithSaveAs = () => {
-    saveAs = useToolbarActions().onSaveAs
+const CanvasWithToolbarActions = () => {
+    toolbarActions = useToolbarActions()
     return <Canvas />
 }
 
 const setUpCanvas = async () => {
     const { store } = await renderWithAppWrapper(
-        <CanvasWithSaveAs />,
+        <CanvasWithToolbarActions />,
         mockOptions
     )
     return store as AppStore
@@ -131,6 +131,19 @@ describe('Canvas', () => {
         expect(analyticsPageSizes.at(-1)).toBe(100)
     })
 
+    it('uses the default page size when the same visualization is opened again', async () => {
+        const user = userEvent.setup()
+        const store = await setUpCanvas()
+        await openVisualization(store, visualization1Id)
+        await choosePageSize50(user)
+        const requestCount = analyticsPageSizes.length
+
+        act(() => toolbarActions.onOpen(visualization1Id))
+
+        await waitForRequestCount(requestCount + 1)
+        expect(analyticsPageSizes.at(-1)).toBe(100)
+    })
+
     it('uses the default page size after switching the vis type', async () => {
         const user = userEvent.setup()
         const store = await setUpCanvas()
@@ -175,7 +188,9 @@ describe('Canvas', () => {
         await choosePageSize50(user)
         const requestCount = analyticsPageSizes.length
 
-        await act(() => saveAs({ name: 'Saved', description: '' }))
+        await act(() =>
+            toolbarActions.onSaveAs({ name: 'Saved', description: '' })
+        )
 
         await waitFor(() =>
             expect(store.getState().navigation.visualizationId).toBe(
