@@ -111,10 +111,10 @@ const applyProgramStageContext = (
     return out
 }
 
-/* The enrollment org unit used to be saved as `ou` with a program and no
- * stage for ENROLLMENT line lists and pivot tables. Only this app saved that
- * form without any other legacy signal, so the rename does not flip `legacy`
- * and the next save writes `enrollmentOu`. */
+/* An `ou` with a program and no stage is the enrollment org unit. Line
+ * Listing and Event Reports save it as a bare `ou` with a top-level program,
+ * which applyProgramStageContext turns into this shape; their top-level
+ * program already marks them legacy, so the rename doesn't. */
 const upgradeEnrollmentOu = (dim: DimensionRecord): DimensionRecord =>
     dim.dimension === 'ou' && dim.program?.id && !dim.programStage
         ? { ...dim, dimension: 'enrollmentOu' }
@@ -199,7 +199,8 @@ const normalizeLegacyValue = (
  *   aggregates by NONE becomes the fallback type the app saves for such an
  *   item; ER let users save that combination. Neither implies `legacy`.
  * - Rename an `ou` with a program and no stage, the enrollment org unit, to
- *   `enrollmentOu`. This app saved that form, so it does not imply `legacy`.
+ *   `enrollmentOu`. It does not imply `legacy`: an older app's visualization
+ *   is already marked legacy by its top-level program.
  *
  * Out of scope (handled downstream — these run on every load, not just legacy
  * visualizations, so they do not imply the `legacy` flag):

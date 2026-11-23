@@ -779,6 +779,27 @@ describe('normalizeApiSavedVisualization', () => {
         }
     )
 
+    it('reads a bare `ou` in an enrollment line list with a top-level program as a legacy `enrollmentOu`', () => {
+        const result = normalizeApiSavedVisualization(
+            buildApiVis({
+                type: 'LINE_LIST',
+                outputType: 'ENROLLMENT',
+                program: { id: PID },
+                columns: [
+                    { dimension: 'ou', dimensionType: 'ORGANISATION_UNIT' },
+                ] as ApiSavedVisualization['columns'],
+            } as Partial<ApiSavedVisualization>)
+        )
+
+        expect(result.columns).toEqual([
+            expect.objectContaining({
+                dimension: 'enrollmentOu',
+                program: { id: PID },
+            }),
+        ])
+        expect(result.legacy).toBe(true)
+    })
+
     it('maps a legacy visualization with no title to a hidden title', () => {
         const result = normalizeApiSavedVisualization(
             buildApiVis({ legacy: true, hideTitle: false })
