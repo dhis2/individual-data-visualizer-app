@@ -125,6 +125,13 @@ const STATUS_HEADER_NAMES = new Set([
     headersMap.eventStatus,
     headersMap.programStatus,
 ])
+const USER_HEADER_NAMES = new Set([
+    headersMap.createdBy,
+    headersMap.lastUpdatedBy,
+])
+/* Analytics builds a user's display name as "surname, firstname (username)"
+ * and returns the empty frame ",  ()" when no user is recorded (DHIS2-15225). */
+const EMPTY_USER_DISPLAY_NAME_PATTERN = /^,\s*\(\)$/
 
 const isStageOffsetInteger = (stageOffset: unknown): stageOffset is number =>
     Number.isInteger(stageOffset)
@@ -322,15 +329,22 @@ export const formatCellValue = ({
     metaDataItems,
     isUndefined,
 }: FormatCellValueArgs): { value: string; formattedValue: string } => {
+    // header.name might be prefixed with programStage.id
+    const dimensionId = extractPlainDimensionId(header.name)
+
+    if (
+        USER_HEADER_NAMES.has(dimensionId) &&
+        EMPTY_USER_DISPLAY_NAME_PATTERN.test(rawValue)
+    ) {
+        return { value: '', formattedValue: '' }
+    }
+
     const value = resolveCellValue({
         rawValue,
         header,
         metaDataItems,
         isUndefined,
     })
-
-    // header.name might be prefixed with programStage.id
-    const dimensionId = extractPlainDimensionId(header.name)
 
     if (dimensionId && STATUS_HEADER_NAMES.has(dimensionId)) {
         return {

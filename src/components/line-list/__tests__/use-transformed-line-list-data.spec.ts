@@ -261,6 +261,40 @@ describe('formatCellValue', () => {
         ).toBe('60 - 70')
     })
 
+    const formatUserValue = (name: string, rawValue: string) =>
+        formatCellValue({
+            rawValue,
+            header: { name, valueType: 'TEXT' } as FormatCellValueHeader,
+            visualization,
+            metaDataItems: {},
+            isUndefined: false,
+        })
+
+    it.each(['createdbydisplayname', 'lastupdatedbydisplayname'])(
+        'blanks out the %s value when no user is recorded',
+        (name) => {
+            expect(formatUserValue(name, ',  ()')).toEqual({
+                value: '',
+                formattedValue: '',
+            })
+        }
+    )
+
+    it('keeps a user display name', () => {
+        expect(
+            formatUserValue('createdbydisplayname', 'Traore, John (admin)')
+        ).toEqual({
+            value: 'Traore, John (admin)',
+            formattedValue: 'Traore, John (admin)',
+        })
+    })
+
+    it('keeps the empty user frame in a column that is not a user column', () => {
+        expect(
+            formatUserValue('Zj7UnCAulEk.someDataElement', ',  ()').value
+        ).toBe(',  ()')
+    })
+
     const formatDateValue = (name: string) =>
         formatCellValue({
             rawValue: '2025-08-23 14:30:00.0',
