@@ -1,10 +1,16 @@
-import { interceptLineListAnalytics, sortColumn } from '../helpers'
+import {
+    expectColumnSort,
+    interceptLineListAnalytics,
+    removeChip,
+    sortColumn,
+} from '../helpers'
 import { getHeaderTexts } from '../support/rendering'
 
 const EVENT_LINE_LIST_ID = 't6SxiQdVPVs'
 const ENROLLMENT_LINE_LIST_ID = 'kUbNtOy0T12'
 const TRACKED_ENTITY_LINE_LIST_ID = 'IS74uKRvJvl'
 const AGE_DIMENSION = 'Zj7UnCAulEk.qrur9Dvnyt5'
+const ENROLLMENT_PROGRAM_ID = 'IpHINAT79UW'
 const DEFAULT_CELL_BACKGROUND_COLOR = 'rgb(255, 255, 255)'
 
 type Pager = { total: number; pageCount: number }
@@ -55,6 +61,13 @@ const choosePageSize = (pageSize: number) => {
         .contains(new RegExp(`^${pageSize}$`))
         .click()
     getRows().should('have.length', pageSize)
+}
+
+/* A tracked entity list can't show a program indicator */
+const switchEnrollmentListToTrackedEntityList = () => {
+    removeChip('Average weight (g)')
+    interceptLineListAnalytics()
+    cy.getByDataTest('update-button-tracked-entity').click()
 }
 
 describe('line list', () => {
@@ -112,6 +125,19 @@ describe('line list', () => {
                 }
             )
         })
+    })
+
+    it('renames the sort when the output type changes', () => {
+        openLineList(ENROLLMENT_LINE_LIST_ID)
+        sortColumn('Date of enrollment', 'asc', 'enrollmentdate')
+
+        switchEnrollmentListToTrackedEntityList()
+
+        expectColumnSort(
+            'Date of enrollment',
+            'asc',
+            `${ENROLLMENT_PROGRAM_ID}.enrollmentdate`
+        )
     })
 
     it('colours the cells by the legend set of each data item', () => {
