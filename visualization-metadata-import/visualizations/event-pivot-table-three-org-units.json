@@ -11,7 +11,7 @@
             "columnDimensions": ["IpHINAT79UW.registrationOu"],
             "rowDimensions": ["IpHINAT79UW.A03MvHHogjR.ou"],
             "filterDimensions": [
-                "IpHINAT79UW.ou",
+                "IpHINAT79UW.enrollmentOu",
                 "IpHINAT79UW.A03MvHHogjR.eventDate"
             ],
             "simpleDimensions": [
@@ -30,7 +30,7 @@
                 },
                 {
                     "parent": "FILTER",
-                    "dimension": "ou",
+                    "dimension": "enrollmentOu",
                     "program": "IpHINAT79UW",
                     "values": ["USER_ORGUNIT_CHILDREN"]
                 },

@@ -18,7 +18,7 @@
                 "id": "WZbXY0S00lP"
             },
             "columnDimensions": ["WSGAb5XwJ3Y.programStatus"],
-            "rowDimensions": ["WSGAb5XwJ3Y.ou"],
+            "rowDimensions": ["WSGAb5XwJ3Y.enrollmentOu"],
             "simpleDimensions": [
                 {
                     "parent": "COLUMN",
@@ -28,7 +28,7 @@
                 },
                 {
                     "parent": "ROW",
-                    "dimension": "ou",
+                    "dimension": "enrollmentOu",
                     "program": "WSGAb5XwJ3Y",
                     "values": ["USER_ORGUNIT_CHILDREN"]
                 },
