@@ -2,12 +2,9 @@ import i18n from '@dhis2/d2-i18n'
 import type {
     DimensionId,
     DimensionMetadataItem,
-    OutputType,
     Program,
     ProgramStage,
 } from '@types'
-
-type DimensionRecordObject = Partial<Record<DimensionId, DimensionMetadataItem>>
 
 export const getCreatedDimension = (): Partial<
     Record<DimensionId, DimensionMetadataItem>
@@ -56,31 +53,6 @@ export const getFixedMetaDimensions = (): DimensionMetadataItem[] => [
         valueType: 'DATETIME',
     },
 ]
-
-export const getMainDimensions = (
-    outputType: OutputType
-): DimensionRecordObject => ({
-    ...(outputType === 'TRACKED_ENTITY_INSTANCE' ? getCreatedDimension() : {}),
-    lastUpdated: {
-        id: 'lastUpdated',
-        dimensionId: 'lastUpdated',
-        dimensionType: 'PERIOD',
-        name: i18n.t('Last updated on'),
-        valueType: 'DATETIME',
-    },
-    createdBy: {
-        id: 'createdBy',
-        dimensionId: 'createdBy',
-        dimensionType: 'USER',
-        name: i18n.t('Created by'),
-    },
-    lastUpdatedBy: {
-        id: 'lastUpdatedBy',
-        dimensionId: 'lastUpdatedBy',
-        dimensionType: 'USER',
-        name: i18n.t('Last updated by'),
-    },
-})
 
 /* ---------------------------------------------------------------------------
  * Fixed dimension builders — shared between sidebar and metadata provider.

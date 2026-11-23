@@ -9,7 +9,6 @@ import { getDefaultItemsForDimension } from '@modules/dimension/default-items'
 import {
     getCreatedDimension,
     getFixedMetaDimensions,
-    getMainDimensions,
     getTrackedEntityTypeFixedDimensions,
 } from '@modules/dimension/fixed'
 import {
@@ -49,24 +48,6 @@ describe('getCreatedDimension', () => {
                 valueType: 'DATETIME',
             },
         })
-    })
-})
-
-describe('getMainDimensions', () => {
-    it('returns main dimensions for EVENT outputType', () => {
-        const result = getMainDimensions('EVENT')
-        expect(result).toHaveProperty('lastUpdated')
-        expect(result.lastUpdated?.dimensionType).toBe('PERIOD')
-        expect(result).toHaveProperty('createdBy')
-        expect(result).toHaveProperty('lastUpdatedBy')
-    })
-
-    it('returns main dimensions for TRACKED_ENTITY_INSTANCE outputType', () => {
-        const result = getMainDimensions('TRACKED_ENTITY_INSTANCE')
-        expect(result).not.toHaveProperty('ou')
-        expect(result).toHaveProperty('created')
-        expect(result.created?.dimensionType).toBe('PERIOD')
-        expect(result).toHaveProperty('lastUpdated')
     })
 })
 

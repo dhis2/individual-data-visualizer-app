@@ -470,6 +470,61 @@ describe('extractValueMetadata', () => {
 })
 
 describe('extractMetadataFromVisualization', () => {
+    it.each([
+        {
+            dimensionId: 'lastUpdated',
+            apiDimensionType: 'PERIOD',
+            name: 'Last updated on',
+            dimensionType: 'PERIOD',
+        },
+        {
+            dimensionId: 'lastUpdatedBy',
+            apiDimensionType: 'DATA_X',
+            name: 'Last updated by',
+            dimensionType: 'USER',
+        },
+        {
+            dimensionId: 'created',
+            apiDimensionType: 'PERIOD',
+            name: 'Created on',
+            dimensionType: 'PERIOD',
+        },
+        {
+            dimensionId: 'createdBy',
+            apiDimensionType: 'DATA_X',
+            name: 'Created by',
+            dimensionType: 'USER',
+        },
+        {
+            dimensionId: 'completed',
+            apiDimensionType: 'PERIOD',
+            name: 'Completed on',
+            dimensionType: 'PERIOD',
+        },
+    ])(
+        'registers the $dimensionId metadata dimension of an event line list',
+        ({ dimensionId, apiDimensionType, name, dimensionType }) => {
+            const visualization = {
+                type: 'LINE_LIST',
+                outputType: 'EVENT',
+                columns: [
+                    {
+                        dimension: dimensionId,
+                        dimensionType: apiDimensionType,
+                        items: [],
+                    },
+                ],
+                rows: [],
+                filters: [],
+                metaData: {},
+            } as unknown as SavedVisualization
+
+            expect(
+                extractMetadataFromVisualization(visualization)[dimensionId]
+            ).toMatchObject({ id: dimensionId, name, dimensionType })
+        }
+    )
+
     it.each(['EVENT', 'ENROLLMENT'] as const)(
         'registers the registration org unit of a %s pivot table under its tracked entity type',
         (outputType) => {
