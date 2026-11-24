@@ -26,6 +26,7 @@ const metadataStore = createMetadataStoreStub({
     dimensions: {
         's1.de': dimension('s1.de', 'DATA_ELEMENT'),
         's1.eventDate': dimension('s1.eventDate', 'PERIOD', 'DATE'),
+        'p1.enrollmentDate': dimension('p1.enrollmentDate', 'PERIOD', 'DATE'),
         's1.ou': dimension('s1.ou', 'ORGANISATION_UNIT', 'ORGANISATION_UNIT'),
         's1.deDate': dimension('s1.deDate', 'DATA_ELEMENT', 'DATE'),
         's1.deOu': dimension('s1.deOu', 'DATA_ELEMENT', 'ORGANISATION_UNIT'),
@@ -68,6 +69,9 @@ const NO_PERIOD = {
 }
 const NO_ORG_UNIT = {
     content: 'Select at least one organisation unit',
+}
+const EMPTY_DIMENSIONS = {
+    content: 'Select at least one item for every period and org unit dimension',
 }
 
 const check = (visUiConfig: VisUiConfigState) =>
@@ -254,6 +258,68 @@ describe('getLayoutSelectionTooltipConfig', () => {
                     })
                 )
             ).toEqual(NO_ORG_UNIT)
+        })
+    })
+
+    describe('pivot table period and org unit items', () => {
+        it('requires items on an empty period next to one with items', () => {
+            expect(
+                check(
+                    buildVisUiConfig({
+                        visualizationType: 'PIVOT_TABLE',
+                        layout: {
+                            columns: ['s1.ou'],
+                            rows: ['s1.eventDate', 'p1.enrollmentDate'],
+                        },
+                    })
+                )
+            ).toEqual(EMPTY_DIMENSIONS)
+        })
+
+        it('requires items when both a period and an org unit are empty', () => {
+            expect(
+                check(
+                    buildVisUiConfig({
+                        visualizationType: 'PIVOT_TABLE',
+                        layout: {
+                            columns: ['s1.ou'],
+                            rows: ['s1.eventDate'],
+                        },
+                        itemsByDimension: { 's1.eventDate': [], 's1.ou': [] },
+                    })
+                )
+            ).toEqual(EMPTY_DIMENSIONS)
+        })
+
+        it('ignores an empty period in filters', () => {
+            expect(
+                check(
+                    buildVisUiConfig({
+                        visualizationType: 'PIVOT_TABLE',
+                        layout: {
+                            columns: ['s1.ou'],
+                            rows: ['s1.eventDate'],
+                            filters: ['p1.enrollmentDate'],
+                        },
+                    })
+                )
+            ).toBeUndefined()
+        })
+
+        it('does not apply to a line list', () => {
+            expect(
+                check(
+                    buildVisUiConfig({
+                        layout: {
+                            columns: [
+                                's1.ou',
+                                's1.eventDate',
+                                'p1.enrollmentDate',
+                            ],
+                        },
+                    })
+                )
+            ).toBeUndefined()
         })
     })
 })
