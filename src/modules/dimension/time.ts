@@ -64,7 +64,7 @@ type TimeDimension =
           nameProperty: 'displayExecutionDateLabel' | 'displayDueDateLabel'
       })
 export const getTimeDimensions = (): Record<
-    Exclude<TimeDimensionId, 'lastUpdated'>,
+    Exclude<TimeDimensionId, 'lastUpdated' | 'created' | 'completed'>,
     TimeDimension
 > => ({
     eventDate: {

@@ -104,12 +104,13 @@ describe('isTimeDimensionId', () => {
         expect(isTimeDimensionId('enrollmentDate')).toBe(true)
         expect(isTimeDimensionId('incidentDate')).toBe(true)
         expect(isTimeDimensionId('lastUpdated')).toBe(true)
+        expect(isTimeDimensionId('created')).toBe(true)
+        expect(isTimeDimensionId('completed')).toBe(true)
         expect(isTimeDimensionId('scheduledDate')).toBe(true)
     })
 
     it('returns false for non-time dimension ids', () => {
         expect(isTimeDimensionId('ou')).toBe(false)
-        expect(isTimeDimensionId('created')).toBe(false)
         expect(isTimeDimensionId('eventStatus')).toBe(false)
     })
 })
@@ -584,6 +585,15 @@ describe('getDefaultItemsForDimension', () => {
         expect(
             getDefaultItemsForDimension('program1.enrollmentDate', 'THIS_YEAR')
         ).toEqual(['THIS_YEAR'])
+    })
+
+    it('defaults the created and completed dimensions to the provided relative period', () => {
+        expect(
+            getDefaultItemsForDimension('created', 'LAST_12_MONTHS')
+        ).toEqual(['LAST_12_MONTHS'])
+        expect(getDefaultItemsForDimension('completed', 'THIS_YEAR')).toEqual([
+            'THIS_YEAR',
+        ])
     })
 
     it('returns no default for non-org-unit, non-time dimensions', () => {
