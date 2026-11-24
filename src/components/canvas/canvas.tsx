@@ -59,6 +59,15 @@ export const Canvas: FC = () => {
             isVisualizationLoading={isVisualizationLoading}
         >
             <PluginWrapper
+                /* The canvas is cleared on opening a visualization, also the
+                 * same one again, or a new one; that and another vis type
+                 * start over, at the default page size. A save reloads in
+                 * place. */
+                key={
+                    isVisualizationEmpty(currentVis)
+                        ? 'cleared'
+                        : currentVis.type
+                }
                 isVisualizationLoading={isVisualizationLoading}
                 visualization={currentVis}
                 visualizationLoadError={visualizationLoadError ?? undefined}

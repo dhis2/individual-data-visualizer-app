@@ -4,7 +4,8 @@ import type {
     LineListPager,
     RequestedPage,
     PagerWithTotals,
-    PaginateFn,
+    PageChangeFn,
+    PageSizeChangeFn,
 } from '@components/line-list/types'
 import i18n from '@dhis2/d2-i18n'
 import {
@@ -30,7 +31,8 @@ type PaginationBarProps = {
     /* The page being loaded, which the bar shows and pages on from */
     requestedPage: RequestedPage | null
     isDisconnected: boolean
-    onPaginate: PaginateFn
+    onPageChange: PageChangeFn
+    onPageSizeChange: PageSizeChangeFn
 }
 
 type TooltipTriggerProps = Record<string, unknown>
@@ -83,7 +85,8 @@ const PaginationBarInternal: FC<PaginationBarInternalProps> = ({
     pageLength,
     visualization,
     requestedPage,
-    onPaginate,
+    onPageChange,
+    onPageSizeChange,
     disabled,
     tooltipProps,
 }) => {
@@ -103,9 +106,6 @@ const PaginationBarInternal: FC<PaginationBarInternalProps> = ({
     const singlePage = isSinglePage(pager)
     const rowCount = getRowCount(pager, pageLength)
 
-    const goToPage = (targetPage: number) =>
-        onPaginate({ page: targetPage, pageSize })
-
     return (
         <StickyFooterCell
             colSpan={colSpan}
@@ -122,14 +122,14 @@ const PaginationBarInternal: FC<PaginationBarInternalProps> = ({
                             icon={<IconChevronLeft16 />}
                             aria-label={i18n.t('Previous page')}
                             disabled={disabled || page <= 1}
-                            onClick={() => goToPage(page - 1)}
+                            onClick={() => onPageChange(page - 1)}
                             dataTest="pagination-previous"
                         />
                         <PageSlot
                             page={page}
                             pageCount={pageCount}
                             disabled={disabled}
-                            onCommit={goToPage}
+                            onCommit={onPageChange}
                         />
                         <Button
                             small
@@ -139,7 +139,9 @@ const PaginationBarInternal: FC<PaginationBarInternalProps> = ({
                             aria-label={i18n.t('Next page')}
                             disabled={disabled || isLastPage}
                             aria-disabled={isNextBlocked || undefined}
-                            onClick={() => !isNextBlocked && goToPage(page + 1)}
+                            onClick={() =>
+                                !isNextBlocked && onPageChange(page + 1)
+                            }
                             dataTest="pagination-next"
                         />
                     </div>
@@ -159,9 +161,7 @@ const PaginationBarInternal: FC<PaginationBarInternalProps> = ({
                 <PageSizeMenu
                     pageSize={pageSize}
                     disabled={disabled}
-                    onChange={(newPageSize) =>
-                        onPaginate({ page: 1, pageSize: newPageSize })
-                    }
+                    onChange={onPageSizeChange}
                 />
             </div>
         </StickyFooterCell>

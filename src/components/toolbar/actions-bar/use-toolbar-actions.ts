@@ -20,7 +20,7 @@ import { getVisualizationState } from '@modules/visualization/state'
 import { getCurrentVis } from '@store/current-vis-slice'
 import { setNavigationState } from '@store/navigation-slice'
 import { getSavedVis, setSavedVisNameDescription } from '@store/saved-vis-slice'
-import { tLoadSavedVisualization } from '@store/thunks'
+import { tClearVisualization, tLoadSavedVisualization } from '@store/thunks'
 import type { CurrentVisualization, SavedVisualization } from '@types'
 import { useCallback, useMemo, useState } from 'react'
 
@@ -134,6 +134,9 @@ export const useToolbarActions = () => {
                 isCurrentVisualizationPersisted(currentVis) &&
                 currentVis.id === id
             ) {
+                /* Cleared first, so the canvas starts over as for another
+                 * visualization, without unsaved changes or the page size */
+                dispatch(tClearVisualization())
                 dispatch(
                     tLoadSavedVisualization({ id, updateStatistics: false })
                 )
@@ -260,7 +263,14 @@ export const useToolbarActions = () => {
             )
 
             if (data) {
-                // Navigate to the new visualization
+                /* Loaded before navigating, so the canvas reloads in place, as
+                 * after a save, and keeps its page size */
+                await dispatch(
+                    tLoadSavedVisualization({
+                        id: data,
+                        updateStatistics: false,
+                    })
+                )
                 dispatch(setNavigationState({ visualizationId: data }))
             } else if (error) {
                 onError(error as EngineError)
