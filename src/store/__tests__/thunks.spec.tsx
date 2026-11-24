@@ -4,6 +4,7 @@ import eventPivotTableAttributeValue from '@modules/visualization/__fixtures__/r
 import { getLastUsedVisualizationTypeFromLocalStorage } from '@modules/visualization/local-storage'
 import { getCurrentVis } from '@store/current-vis-slice'
 import { getVisualizationLoadError } from '@store/loader-slice'
+import { getSavedVis } from '@store/saved-vis-slice'
 import {
     tClearVisualization,
     tLoadSavedVisualization,
@@ -320,6 +321,30 @@ describe('tLoadSavedVisualization', () => {
         await store.dispatch(tLoadSavedVisualization({ id: 'TIuOzZ0ID0V' }))
 
         expect(getCurrentVis(store.getState()).sorting ?? []).toEqual([])
+    })
+
+    /* The API leaves out an empty field, so a title removed and saved is
+     * missing from the reloaded visualization. */
+    it('drops a removed title from the saved visualization when it reloads', async () => {
+        const lineListWithoutTitle: Record<string, unknown> = {
+            ...lineListWithoutSort,
+        }
+        delete lineListWithoutTitle.title
+        const responses = [
+            { ...lineListWithoutSort, title: 'Saved title' },
+            lineListWithoutTitle,
+        ]
+        const { store } = await renderHookWithAppWrapper(() => null, {
+            queryData: {
+                eventVisualizations: () => responses.shift(),
+            },
+        } as unknown as MockOptions)
+        await store.dispatch(tLoadSavedVisualization({ id: 'TIuOzZ0ID0V' }))
+        expect(getSavedVis(store.getState()).title).toBe('Saved title')
+
+        await store.dispatch(tLoadSavedVisualization({ id: 'TIuOzZ0ID0V' }))
+
+        expect(getSavedVis(store.getState()).title).toBeUndefined()
     })
 
     it('keeps a failed fetch as a fetch error instead of a runtime one', async () => {
