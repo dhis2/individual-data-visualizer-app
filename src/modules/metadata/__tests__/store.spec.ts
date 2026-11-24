@@ -557,7 +557,7 @@ describe('MetadataStore', () => {
         const snapshot2Keys = new Set(Object.keys(snapshot2))
 
         // Length grows and decreases
-        expect(snapshot0Keys.size).toBe(52)
+        expect(snapshot0Keys.size).toBe(56)
         expect(snapshot1Keys.size).toBe(85)
         expect(snapshot2Keys.size).toBe(71)
 
@@ -608,10 +608,6 @@ describe('MetadataStore', () => {
             "enrollmentDate",
             "incidentDate",
             "scheduledDate",
-            "lastUpdated",
-            "lastUpdatedBy",
-            "createdBy",
-            "completed",
             "eBAyeGv0exc",
             "Zj7UnCAulEk",
             "Zj7UnCAulEk.eventDate",

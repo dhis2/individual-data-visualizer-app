@@ -1,4 +1,5 @@
 import { DEFAULT_OPTIONS } from '@constants/options'
+import { getInitialMetadata } from '@modules/metadata/initial-metadata'
 import { MetadataStore } from '@modules/metadata/store'
 import legacyEnrollmentPivotTable from '@modules/visualization/__fixtures__/round-trip/legacy/enrollment-pivot-table.json'
 import legacyEventLineList from '@modules/visualization/__fixtures__/round-trip/legacy/event-line-list.json'
@@ -322,7 +323,7 @@ const roundTrip = (fixture: unknown) => {
     const savedVis = normalizeApiSavedVisualization(
         fixture as ApiSavedVisualization
     )
-    const metadataStore = new MetadataStore({})
+    const metadataStore = new MetadataStore(getInitialMetadata({}))
     metadataStore.setVisualizationMetadata(savedVis)
 
     const currentVisFromApiVis = toCurrentVis(savedVis)

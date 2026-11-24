@@ -2,7 +2,6 @@ import { getCellValueItem } from '@modules/dimension/cell-value'
 import { getUiDimensionType } from '@modules/dimension/dimension-type'
 import {
     getEnrollmentFixedDimensions,
-    getFixedMetaDimensions,
     getStageFixedDimensions,
     getTrackedEntityTypeFixedDimensions,
 } from '@modules/dimension/fixed'
@@ -65,12 +64,6 @@ const getDefaultDynamicTimeDimensionsMetadata = (
         },
         {}
     )
-
-const getFixedMetaDimensionsMetadata = (): MetadataInputMap =>
-    getFixedMetaDimensions().reduce<MetadataInputMap>((acc, dimension) => {
-        acc[dimension.id] = dimension
-        return acc
-    }, {})
 
 export const extractTrackedEntityTypeMetadata = (
     visualization: SavedVisualization
@@ -295,7 +288,6 @@ export const extractMetadataFromVisualization = (
     const sources: MetadataInputMap[] = [
         vis.metaData,
         getDefaultDynamicTimeDimensionsMetadata(singleProgram, singleStage),
-        getFixedMetaDimensionsMetadata(),
         extractTrackedEntityTypeMetadata(vis),
         extractProgramDimensionsMetadata(vis),
         extractDimensionMetadata(vis),

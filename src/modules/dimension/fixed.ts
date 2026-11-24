@@ -1,22 +1,5 @@
 import i18n from '@dhis2/d2-i18n'
-import type {
-    DimensionId,
-    DimensionMetadataItem,
-    Program,
-    ProgramStage,
-} from '@types'
-
-export const getCreatedDimension = (): Partial<
-    Record<DimensionId, DimensionMetadataItem>
-> => ({
-    created: {
-        id: 'created',
-        dimensionId: 'created',
-        dimensionType: 'PERIOD',
-        name: i18n.t('Created on'),
-        valueType: 'DATETIME',
-    },
-})
+import type { DimensionMetadataItem, Program, ProgramStage } from '@types'
 
 export const getFixedMetaDimensions = (): DimensionMetadataItem[] => [
     {

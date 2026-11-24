@@ -7,7 +7,6 @@ import {
 } from '@modules/dimension/blocking'
 import { getDefaultItemsForDimension } from '@modules/dimension/default-items'
 import {
-    getCreatedDimension,
     getFixedMetaDimensions,
     getTrackedEntityTypeFixedDimensions,
 } from '@modules/dimension/fixed'
@@ -35,21 +34,6 @@ import type {
     ProgramStage,
 } from '@types'
 import { describe, it, expect } from 'vitest'
-
-describe('getCreatedDimension', () => {
-    it('returns the created dimension object', () => {
-        const result = getCreatedDimension()
-        expect(result).toEqual({
-            created: {
-                id: 'created',
-                dimensionId: 'created',
-                dimensionType: 'PERIOD',
-                name: expect.any(String), // Assuming i18n.t returns a string
-                valueType: 'DATETIME',
-            },
-        })
-    })
-})
 
 describe('transformDimensions', () => {
     it('transforms PROGRAM_DATA_ELEMENT to DATA_ELEMENT', () => {
