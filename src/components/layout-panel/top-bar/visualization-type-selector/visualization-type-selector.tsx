@@ -1,3 +1,4 @@
+import { useSystemSettings } from '@components/app-wrapper/cached-data/app-cached-data-provider'
 import {
     AGGREGATED_VISUALIZATION_TYPES,
     INDIVIDUAL_VISUALIZATION_TYPES,
@@ -16,8 +17,10 @@ import {
     IconVisualizationArea16,
 } from '@dhis2/ui'
 import { useAppDispatch, useAppSelector, useMetadataStore } from '@hooks'
+import { getDefaultItemsForDimension } from '@modules/dimension/default-items'
 import { convertLayoutForVisType } from '@modules/layout'
 import {
+    setVisUiConfigItemsByDimension,
     setVisUiConfigLayout,
     setVisUiConfigVisualizationType,
     getVisUiConfigLayout,
@@ -93,15 +96,22 @@ const ComingSoonListItem: FC<{ visType: ComingSoonVisType }> = ({
     </div>
 )
 
-type PendingConversion = {
+type Conversion = {
     targetVisType: VisualizationType
     convertedLayout: Layout
+    defaultItemsByDimension: Record<string, string[]>
+}
+
+type PendingConversion = Conversion & {
     discardedNames: string[]
+    emptyDimensionNames: string[]
+    defaultItemNames: string[]
 }
 
 export const VisualizationTypeSelector: FC = () => {
     const dispatch = useAppDispatch()
     const metadataStore = useMetadataStore()
+    const { relativePeriod } = useSystemSettings()
 
     const visualizationType = useAppSelector(getVisUiConfigVisualizationType)
     const layout = useAppSelector(getVisUiConfigLayout)
@@ -115,40 +125,69 @@ export const VisualizationTypeSelector: FC = () => {
 
     const toggleList = () => setListIsOpen(!listIsOpen)
 
-    const applyChange = (
-        targetVisType: VisualizationType,
-        convertedLayout: Layout
-    ) => {
+    const getDimensionName = (id: string) =>
+        metadataStore.getDimensionMetadataItem(id)?.name ?? id
+
+    const applyChange = ({
+        targetVisType,
+        convertedLayout,
+        defaultItemsByDimension,
+    }: Conversion) => {
         dispatch(setVisUiConfigLayout(convertedLayout))
         dispatch(setVisUiConfigVisualizationType(targetVisType))
+        for (const [dimensionId, itemIds] of Object.entries(
+            defaultItemsByDimension
+        )) {
+            dispatch(setVisUiConfigItemsByDimension({ dimensionId, itemIds }))
+        }
     }
 
     const handleListItemClick = (nextVisType: VisualizationType) => () => {
+        setListIsOpen(false)
         if (nextVisType === visualizationType) {
-            setListIsOpen(false)
             return
         }
-        const { convertedLayout, invalidDimensionIds } =
+        const { convertedLayout, invalidDimensionIds, emptyDimensionIds } =
             convertLayoutForVisType({
                 layout,
                 itemsByDimension,
                 targetVisType: nextVisType,
                 getDimension: metadataStore.getDimensionMetadataItemOrThrow,
             })
-        if (invalidDimensionIds.length === 0) {
-            applyChange(nextVisType, convertedLayout)
-            setListIsOpen(false)
-            return
+        const defaultItemsByDimension: Record<string, string[]> = {}
+        for (const id of emptyDimensionIds) {
+            const defaultItems = getDefaultItemsForDimension(id, relativePeriod)
+            if (defaultItems) {
+                defaultItemsByDimension[id] = defaultItems
+            }
         }
-        const discardedNames = invalidDimensionIds.map(
-            (id) => metadataStore.getDimensionMetadataItem(id)?.name ?? id
-        )
-        setPendingConversion({
+        const conversion: Conversion = {
             targetVisType: nextVisType,
             convertedLayout,
-            discardedNames,
+            defaultItemsByDimension,
+        }
+        const emptyDimensionIdsWithDefaults = Object.keys(
+            defaultItemsByDimension
+        )
+        if (
+            invalidDimensionIds.length === 0 &&
+            emptyDimensionIdsWithDefaults.length === 0
+        ) {
+            applyChange(conversion)
+            return
+        }
+        const defaultItemIds = [
+            ...new Set(Object.values(defaultItemsByDimension).flat()),
+        ]
+        setPendingConversion({
+            ...conversion,
+            discardedNames: invalidDimensionIds.map(getDimensionName),
+            emptyDimensionNames:
+                emptyDimensionIdsWithDefaults.map(getDimensionName),
+            defaultItemNames: defaultItemIds.map(
+                (id) => metadataStore.getMetadataItem(id)?.name ?? id
+            ),
         })
-        setListIsOpen(false)
     }
 
     const buttonRef = useRef<HTMLDivElement>(null)
@@ -240,11 +279,10 @@ export const VisualizationTypeSelector: FC = () => {
                 <ConversionConfirmationModal
                     targetVisType={pendingConversion.targetVisType}
                     discardedDimensionNames={pendingConversion.discardedNames}
+                    emptyDimensionNames={pendingConversion.emptyDimensionNames}
+                    defaultItemNames={pendingConversion.defaultItemNames}
                     onConfirm={() => {
-                        applyChange(
-                            pendingConversion.targetVisType,
-                            pendingConversion.convertedLayout
-                        )
+                        applyChange(pendingConversion)
                         setPendingConversion(null)
                     }}
                     onCancel={() => setPendingConversion(null)}
