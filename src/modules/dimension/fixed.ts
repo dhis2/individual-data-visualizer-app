@@ -1,25 +1,5 @@
 import i18n from '@dhis2/d2-i18n'
-import type {
-    DimensionId,
-    DimensionMetadataItem,
-    OutputType,
-    Program,
-    ProgramStage,
-} from '@types'
-
-type DimensionRecordObject = Partial<Record<DimensionId, DimensionMetadataItem>>
-
-export const getCreatedDimension = (): Partial<
-    Record<DimensionId, DimensionMetadataItem>
-> => ({
-    created: {
-        id: 'created',
-        dimensionId: 'created',
-        dimensionType: 'PERIOD',
-        name: i18n.t('Created on'),
-        valueType: 'DATE',
-    },
-})
+import type { DimensionMetadataItem, Program, ProgramStage } from '@types'
 
 export const getFixedMetaDimensions = (): DimensionMetadataItem[] => [
     {
@@ -27,7 +7,7 @@ export const getFixedMetaDimensions = (): DimensionMetadataItem[] => [
         dimensionId: 'lastUpdated',
         name: i18n.t('Last updated on'),
         dimensionType: 'PERIOD',
-        valueType: 'DATE',
+        valueType: 'DATETIME',
     },
     {
         id: 'lastUpdatedBy',
@@ -40,7 +20,7 @@ export const getFixedMetaDimensions = (): DimensionMetadataItem[] => [
         dimensionId: 'created',
         name: i18n.t('Created on'),
         dimensionType: 'PERIOD',
-        valueType: 'DATE',
+        valueType: 'DATETIME',
     },
     {
         id: 'createdBy',
@@ -53,34 +33,9 @@ export const getFixedMetaDimensions = (): DimensionMetadataItem[] => [
         dimensionId: 'completed',
         name: i18n.t('Completed on'),
         dimensionType: 'PERIOD',
-        valueType: 'DATE',
-    },
-]
-
-export const getMainDimensions = (
-    outputType: OutputType
-): DimensionRecordObject => ({
-    ...(outputType === 'TRACKED_ENTITY_INSTANCE' ? getCreatedDimension() : {}),
-    lastUpdated: {
-        id: 'lastUpdated',
-        dimensionId: 'lastUpdated',
-        dimensionType: 'PERIOD',
-        name: i18n.t('Last updated on'),
         valueType: 'DATETIME',
     },
-    createdBy: {
-        id: 'createdBy',
-        dimensionId: 'createdBy',
-        dimensionType: 'USER',
-        name: i18n.t('Created by'),
-    },
-    lastUpdatedBy: {
-        id: 'lastUpdatedBy',
-        dimensionId: 'lastUpdatedBy',
-        dimensionType: 'USER',
-        name: i18n.t('Last updated by'),
-    },
-})
+]
 
 /* ---------------------------------------------------------------------------
  * Fixed dimension builders — shared between sidebar and metadata provider.

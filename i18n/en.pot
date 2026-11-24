@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-19T14:34:40.520Z\n"
-"PO-Revision-Date: 2026-11-19T14:34:40.521Z\n"
+"POT-Creation-Date: 2026-11-24T13:21:20.538Z\n"
+"PO-Revision-Date: 2026-11-24T13:21:20.539Z\n"
 
 msgid "Network error"
 msgstr "Network error"
@@ -1017,14 +1017,14 @@ msgstr ""
 msgid "Cannot be used in a {{visType}}."
 msgstr "Cannot be used in a {{visType}}."
 
-msgid "Created on"
-msgstr "Created on"
-
 msgid "Last updated on"
 msgstr "Last updated on"
 
 msgid "Last updated by"
 msgstr "Last updated by"
+
+msgid "Created on"
+msgstr "Created on"
 
 msgid "Created by"
 msgstr "Created by"

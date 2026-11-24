@@ -421,12 +421,19 @@ describe('MetadataStore', () => {
               "programStageId": "Zj7UnCAulEk",
               "valueType": "INTEGER_POSITIVE",
             },
+            "completed": {
+              "dimensionId": "completed",
+              "dimensionType": "PERIOD",
+              "id": "completed",
+              "name": "Completed on",
+              "valueType": "DATETIME",
+            },
             "created": {
               "dimensionId": "created",
               "dimensionType": "PERIOD",
               "id": "created",
               "name": "Created on",
-              "valueType": "DATE",
+              "valueType": "DATETIME",
             },
             "createdBy": {
               "dimensionId": "createdBy",
@@ -550,9 +557,9 @@ describe('MetadataStore', () => {
         const snapshot2Keys = new Set(Object.keys(snapshot2))
 
         // Length grows and decreases
-        expect(snapshot0Keys.size).toBe(52)
-        expect(snapshot1Keys.size).toBe(84)
-        expect(snapshot2Keys.size).toBe(70)
+        expect(snapshot0Keys.size).toBe(56)
+        expect(snapshot1Keys.size).toBe(85)
+        expect(snapshot2Keys.size).toBe(71)
 
         // Initial metadata is always included
         expect(snapshot0Keys.isSubsetOf(snapshot1Keys)).toBe(true)
@@ -601,9 +608,6 @@ describe('MetadataStore', () => {
             "enrollmentDate",
             "incidentDate",
             "scheduledDate",
-            "lastUpdated",
-            "createdBy",
-            "lastUpdatedBy",
             "eBAyeGv0exc",
             "Zj7UnCAulEk",
             "Zj7UnCAulEk.eventDate",

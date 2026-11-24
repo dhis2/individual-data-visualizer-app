@@ -7,9 +7,7 @@ import {
 } from '@modules/dimension/blocking'
 import { getDefaultItemsForDimension } from '@modules/dimension/default-items'
 import {
-    getCreatedDimension,
     getFixedMetaDimensions,
-    getMainDimensions,
     getTrackedEntityTypeFixedDimensions,
 } from '@modules/dimension/fixed'
 import {
@@ -36,39 +34,6 @@ import type {
     ProgramStage,
 } from '@types'
 import { describe, it, expect } from 'vitest'
-
-describe('getCreatedDimension', () => {
-    it('returns the created dimension object', () => {
-        const result = getCreatedDimension()
-        expect(result).toEqual({
-            created: {
-                id: 'created',
-                dimensionId: 'created',
-                dimensionType: 'PERIOD',
-                name: expect.any(String), // Assuming i18n.t returns a string
-                valueType: 'DATE',
-            },
-        })
-    })
-})
-
-describe('getMainDimensions', () => {
-    it('returns main dimensions for EVENT outputType', () => {
-        const result = getMainDimensions('EVENT')
-        expect(result).toHaveProperty('lastUpdated')
-        expect(result.lastUpdated?.dimensionType).toBe('PERIOD')
-        expect(result).toHaveProperty('createdBy')
-        expect(result).toHaveProperty('lastUpdatedBy')
-    })
-
-    it('returns main dimensions for TRACKED_ENTITY_INSTANCE outputType', () => {
-        const result = getMainDimensions('TRACKED_ENTITY_INSTANCE')
-        expect(result).not.toHaveProperty('ou')
-        expect(result).toHaveProperty('created')
-        expect(result.created?.dimensionType).toBe('PERIOD')
-        expect(result).toHaveProperty('lastUpdated')
-    })
-})
 
 describe('transformDimensions', () => {
     it('transforms PROGRAM_DATA_ELEMENT to DATA_ELEMENT', () => {
@@ -362,7 +327,7 @@ describe('getFixedMetaDimensions', () => {
 
     it('assigns PERIOD dimensionType to date-based dimensions', () => {
         const result = getFixedMetaDimensions()
-        const dateDims = result.filter((d) => d.valueType === 'DATE')
+        const dateDims = result.filter((d) => d.valueType === 'DATETIME')
         expect(dateDims.map((d) => d.id)).toEqual([
             'lastUpdated',
             'created',

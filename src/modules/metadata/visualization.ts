@@ -2,7 +2,6 @@ import { getCellValueItem } from '@modules/dimension/cell-value'
 import { getUiDimensionType } from '@modules/dimension/dimension-type'
 import {
     getEnrollmentFixedDimensions,
-    getMainDimensions,
     getStageFixedDimensions,
     getTrackedEntityTypeFixedDimensions,
 } from '@modules/dimension/fixed'
@@ -289,7 +288,6 @@ export const extractMetadataFromVisualization = (
     const sources: MetadataInputMap[] = [
         vis.metaData,
         getDefaultDynamicTimeDimensionsMetadata(singleProgram, singleStage),
-        getMainDimensions(vis.outputType),
         extractTrackedEntityTypeMetadata(vis),
         extractProgramDimensionsMetadata(vis),
         extractDimensionMetadata(vis),
