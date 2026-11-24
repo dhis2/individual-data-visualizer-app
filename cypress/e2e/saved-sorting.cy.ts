@@ -15,7 +15,7 @@ const LAST_UPDATED_HEADER = 'Last updated on'
 
 /* A `cy.wait` for the first request after a page load gets only the 5s
  * request timeout, too short for the app to start on a slow CI runner. Rows
- * get the 30s command timeout, and once they show, the request has been sent. */
+ * get the 30s command timeout, and once they show, the request has been received. */
 const waitForRows = () =>
     cy.getByDataTest('table-row').should('have.length.greaterThan', 0)
 
