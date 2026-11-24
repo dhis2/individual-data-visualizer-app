@@ -1,6 +1,7 @@
 import { getSidebarWidthFromLocalStorage } from '@components/sidebar/local-storage'
 import { getLastUsedVisualizationTypeFromLocalStorage } from '@modules/visualization/local-storage'
 import { configureStore } from '@reduxjs/toolkit'
+import { currentVisSlice } from '@store/current-vis-slice'
 import { registerAppListeners } from '@store/listeners'
 import {
     resetUiSidebarWidth,
@@ -27,11 +28,20 @@ vi.mock('../thunks', () => ({
     tSeedDefaultGrouping: vi.fn(() => ({ type: 'mock/tSeedDefaultGrouping' })),
 }))
 
-const createStore = (visualizationId: NavigationState['visualizationId']) =>
+const createStore = (
+    visualizationId: NavigationState['visualizationId'],
+    loadedVisualizationId?: string
+) =>
     configureStore({
-        reducer: { navigation: navigationSlice.reducer },
+        reducer: {
+            navigation: navigationSlice.reducer,
+            currentVis: currentVisSlice.reducer,
+        },
         preloadedState: {
             navigation: { visualizationId, interpretationId: null },
+            currentVis: loadedVisualizationId
+                ? ({ id: loadedVisualizationId } as never)
+                : {},
         },
         middleware: (getDefaultMiddleware) =>
             getDefaultMiddleware().prepend(listenerMiddleware.middleware),
@@ -75,6 +85,16 @@ describe('navigationSlice listener', () => {
         await Promise.resolve()
 
         expect(tClearVisualization).toHaveBeenCalledTimes(1)
+        expect(tLoadSavedVisualization).not.toHaveBeenCalled()
+    })
+
+    it('does nothing when navigating to the visualization already loaded', async () => {
+        const store = createStore('new', 'vis-b')
+
+        store.dispatch(setNavigationState({ visualizationId: 'vis-b' }))
+        await Promise.resolve()
+
+        expect(tClearVisualization).not.toHaveBeenCalled()
         expect(tLoadSavedVisualization).not.toHaveBeenCalled()
     })
 

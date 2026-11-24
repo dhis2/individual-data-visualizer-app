@@ -28,7 +28,13 @@ export const registerAppListeners = () => {
             const originalVisualizationId =
                 originalState.navigation.visualizationId
             const newVisualizationId = action.payload.visualizationId
+            /* Saving as a new visualization loads it before navigating to it */
+            const isAlreadyLoaded =
+                originalState.currentVis.id === newVisualizationId
 
+            if (isAlreadyLoaded) {
+                return
+            }
             /* Since the InterpretationsModal loads its own visualization plugin
              * we are only interested in visualizationId changes in this
              * listener middleware */

@@ -11,6 +11,7 @@ import type {
     EventVisualizationOptions,
     Layout,
     OutputType,
+    SortDirection,
     VisualizationType,
 } from '@types'
 import { getAppCachedDataFromAction } from './middleware-app-cached-data'
@@ -24,6 +25,14 @@ export type ConditionsObject = {
 export type CellValueObject = {
     id: string
     aggregationType: AggregationType
+}
+
+/* The column a line list is sorted by, named by its dimension rather than its
+ * header so the sort follows the column when the header name changes. */
+export type SortingObject = {
+    dimensionId: string
+    repetitionIndex?: number
+    direction: SortDirection
 }
 
 export type RepetitionsObject = {
@@ -49,6 +58,7 @@ export interface VisUiConfigState {
     conditionsByDimension: Record<string, ConditionsObject | undefined>
     cellValue?: CellValueObject
     repetitionsByDimension: Record<string, RepetitionsObject | undefined>
+    sorting?: SortingObject
     options: EventVisualizationOptions
 }
 
@@ -232,6 +242,12 @@ export const visUiConfigSlice = createSlice({
         },
         clearVisUiConfigCellValue: (state) => {
             delete state.cellValue
+        },
+        setVisUiConfigSorting: (
+            state,
+            action: PayloadAction<SortingObject | undefined>
+        ) => {
+            state.sorting = action.payload
         },
         setVisUiConfigRepetitionsByDimension: (
             state,
@@ -427,6 +443,7 @@ export const {
     setVisUiConfigCellValue,
     clearVisUiConfigCellValue,
     setVisUiConfigRepetitionsByDimension,
+    setVisUiConfigSorting,
     addVisUiConfigLayoutDimension,
     addVisUiConfigLayoutDimensions,
     moveVisUiConfigLayoutDimension,

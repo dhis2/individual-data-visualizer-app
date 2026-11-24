@@ -16,8 +16,8 @@ export const savedVisSlice = createSlice({
     initialState,
     reducers: {
         clearSavedVis: () => initialState,
-        setSavedVis: (state, action: PayloadAction<SavedVisualization>) =>
-            Object.assign(state, action.payload),
+        setSavedVis: (_, action: PayloadAction<SavedVisualization>) =>
+            action.payload,
         setSavedVisNameDescription: (
             state,
             action: PayloadAction<VisualizationNameDescription>

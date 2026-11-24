@@ -153,6 +153,20 @@ describe('PluginWrapper', () => {
         })
     }
 
+    const choosePageSize = async (
+        user: ReturnType<typeof userEvent.setup>,
+        pageSize: number
+    ) => {
+        await user.click(screen.getByTestId('pagination-options'))
+        await user.click(screen.getByTestId('dhis2-uicore-select-input'))
+        await user.click(
+            screen.getByText(String(pageSize), {
+                selector: '[data-test="dhis2-uicore-singleselectoption"] *',
+            })
+        )
+        await deferredAnalytics.releaseAll()
+    }
+
     beforeEach(() => {
         deferredAnalytics.reset()
         analyticsPageSizes.length = 0
@@ -371,19 +385,39 @@ describe('PluginWrapper', () => {
         )
         await loadFirstVisualization(store)
 
-        await user.click(screen.getByTestId('pagination-options'))
-        await user.click(screen.getByTestId('dhis2-uicore-select-input'))
-        await user.click(
-            screen.getByText('50', {
-                selector: '[data-test="dhis2-uicore-singleselectoption"] *',
-            })
-        )
-        await deferredAnalytics.releaseAll()
+        await choosePageSize(user, 50)
         await user.click(
             screen.getByRole('button', {
                 name: /sort by.*organisation unit/i,
             })
         )
+        await deferredAnalytics.releaseAll()
+
+        await waitFor(() => expect(analyticsPageSizes).toHaveLength(3))
+        expect(analyticsPageSizes.at(-1)).toBe(50)
+    })
+
+    it('keeps the chosen page size when the layout changes', async () => {
+        const user = userEvent.setup()
+        const { store } = await renderWithAppWrapper(
+            <TestComponent />,
+            mockOptions
+        )
+        await loadFirstVisualization(store)
+
+        await choosePageSize(user, 50)
+        act(() => {
+            const currentVis = store.getState().currentVis
+            if (isVisualizationEmpty(currentVis)) {
+                throw new Error('expected a loaded visualization')
+            }
+            store.dispatch(
+                setCurrentVis({
+                    ...currentVis,
+                    columns: [...currentVis.columns].reverse(),
+                })
+            )
+        })
         await deferredAnalytics.releaseAll()
 
         await waitFor(() => expect(analyticsPageSizes).toHaveLength(3))

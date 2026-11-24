@@ -108,10 +108,22 @@ describe('detecting unapplied changes', () => {
     })
 
     it('reports no change for a visualization that has been sorted on the canvas', () => {
-        const sortedVis = {
-            ...baseCurrentVis,
-            sorting: [{ dimension: 'de1', direction: 'ASC' }],
-        } as unknown as CurrentVisualization
+        const lineList = buildCurrentVisFromVisUiConfig({
+            previousCurrentVis: baseCurrentVis,
+            visUiConfig: {
+                ...getVisualizationUiConfig(
+                    baseCurrentVis,
+                    metadataStore,
+                    DEFAULT_OPTIONS
+                ),
+                layout: { columns: [DIMENSION_ID], rows: [], filters: [] },
+            },
+            metadataStore,
+        })
+        const sortedVis: CurrentVisualization = {
+            ...lineList,
+            sorting: [{ dimension: DIMENSION_ID, direction: 'ASC' }],
+        }
 
         expect(hasUnappliedChanges(sortedVis)).toBe(false)
     })
