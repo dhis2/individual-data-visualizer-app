@@ -1,53 +1,14 @@
-import { getHeadersMap } from '@modules/analytics-request'
 import { removeNonPersistedDimensionProperties } from '@modules/dimension/translation'
-import type {
-    CurrentVisualization,
-    SavedVisualization,
-    SortDirection,
-} from '@types'
-
-const getDimensionIdFromHeaderName = (
-    headerName: string,
-    visualization: CurrentVisualization
-) =>
-    Object.entries(getHeadersMap(visualization)).find(
-        ([, value]) => value === headerName
-    )?.[0]
+import type { SavedVisualization } from '@types'
 
 export const getSaveableVisualization = (
     vis: SavedVisualization
 ): SavedVisualization => {
-    const visualization = { ...vis }
-
-    visualization.columns = removeNonPersistedDimensionProperties(
-        visualization.columns
-    )
-    visualization.filters = removeNonPersistedDimensionProperties(
-        visualization.filters
-    )
-    visualization.rows = removeNonPersistedDimensionProperties(
-        visualization.rows
-    )
-
-    // Use the first sorting item only and format for saving
-    const sorting = vis.sorting?.length
-        ? [
-              {
-                  dimension:
-                      getDimensionIdFromHeaderName(
-                          vis.sorting[0].dimension,
-                          vis
-                      ) || vis.sorting[0].dimension,
-                  direction: vis.sorting[0].direction
-                      ? (vis.sorting[0].direction.toUpperCase() as SortDirection)
-                      : 'ASC',
-              },
-          ]
-        : undefined
-
     const result: Partial<SavedVisualization> = {
-        ...visualization,
-        sorting,
+        ...vis,
+        columns: removeNonPersistedDimensionProperties(vis.columns),
+        rows: removeNonPersistedDimensionProperties(vis.rows),
+        filters: removeNonPersistedDimensionProperties(vis.filters),
     }
     // Remove legacy flag when saving — a legacy-loaded vis is re-saved in the new format.
     delete result.legacy

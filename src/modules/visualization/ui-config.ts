@@ -7,6 +7,7 @@ import {
 } from '@modules/dimension/ids'
 import { toAppLocalDimensions } from '@modules/dimension/translation'
 import { getRepetitionsFromVisualisation } from '@modules/repetitions'
+import { getVisUiConfigSorting } from '@modules/visualization/sorting'
 import { getTetId } from '@modules/visualization/tracked-entity-type'
 import type {
     CurrentVisualization,
@@ -76,9 +77,10 @@ export const getVisualizationUiConfig = (
         conditionsByDimension: getConditionsFromVisualization(vis),
         repetitionsByDimension: getRepetitionsFromVisualisation(vis),
         options: { ...baseOptions, ...extractOptions(vis) },
-        /* Always emit the key, even when absent: the result is merged into the
-         * existing visUiConfig, so omitting it would carry the previously
-         * loaded visualization's cell value into this one. */
+        /* Always emit the cellValue and sorting keys, even when absent: the
+         * result is merged into the existing visUiConfig, so omitting one would
+         * carry the previously loaded visualization's value into this one. */
+        sorting: getVisUiConfigSorting(raw.sorting, raw),
         cellValue: vis.value?.id
             ? {
                   id: getCellValueMetadataItemOrThrow(
