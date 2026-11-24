@@ -105,6 +105,9 @@ export const VisualizationTypeSelector: FC = () => {
 
     const visualizationType = useAppSelector(getVisUiConfigVisualizationType)
     const layout = useAppSelector(getVisUiConfigLayout)
+    const itemsByDimension = useAppSelector(
+        (state) => state.visUiConfig.itemsByDimension
+    )
 
     const [listIsOpen, setListIsOpen] = useState(false)
     const [pendingConversion, setPendingConversion] =
@@ -128,6 +131,7 @@ export const VisualizationTypeSelector: FC = () => {
         const { convertedLayout, invalidDimensionIds } =
             convertLayoutForVisType({
                 layout,
+                itemsByDimension,
                 targetVisType: nextVisType,
                 getDimension: metadataStore.getDimensionMetadataItemOrThrow,
             })
