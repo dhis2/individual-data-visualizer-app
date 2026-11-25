@@ -1,6 +1,10 @@
 import { useAppDispatch, useAppSelector, useAppStore } from '@hooks'
 import { getNavigationStateFromLocation, history } from '@modules/history'
-import { setNavigationState } from '@store/navigation-slice'
+import {
+    getPendingNavigation,
+    setNavigationState,
+} from '@store/navigation-slice'
+import { tRequestNavigation } from '@store/thunks'
 import type { Location } from 'history'
 import queryString from 'query-string'
 import { useEffect, useRef } from 'react'
@@ -11,6 +15,9 @@ export const StoreToLocationSyncer = () => {
     const dispatch = useAppDispatch()
     const { visualizationId, interpretationId } = useAppSelector(
         (state) => state.navigation
+    )
+    const hasPendingNavigation = useAppSelector(
+        (state) => getPendingNavigation(state) !== null
     )
 
     // Sync URL → Redux
@@ -38,17 +45,15 @@ export const StoreToLocationSyncer = () => {
 
             const locationState = getNavigationStateFromLocation()
             const { navigation: storeState } = store.getState()
-            const hasChanges =
-                locationState.visualizationId !== storeState.visualizationId ||
+            /* The app's own navigation updates the store before the URL, so
+             * only browser back/forward and a typed URL get here with another
+             * visualization. */
+            if (locationState.visualizationId !== storeState.visualizationId) {
+                dispatch(tRequestNavigation(locationState))
+            } else if (
                 locationState.interpretationId !== storeState.interpretationId
-
-            if (hasChanges) {
-                dispatch(
-                    setNavigationState({
-                        visualizationId: locationState.visualizationId,
-                        interpretationId: locationState.interpretationId,
-                    })
-                )
+            ) {
+                dispatch(setNavigationState(locationState))
             }
         }
 
@@ -65,7 +70,11 @@ export const StoreToLocationSyncer = () => {
 
     // Sync Redux → URL
     useEffect(() => {
+        /* Browser back/forward changes the URL before the user confirms
+         * leaving, so the URL is left alone until then. Cancelling puts it
+         * back here. */
         if (
+            hasPendingNavigation ||
             !visualizationId ||
             // Treat `/` and `/new` the same
             (visualizationId === 'new' && history.location.pathname === '/')
@@ -85,7 +94,7 @@ export const StoreToLocationSyncer = () => {
         if (currentPath !== newPath) {
             history.push(newPath)
         }
-    }, [visualizationId, interpretationId])
+    }, [visualizationId, interpretationId, hasPendingNavigation])
 
     return null
 }

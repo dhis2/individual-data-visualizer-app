@@ -1,5 +1,6 @@
 import {
     expectStartScreenToBeVisible,
+    expectVisTitleToEqual,
     openVisByName,
     removeChip,
 } from '../helpers'
@@ -20,5 +21,24 @@ describe('leaving a visualization with changes', () => {
         cy.getByDataTest('discard-changes-modal-confirm').click()
 
         expectStartScreenToBeVisible()
+    })
+
+    it('goes back when the user confirms going back in the browser', () => {
+        cy.go('back')
+
+        cy.getByDataTest('discard-changes-modal-confirm').click()
+
+        expectStartScreenToBeVisible()
+    })
+
+    it('puts the visualization back when the user cancels going back in the browser', () => {
+        cy.location('hash').then((visualizationHash) => {
+            cy.go('back')
+
+            cy.getByDataTest('discard-changes-modal-cancel').click()
+
+            cy.location('hash').should('equal', visualizationHash)
+            expectVisTitleToEqual(VISUALIZATION_NAME)
+        })
     })
 })
