@@ -29,6 +29,8 @@ The page will reload if you make edits. You will also see any lint errors in the
 
 Launches the test runner and runs all available unit tests found in `/src` using vitest. Using `pnpm test:watch` will run the tests in watch mode.
 
+The tests load the translations generated in `src/locales`, so that plural forms work. `pnpm start` and `pnpm build` generate them; on a fresh clone, or after changing `i18n/en.pot`, run `pnpm d2-app-scripts i18n generate` first.
+
 ### `pnpm build`
 
 Builds the app for production to the `build` folder. It correctly bundles React in production mode and optimizes the build for the best performance.
