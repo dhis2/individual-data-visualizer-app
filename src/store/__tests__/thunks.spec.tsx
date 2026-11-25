@@ -4,10 +4,16 @@ import eventPivotTableAttributeValue from '@modules/visualization/__fixtures__/r
 import { getLastUsedVisualizationTypeFromLocalStorage } from '@modules/visualization/local-storage'
 import { getCurrentVis } from '@store/current-vis-slice'
 import { getVisualizationLoadError } from '@store/loader-slice'
+import {
+    getPendingNavigation,
+    setNavigationState,
+} from '@store/navigation-slice'
 import { getSavedVis } from '@store/saved-vis-slice'
 import {
     tClearVisualization,
+    tConfirmPendingNavigation,
     tLoadSavedVisualization,
+    tRequestNavigation,
     tSetCurrentVisSorting,
     tUpdateCurrentVisFromVisUiConfig,
 } from '@store/thunks'
@@ -22,9 +28,14 @@ import {
     renderHookWithAppWrapper,
     type MockOptions,
 } from '@test-utils/app-wrapper'
-import type { AppCachedData, CurrentVisualization, RootState } from '@types'
+import type {
+    AppCachedData,
+    AppDispatch,
+    CurrentVisualization,
+    RootState,
+} from '@types'
 import deepmerge from 'deepmerge'
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 
 const stage1 = {
     id: 's1',
@@ -370,5 +381,70 @@ describe('tLoadSavedVisualization', () => {
             type: 'unknown',
             message: 'An unknown error occurred - Server Error (500)',
         })
+    })
+})
+
+describe('tRequestNavigation', () => {
+    const renderWithSavedLineList = async () => {
+        const getVisualization = vi.fn(() => lineListWithoutSort)
+        const { store } = await renderHookWithAppWrapper(() => null, {
+            queryData: { eventVisualizations: getVisualization },
+        } as unknown as MockOptions)
+        await store.dispatch(tLoadSavedVisualization({ id: 'TIuOzZ0ID0V' }))
+        store.dispatch(setNavigationState({ visualizationId: 'TIuOzZ0ID0V' }))
+
+        return { store, getVisualization }
+    }
+
+    const editVisualization = (store: { dispatch: AppDispatch }) =>
+        store.dispatch(
+            tSetCurrentVisSorting({ dimension: 'ouname', direction: 'ASC' })
+        )
+
+    it('navigates right away when there are no unsaved changes', async () => {
+        const { store } = await renderWithSavedLineList()
+
+        store.dispatch(tRequestNavigation({ visualizationId: 'new' }))
+
+        expect(store.getState().navigation.visualizationId).toBe('new')
+        expect(getPendingNavigation(store.getState())).toBeNull()
+    })
+
+    it('waits for confirmation when there are unsaved changes', async () => {
+        const { store } = await renderWithSavedLineList()
+        editVisualization(store)
+
+        store.dispatch(tRequestNavigation({ visualizationId: 'new' }))
+
+        expect(store.getState().navigation.visualizationId).toBe('TIuOzZ0ID0V')
+        expect(getPendingNavigation(store.getState())).toEqual({
+            visualizationId: 'new',
+        })
+    })
+
+    it('navigates once the user confirms', async () => {
+        const { store } = await renderWithSavedLineList()
+        editVisualization(store)
+        store.dispatch(tRequestNavigation({ visualizationId: 'new' }))
+
+        store.dispatch(tConfirmPendingNavigation())
+
+        expect(store.getState().navigation.visualizationId).toBe('new')
+        expect(getPendingNavigation(store.getState())).toBeNull()
+    })
+
+    it('reloads the visualization that is already open', async () => {
+        const { store, getVisualization } = await renderWithSavedLineList()
+        editVisualization(store)
+        getVisualization.mockClear()
+
+        store.dispatch(tRequestNavigation({ visualizationId: 'TIuOzZ0ID0V' }))
+        await store.dispatch(tConfirmPendingNavigation())
+
+        await vi.waitFor(() => expect(getVisualization).toHaveBeenCalledOnce())
+        await vi.waitFor(() =>
+            expect(getCurrentVis(store.getState()).sorting ?? []).toEqual([])
+        )
+        expect(store.getState().navigation.visualizationId).toBe('TIuOzZ0ID0V')
     })
 })

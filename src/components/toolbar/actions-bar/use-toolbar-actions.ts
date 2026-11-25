@@ -20,7 +20,7 @@ import { getVisualizationState } from '@modules/visualization/state'
 import { getCurrentVis } from '@store/current-vis-slice'
 import { setNavigationState } from '@store/navigation-slice'
 import { getSavedVis, setSavedVisNameDescription } from '@store/saved-vis-slice'
-import { tClearVisualization, tLoadSavedVisualization } from '@store/thunks'
+import { tLoadSavedVisualization, tRequestNavigation } from '@store/thunks'
 import type { CurrentVisualization, SavedVisualization } from '@types'
 import { useCallback, useMemo, useState } from 'react'
 
@@ -124,27 +124,13 @@ export const useToolbarActions = () => {
     )
 
     const onNew = useCallback(
-        () => dispatch(setNavigationState({ visualizationId: 'new' })),
+        () => dispatch(tRequestNavigation({ visualizationId: 'new' })),
         [dispatch]
     )
 
     const onOpen = useCallback(
-        (id: string) => {
-            if (
-                isCurrentVisualizationPersisted(currentVis) &&
-                currentVis.id === id
-            ) {
-                /* Cleared first, so the canvas starts over as for another
-                 * visualization, without unsaved changes or the page size */
-                dispatch(tClearVisualization())
-                dispatch(
-                    tLoadSavedVisualization({ id, updateStatistics: false })
-                )
-            } else {
-                dispatch(setNavigationState({ visualizationId: id }))
-            }
-        },
-        [dispatch, currentVis]
+        (id: string) => dispatch(tRequestNavigation({ visualizationId: id })),
+        [dispatch]
     )
 
     // Existing visualization
