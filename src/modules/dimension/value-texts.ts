@@ -46,4 +46,5 @@ export const getDimensionValueTexts = ({
               dimension,
               formatValueOptions,
               metadataItems,
+              locale,
           })
