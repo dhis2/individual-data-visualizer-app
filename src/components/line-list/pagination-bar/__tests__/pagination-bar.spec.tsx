@@ -1,13 +1,12 @@
 import { PaginationBar } from '@components/line-list/pagination-bar/pagination-bar'
 import { ScrollBox } from '@components/line-list/scroll-box'
 import type { LineListPager } from '@components/line-list/types'
-import i18n from '@dhis2/d2-i18n'
 import { createMetadataStoreStub } from '@test-utils/metadata-store-stub'
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { CurrentVisualization } from '@types'
 import type { ComponentProps } from 'react'
-import { beforeAll, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 vi.mock(
     '@components/app-wrapper/metadata-provider/metadata-provider',
@@ -84,12 +83,6 @@ const previousButton = () => screen.getByTestId('pagination-previous')
 const nextButton = () => screen.getByTestId('pagination-next')
 
 describe('PaginationBar', () => {
-    beforeAll(() => {
-        i18n.addResourceBundle('en', 'translation', {
-            '{{- formattedCount}} event_plural': '{{- formattedCount}} events',
-        })
-    })
-
     describe('display', () => {
         it('shows no count without totals on a page of many', () => {
             renderBar()

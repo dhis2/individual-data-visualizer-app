@@ -1,9 +1,15 @@
+import i18n from '@dhis2/d2-i18n'
 import { configure } from '@testing-library/dom'
 import * as matchers from '@testing-library/jest-dom/matchers'
 import { cleanup } from '@testing-library/react'
 import ResizeObserver from 'resize-observer-polyfill'
 import { expect, afterEach, beforeEach } from 'vitest'
 import 'vitest-canvas-mock'
+import './src/locales/index.js'
+
+/* The generated locales register under this namespace, which the app adapter
+ * selects when the app starts. */
+i18n.setDefaultNamespace('default')
 
 expect.extend(matchers)
 configure({

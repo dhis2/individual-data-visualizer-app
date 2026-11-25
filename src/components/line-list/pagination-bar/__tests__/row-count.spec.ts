@@ -1,8 +1,7 @@
 import { getRowCountText } from '@components/line-list/pagination-bar/row-count'
-import i18n from '@dhis2/d2-i18n'
 import { MetadataStore } from '@modules/metadata/store'
 import type { CurrentVisualization, MetadataInputMap } from '@types'
-import { beforeAll, describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
 const PROGRAM_ID = 'prg1'
 const TET_ID = 'tet1'
@@ -36,18 +35,6 @@ const buildVis = (
     }) as CurrentVisualization
 
 describe('getRowCountText', () => {
-    /* Unit tests don't load the generated locales, which hold the plural
-     * forms, so register the English ones from i18n/en.pot here. */
-    beforeAll(() => {
-        i18n.addResourceBundle('en', 'translation', {
-            '{{- formattedCount}} event_plural': '{{- formattedCount}} events',
-            '{{- formattedCount}} enrollment_plural':
-                '{{- formattedCount}} enrollments',
-            '{{- formattedCount}} tracked entity_plural':
-                '{{- formattedCount}} tracked entities',
-        })
-    })
-
     describe('events', () => {
         it('uses the singular for one', () => {
             expect(getRowCountText(1, buildVis(), buildStore())).toBe('1 event')
