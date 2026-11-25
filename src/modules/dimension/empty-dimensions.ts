@@ -15,15 +15,11 @@ export const getEmptyPeriodAndOrgUnitDimensionIds = ({
 }: {
     layout: Layout
     itemsByDimension: Record<string, string[] | undefined>
-    getDimension: (
-        id: string
-    ) => Partial<Pick<DimensionMetadataItem, 'dimensionType'>> | undefined
+    getDimension: (id: string) => Pick<DimensionMetadataItem, 'dimensionType'>
 }): string[] =>
-    [...layout.columns, ...layout.rows].filter((id) => {
-        const dimensionType = getDimension(id)?.dimensionType
-        return (
-            dimensionType !== undefined &&
-            DIMENSION_TYPES_REQUIRING_ITEMS.has(dimensionType) &&
-            !itemsByDimension[id]?.length
-        )
-    })
+    [...layout.columns, ...layout.rows].filter(
+        (id) =>
+            DIMENSION_TYPES_REQUIRING_ITEMS.has(
+                getDimension(id).dimensionType
+            ) && !itemsByDimension[id]?.length
+    )

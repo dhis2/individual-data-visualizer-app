@@ -230,7 +230,7 @@ export const getLayoutSelectionTooltipConfig = ({
         getEmptyPeriodAndOrgUnitDimensionIds({
             layout,
             itemsByDimension,
-            getDimension: metadataStore.getDimensionMetadataItem,
+            getDimension: metadataStore.getDimensionMetadataItemOrThrow,
         }).length
     ) {
         return {
@@ -243,8 +243,8 @@ export const getLayoutSelectionTooltipConfig = ({
     const hasDimensionWithItems = (dimensionType: DimensionType): boolean =>
         layoutDimensionIds.some(
             (dimensionId) =>
-                metadataStore.getDimensionMetadataItem(dimensionId)
-                    ?.dimensionType === dimensionType &&
+                metadataStore.getDimensionMetadataItemOrThrow(dimensionId)
+                    .dimensionType === dimensionType &&
                 Boolean(itemsByDimension[dimensionId]?.length)
         )
 
@@ -308,16 +308,16 @@ export const getOutputTypeTooltipConfig = ({
     const dimensionTypeCount = (dimensionType: string): number =>
         layoutDimensionIds.filter(
             (dimensionId) =>
-                metadataStore.getDimensionMetadataItem(dimensionId)
-                    ?.dimensionType === dimensionType
+                metadataStore.getDimensionMetadataItemOrThrow(dimensionId)
+                    .dimensionType === dimensionType
         ).length
 
     const tetIdsInLayout = new Set(
         layoutDimensionIds
             .map(
                 (dimensionId) =>
-                    metadataStore.getDimensionMetadataItem(dimensionId)
-                        ?.trackedEntityTypeId
+                    metadataStore.getDimensionMetadataItemOrThrow(dimensionId)
+                        .trackedEntityTypeId
             )
             .filter(Boolean)
     )
@@ -341,7 +341,7 @@ export const getOutputTypeTooltipConfig = ({
     const hasMultipleProgramsSelected = selectedProgramIds.size > 1
     const hasEventProgramSelected = [...selectedProgramIds].some((programId) =>
         isDataSourceProgramWithoutRegistration(
-            metadataStore.getProgramMetadataItem(programId)
+            metadataStore.getProgramMetadataItemOrThrow(programId)
         )
     )
     switch (outputType) {

@@ -146,8 +146,8 @@ export const resolveDimensionTetId = (
     }
     if (dim.programId) {
         return (
-            metadataStore.getProgramMetadataItem(dim.programId)
-                ?.trackedEntityType?.id ?? null
+            metadataStore.getProgramMetadataItemOrThrow(dim.programId)
+                .trackedEntityType?.id ?? null
         )
     }
     return null

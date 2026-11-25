@@ -94,7 +94,7 @@ export const useVisTypeConversion = () => {
                 (id) => metadataStore.getDimensionMetadataItemOrThrow(id).name
             ),
             defaultItemNames: defaultItemIds.map(
-                (id) => metadataStore.getMetadataItem(id)?.name ?? id
+                (id) => metadataStore.getMetadataItemOrThrow(id).name
             ),
         })
     }
