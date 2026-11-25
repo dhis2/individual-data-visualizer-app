@@ -20,13 +20,6 @@ export const getItemMetadataIds = (itemIds: string[]): string[] => {
     return Array.from(ids)
 }
 
-const getNameList = (
-    ids: string[],
-    label: string,
-    metadataItems: ItemMetadataItems
-): string =>
-    `${label}: ${ids.map((id) => metadataItems[id]?.name ?? id).join(', ')}`
-
 /* Org unit levels and groups are collapsed into one "Levels: a, b" entry each,
  * rather than listed alongside the individually selected org units. */
 export const getItemDisplayNames = ({
@@ -39,6 +32,9 @@ export const getItemDisplayNames = ({
     locale: string
 }): string[] => {
     const formatStartEndDate = getStartEndDateFormatter(locale)
+    const listFormatter = new Intl.ListFormat(locale, { style: 'narrow' })
+    const getNameList = (ids: string[], label: string) =>
+        `${label}: ${listFormatter.format(ids.map((id) => metadataItems[id]?.name ?? id))}`
     const levelIds: string[] = []
     const groupIds: string[] = []
     const displayNames: string[] = []
@@ -59,14 +55,10 @@ export const getItemDisplayNames = ({
     }
 
     if (levelIds.length > 0) {
-        displayNames.push(
-            getNameList(levelIds, i18n.t('Levels'), metadataItems)
-        )
+        displayNames.push(getNameList(levelIds, i18n.t('Levels')))
     }
     if (groupIds.length > 0) {
-        displayNames.push(
-            getNameList(groupIds, i18n.t('Groups'), metadataItems)
-        )
+        displayNames.push(getNameList(groupIds, i18n.t('Groups')))
     }
 
     return displayNames

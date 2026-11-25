@@ -203,9 +203,9 @@ describe('ConditionsTabContent — grouping', () => {
         expect(
             screen.getByRole('radio', { name: /^Weight legends/ })
         ).toBeInTheDocument()
-        expect(screen.getByText('Low, High')).toBeInTheDocument()
+        expect(screen.getByText('Low and High')).toBeInTheDocument()
         expect(
-            screen.getByText('0 - 10, 10 - 20, 20 - 30 and 1 more')
+            screen.getByText('0 - 10, 10 - 20, 20 - 30, and 1 more')
         ).toBeInTheDocument()
     })
 
@@ -217,7 +217,7 @@ describe('ConditionsTabContent — grouping', () => {
             dataElementsWithLegendSets([weightLegendSet])
         )
 
-        await user.click(await screen.findByText('Low, High'))
+        await user.click(await screen.findByText('Low and High'))
 
         expect(
             getVisUiConfigConditionsByDimension(

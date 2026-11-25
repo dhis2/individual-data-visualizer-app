@@ -141,6 +141,7 @@ describe('transformHeaders', () => {
 })
 
 describe('formatCellValue', () => {
+    const listFormatter = new Intl.ListFormat('en', { style: 'narrow' })
     type FormatCellValueParams = Parameters<typeof formatCellValue>[0]
     type FormatCellValueHeader = FormatCellValueParams['header']
     type FormatCellValueMetaDataItems = FormatCellValueParams['metaDataItems']
@@ -173,6 +174,7 @@ describe('formatCellValue', () => {
             visualization,
             metaDataItems,
             isUndefined: false,
+            listFormatter,
         }).formattedValue
 
     it('resolves an option set value to its option name', () => {
@@ -231,6 +233,7 @@ describe('formatCellValue', () => {
                 visualization,
                 metaDataItems: {},
                 isUndefined: false,
+                listFormatter,
             })
         ).toEqual({ value: 'Yes', formattedValue: 'Yes' })
     })
@@ -243,6 +246,7 @@ describe('formatCellValue', () => {
                 visualization,
                 metaDataItems: {},
                 isUndefined: true,
+                listFormatter,
             }).formattedValue
         ).toBe('')
     })
@@ -257,6 +261,7 @@ describe('formatCellValue', () => {
                     legend1: { name: '60 - 70' },
                 } as unknown as FormatCellValueMetaDataItems,
                 isUndefined: false,
+                listFormatter,
             }).formattedValue
         ).toBe('60 - 70')
     })
@@ -268,6 +273,7 @@ describe('formatCellValue', () => {
             visualization,
             metaDataItems: {},
             isUndefined: false,
+            listFormatter,
         })
 
     it.each(['createdbydisplayname', 'lastupdatedbydisplayname'])(
@@ -302,6 +308,7 @@ describe('formatCellValue', () => {
             visualization,
             metaDataItems: {},
             isUndefined: false,
+            listFormatter,
         }).formattedValue
 
     it.each([
@@ -367,6 +374,7 @@ describe('transformLineListData', () => {
             analyticsData,
             visualization: visualizationWithLegend,
             metadataStore: createMetadataStoreStub(),
+            locale: 'en',
         })
 
         expect(result.headers).toEqual([
@@ -403,6 +411,7 @@ describe('transformLineListData', () => {
             analyticsData,
             visualization: visualizationWithLegend,
             metadataStore: createMetadataStoreStub(),
+            locale: 'en',
         })
 
         expect(result.legendSets).toEqual([legendSet])
@@ -413,6 +422,7 @@ describe('transformLineListData', () => {
             analyticsData,
             visualization,
             metadataStore: createMetadataStoreStub(),
+            locale: 'en',
         })
 
         expect(result.legendSets).toEqual([])

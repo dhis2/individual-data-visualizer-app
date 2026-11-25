@@ -33,6 +33,7 @@ export const getVisualizationFilterText = ({
         [...layout.columns, ...layout.rows, ...layout.filters],
         metadataStore
     )
+    const listFormatter = new Intl.ListFormat(locale, { style: 'narrow' })
 
     return layout.filters
         .flatMap((dimensionId) => {
@@ -59,7 +60,7 @@ export const getVisualizationFilterText = ({
 
             return valueTexts.length
                 ? [
-                      `${getDimensionLabel(dimension.name, dimension.suffix)}: ${valueTexts.join(', ')}`,
+                      `${getDimensionLabel(dimension.name, dimension.suffix)}: ${listFormatter.format(valueTexts)}`,
                   ]
                 : []
         })

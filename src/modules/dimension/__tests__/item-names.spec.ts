@@ -61,6 +61,16 @@ describe('getItemDisplayNames', () => {
         ])
     })
 
+    it('lists the levels the way the locale writes a list', () => {
+        expect(
+            getItemDisplayNames({
+                itemIds: ['LEVEL-lvl1', 'LEVEL-lvl2'],
+                metadataItems: named({ lvl1: '国家', lvl2: '地区' }),
+                locale: 'zh',
+            })
+        ).toEqual(['Levels: 国家、地区'])
+    })
+
     it('formats a custom start and end date', () => {
         expect(
             getItemDisplayNames({
