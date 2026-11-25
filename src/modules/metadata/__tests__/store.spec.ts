@@ -458,12 +458,6 @@ describe('MetadataStore', () => {
               ],
               "programType": "WITHOUT_REGISTRATION",
             },
-            "enrollmentDate": {
-              "dimensionId": "enrollmentDate",
-              "dimensionType": "PERIOD",
-              "id": "enrollmentDate",
-              "name": "Enrollment date",
-            },
             "gWxh7DiRmG7": {
               "dimensionId": "gWxh7DiRmG7",
               "dimensionType": "PROGRAM_INDICATOR",
@@ -479,12 +473,6 @@ describe('MetadataStore', () => {
               "name": "BMI female under 5 y",
               "programId": "eBAyeGv0exc",
               "programStageId": "Zj7UnCAulEk",
-            },
-            "incidentDate": {
-              "dimensionId": "incidentDate",
-              "dimensionType": "PERIOD",
-              "id": "incidentDate",
-              "name": "Date of Discharge",
             },
             "lastUpdated": {
               "dimensionId": "lastUpdated",
@@ -512,12 +500,6 @@ describe('MetadataStore', () => {
               "name": "Average age of female discharges",
               "programId": "eBAyeGv0exc",
               "programStageId": "Zj7UnCAulEk",
-            },
-            "scheduledDate": {
-              "dimensionId": "scheduledDate",
-              "dimensionType": "PERIOD",
-              "id": "scheduledDate",
-              "name": "Scheduled date",
             },
             "tUdBD1JDxpn": {
               "dimensionId": "tUdBD1JDxpn",
@@ -558,8 +540,8 @@ describe('MetadataStore', () => {
 
         // Length grows and decreases
         expect(snapshot0Keys.size).toBe(56)
-        expect(snapshot1Keys.size).toBe(85)
-        expect(snapshot2Keys.size).toBe(71)
+        expect(snapshot1Keys.size).toBe(82)
+        expect(snapshot2Keys.size).toBe(68)
 
         // Initial metadata is always included
         expect(snapshot0Keys.isSubsetOf(snapshot1Keys)).toBe(true)
@@ -605,12 +587,8 @@ describe('MetadataStore', () => {
             )
         ).toMatchInlineSnapshot(`
           [
-            "enrollmentDate",
-            "incidentDate",
-            "scheduledDate",
             "eBAyeGv0exc",
             "Zj7UnCAulEk",
-            "Zj7UnCAulEk.eventDate",
             "Zj7UnCAulEk.eMyVanycQSC",
             "Zj7UnCAulEk.qrur9Dvnyt5",
             "Zj7UnCAulEk.K6uUAvq500H",
@@ -618,6 +596,7 @@ describe('MetadataStore', () => {
             "Zj7UnCAulEk.oZg33kd9taw",
             "Zj7UnCAulEk.fWIAEtYVEGk",
             "Zj7UnCAulEk.ou",
+            "Zj7UnCAulEk.eventDate",
             "Zj7UnCAulEk.scheduledDate",
             "Zj7UnCAulEk.eventStatus",
           ]

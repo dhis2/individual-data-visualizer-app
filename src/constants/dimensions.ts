@@ -29,6 +29,8 @@ export const DIMENSION_IDS = [
 export const DIMENSION_ID_ORGUNIT: DimensionId = 'ou'
 
 export const TIME_DIMENSION_IDS = [
+    'completed',
+    'created',
     'enrollmentDate',
     'eventDate',
     'incidentDate',

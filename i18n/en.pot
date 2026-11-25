@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-24T13:21:20.538Z\n"
-"PO-Revision-Date: 2026-11-24T13:21:20.539Z\n"
+"POT-Creation-Date: 2026-11-25T09:52:25.831Z\n"
+"PO-Revision-Date: 2026-11-25T09:52:25.831Z\n"
 
 msgid "Network error"
 msgstr "Network error"
@@ -1064,9 +1064,6 @@ msgstr "Levels"
 
 msgid "Groups"
 msgstr "Groups"
-
-msgid "Enrollment date"
-msgstr "Enrollment date"
 
 msgid "Restricted access"
 msgstr "Restricted access"
