@@ -33,14 +33,14 @@ export const getDimensionValueTexts = ({
     conditions,
     metadataItems,
     formatValueOptions,
-    formatStartEndDate,
+    locale,
 }: DimensionValues & {
     metadataItems: Record<string, MetadataItem | undefined>
     formatValueOptions: FormatValueOptions
-    formatStartEndDate: (startEndDate: string) => string
+    locale: string
 }): string[] =>
     isItemBasedDimensionType(dimension.dimensionType)
-        ? getItemDisplayNames({ itemIds, metadataItems, formatStartEndDate })
+        ? getItemDisplayNames({ itemIds, metadataItems, locale })
         : getConditionsTexts({
               conditions,
               dimension,

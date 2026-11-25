@@ -4,7 +4,6 @@ import {
     getDimensionValueMetadataIds,
     getDimensionValueTexts,
 } from '@modules/dimension/value-texts'
-import { getStartEndDateFormatter } from '@modules/utils/dates'
 import { getVisualizationUiConfig } from '@modules/visualization/ui-config'
 import type { CurrentVisualization, MetadataStore } from '@types'
 
@@ -34,7 +33,6 @@ export const getVisualizationFilterText = ({
         [...layout.columns, ...layout.rows, ...layout.filters],
         metadataStore
     )
-    const formatStartEndDate = getStartEndDateFormatter(locale)
 
     return layout.filters
         .flatMap((dimensionId) => {
@@ -56,7 +54,7 @@ export const getVisualizationFilterText = ({
                 formatValueOptions: {
                     digitGroupSeparator: visualization.digitGroupSeparator,
                 },
-                formatStartEndDate,
+                locale,
             })
 
             return valueTexts.length

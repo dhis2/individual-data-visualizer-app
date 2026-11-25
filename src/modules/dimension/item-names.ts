@@ -1,7 +1,7 @@
 import { ouIdHelper } from '@dhis2/analytics'
 import i18n from '@dhis2/d2-i18n'
 import { extractPlainDimensionId } from '@modules/dimension/ids'
-import { isStartEndDate } from '@modules/utils/dates'
+import { getStartEndDateFormatter, isStartEndDate } from '@modules/utils/dates'
 import type { MetadataItem } from '@types'
 
 type ItemMetadataItems = Record<string, MetadataItem | undefined>
@@ -32,12 +32,13 @@ const getNameList = (
 export const getItemDisplayNames = ({
     itemIds,
     metadataItems,
-    formatStartEndDate,
+    locale,
 }: {
     itemIds: string[]
     metadataItems: ItemMetadataItems
-    formatStartEndDate: (startEndDate: string) => string
+    locale: string
 }): string[] => {
+    const formatStartEndDate = getStartEndDateFormatter(locale)
     const levelIds: string[] = []
     const groupIds: string[] = []
     const displayNames: string[] = []

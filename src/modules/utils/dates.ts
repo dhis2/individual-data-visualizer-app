@@ -1,6 +1,3 @@
-import { useCurrentUser } from '@components/app-wrapper/cached-data/cached-data-provider'
-import { useCallback, useMemo } from 'react'
-
 export const getStartEndDate = (startEndDate: string): Array<string> => {
     const parts = startEndDate.split('_')
     return parts.length === 2 &&
@@ -13,11 +10,9 @@ export const getStartEndDate = (startEndDate: string): Array<string> => {
 export const isStartEndDate = (id: string): boolean =>
     getStartEndDate(id).length === 2
 
-type UseLocalizedStartEndDateFormatterResult = (startEndDate: string) => string
-
 export const getStartEndDateFormatter = (
     locale: string
-): UseLocalizedStartEndDateFormatterResult => {
+): ((startEndDate: string) => string) => {
     const formatter = new Intl.DateTimeFormat(locale, { dateStyle: 'long' })
 
     return (startEndDate) => {
@@ -28,18 +23,3 @@ export const getStartEndDateFormatter = (
             : ''
     }
 }
-
-export const useLocalizedStartEndDateFormatter =
-    (): UseLocalizedStartEndDateFormatterResult => {
-        const locale = useCurrentUser().settings.uiLocale
-
-        const formatter = useMemo(
-            () => getStartEndDateFormatter(locale),
-            [locale]
-        )
-
-        return useCallback(
-            (startEndDate) => formatter(startEndDate),
-            [formatter]
-        )
-    }
