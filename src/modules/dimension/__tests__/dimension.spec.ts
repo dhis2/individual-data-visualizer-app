@@ -17,22 +17,13 @@ import {
     parseCompoundDimensionId,
     resolveId,
 } from '@modules/dimension/ids'
-import {
-    isTimeDimensionId,
-    getTimeDimensions,
-    getTimeDimensionName,
-} from '@modules/dimension/time'
+import { isTimeDimensionId } from '@modules/dimension/time'
 import {
     transformDimensions,
     toAppLocalDimensions,
     toEventVisualizationDimensionId,
 } from '@modules/dimension/translation'
-import type {
-    DimensionArray,
-    DimensionMetadataItem,
-    Program,
-    ProgramStage,
-} from '@types'
+import type { DimensionArray, DimensionMetadataItem } from '@types'
 import { describe, it, expect } from 'vitest'
 
 describe('transformDimensions', () => {
@@ -112,89 +103,6 @@ describe('isTimeDimensionId', () => {
     it('returns false for non-time dimension ids', () => {
         expect(isTimeDimensionId('ou')).toBe(false)
         expect(isTimeDimensionId('eventStatus')).toBe(false)
-    })
-})
-
-describe('getTimeDimensions', () => {
-    it('returns time dimensions object', () => {
-        const result = getTimeDimensions()
-        expect(result).toMatchInlineSnapshot(`
-          {
-            "enrollmentDate": {
-              "defaultName": "Enrollment date",
-              "dimensionType": "PERIOD",
-              "formatType": "DATE",
-              "id": "enrollmentDate",
-              "nameParentProperty": "program",
-              "nameProperty": "displayEnrollmentDateLabel",
-            },
-            "eventDate": {
-              "defaultName": "Event date",
-              "dimensionType": "PERIOD",
-              "formatType": "DATE",
-              "id": "eventDate",
-              "nameParentProperty": "stage",
-              "nameProperty": "displayExecutionDateLabel",
-            },
-            "incidentDate": {
-              "defaultName": "Incident date",
-              "dimensionType": "PERIOD",
-              "formatType": "DATE",
-              "id": "incidentDate",
-              "nameParentProperty": "program",
-              "nameProperty": "displayIncidentDateLabel",
-            },
-            "scheduledDate": {
-              "defaultName": "Scheduled date",
-              "dimensionType": "PERIOD",
-              "formatType": "DATE",
-              "id": "scheduledDate",
-              "nameParentProperty": "stage",
-              "nameProperty": "displayDueDateLabel",
-            },
-          }
-        `)
-    })
-})
-
-describe('getTimeDimensionName', () => {
-    const mockProgram = {
-        displayEnrollmentDateLabel: 'Custom Enrollment Date',
-        displayIncidentDateLabel: 'Custom Incident Date',
-        programType: 'WITH_REGISTRATION',
-    } as unknown as Program
-    const mockStage = {
-        displayExecutionDateLabel: 'Custom Event Date',
-        displayDueDateLabel: 'Custom Due Date',
-    } as unknown as ProgramStage
-
-    it('returns default name when no program provided', () => {
-        const dimension = getTimeDimensions().eventDate
-        expect(getTimeDimensionName(dimension)).toBe('Event date')
-    })
-
-    it('returns program name for program parent property', () => {
-        const dimension = getTimeDimensions().enrollmentDate
-        expect(getTimeDimensionName(dimension, mockProgram)).toBe(
-            'Custom Enrollment Date'
-        )
-    })
-
-    it('returns stage name for stage parent property', () => {
-        const dimension = getTimeDimensions().eventDate
-        expect(getTimeDimensionName(dimension, mockProgram, mockStage)).toBe(
-            'Custom Event Date'
-        )
-    })
-
-    it('returns default name when custom name is not available', () => {
-        const dimension = getTimeDimensions().incidentDate
-        const programWithoutLabel = {
-            programType: 'WITH_REGISTRATION',
-        } as unknown as Program
-        expect(getTimeDimensionName(dimension, programWithoutLabel)).toBe(
-            'Incident date'
-        )
     })
 })
 
