@@ -13,11 +13,18 @@ const SOURCE_VISUALIZATION_ID = 't6SxiQdVPVs'
  * accepts only the header name as a sort. */
 const LAST_UPDATED_HEADER = 'Last updated on'
 
+/* A `cy.wait` for the first request after a page load gets only the 5s
+ * request timeout, too short for the app to start on a slow CI runner. Rows
+ * get the 30s command timeout, and once they show, the request has been received. */
+const waitForRows = () =>
+    cy.getByDataTest('table-row').should('have.length.greaterThan', 0)
+
 const openCopy = (name: string, overrides?: Record<string, unknown>) => {
     interceptLineListAnalytics()
     copyVisualization(SOURCE_VISUALIZATION_ID, name, overrides).then((id) =>
         cy.visit(`/#/${id}`)
     )
+    waitForRows()
 }
 
 describe('a saved line list sort', () => {
@@ -40,6 +47,7 @@ describe('a saved line list sort', () => {
 
         interceptLineListAnalytics()
         cy.reload()
+        waitForRows()
 
         expectColumnSort(LAST_UPDATED_HEADER, 'asc', 'lastupdated')
     })
