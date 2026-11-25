@@ -71,6 +71,6 @@ describe('getItemDisplayNames', () => {
                 metadataItems: {},
                 formatStartEndDate,
             })
-        ).toEqual(['January 1, 2023 - December 31, 2023'])
+        ).toEqual(['January 1\u2009–\u2009December 31, 2023'])
     })
 })

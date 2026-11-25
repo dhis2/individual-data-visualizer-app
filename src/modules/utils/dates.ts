@@ -20,10 +20,13 @@ export const getStartEndDateFormatter = (
 ): UseLocalizedStartEndDateFormatterResult => {
     const formatter = new Intl.DateTimeFormat(locale, { dateStyle: 'long' })
 
-    return (startEndDate) =>
-        getStartEndDate(startEndDate)
-            .map((dateStr: string) => formatter.format(new Date(dateStr)))
-            .join(' - ')
+    return (startEndDate) => {
+        const [startDate, endDate] = getStartEndDate(startEndDate)
+
+        return startDate && endDate
+            ? formatter.formatRange(new Date(startDate), new Date(endDate))
+            : ''
+    }
 }
 
 export const useLocalizedStartEndDateFormatter =
