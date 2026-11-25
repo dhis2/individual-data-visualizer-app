@@ -91,7 +91,7 @@ export const getDimensionLayoutBlockedMessage = (
 ): string | null => {
     switch (getDimensionBlockReason(input)) {
         case 'visType':
-            return i18n.t('Cannot be used in a {{visType}}.', {
+            return i18n.t('Cannot be used in a {{- visType}}.', {
                 visType: visTypeDisplayNames[input.visualizationType],
             })
         case 'crossTet':

@@ -44,7 +44,7 @@ export const FilteringSection: FC<FilteringSectionProps> = ({
     })
 
     const filterDisabledHelp = valueType
-        ? i18n.t('{{valueType}} type dimensions cannot be filtered.', {
+        ? i18n.t('{{- valueType}} type dimensions cannot be filtered.', {
               valueType: valueTypeDisplayNames[valueType],
           })
         : i18n.t('This dimension cannot be filtered.')

@@ -30,7 +30,7 @@ const useLegendsPreview = (): ((
                 remainingCount > 0
                     ? [
                           ...previewNames,
-                          i18n.t('{{count}} more', { count: remainingCount }),
+                          i18n.t('{{- count}} more', { count: remainingCount }),
                       ]
                     : previewNames
             )

@@ -37,7 +37,7 @@ export const ServerVersionGate: FC<{ children: ReactNode }> = ({
                 </p>
                 <p className={classes.description}>
                     {i18n.t(
-                        'This server is running version {{currentVersion}}. Individual Data Visualizer needs {{requiredVersion}} or later.',
+                        'This server is running version {{- currentVersion}}. Individual Data Visualizer needs {{- requiredVersion}} or later.',
                         {
                             currentVersion: serverVersion.full,
                             requiredVersion: `2.${MIN_MINOR}.${MIN_PATCH}`,
