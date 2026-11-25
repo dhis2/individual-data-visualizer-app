@@ -1,16 +1,6 @@
 import i18n from '@dhis2/d2-i18n'
 import type { CanvasErrorDisplay } from './canvas-error-display'
 
-/* Shown for E7121 and, from get-error-display, for an access error that names
- * no code at all: the same refusal as far as the user is concerned. */
-export const restrictedDataAccess = (): CanvasErrorDisplay => ({
-    icon: 'data',
-    title: i18n.t('Restricted access'),
-    description: i18n.t(
-        "You don't have access to the data in this visualization. Contact a system administrator."
-    ),
-})
-
 /* DHIS2 backend error codes and their user-facing screen. Each title names what
  * went wrong rather than reporting a generic failure, since reaching this table
  * means the code told us. Titles avoid asserting a cause the response does not
@@ -31,7 +21,13 @@ export const getBackendErrorCodeDisplay = (
                 ),
             }
         case 'E7121':
-            return restrictedDataAccess()
+            return {
+                icon: 'data',
+                title: i18n.t('Restricted access'),
+                description: i18n.t(
+                    "You don't have access to the data in this visualization. Contact a system administrator."
+                ),
+            }
         /* The user account carries a constraint on a dimension it can read no
          * items of, so this is about the account rather than the
          * visualization. */

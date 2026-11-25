@@ -69,6 +69,7 @@ describe('getErrorDisplay', () => {
         const display = getErrorDisplay(
             engineError({
                 type: 'access',
+                httpStatusCode: 409,
                 errorCodes: ['E7999', 'E7998'],
                 message: 'Two things were wrong with the request',
             })
@@ -80,11 +81,52 @@ describe('getErrorDisplay', () => {
         )
     })
 
-    it('maps an access error without a code to restricted access', () => {
-        const display = getErrorDisplay(engineError({ type: 'access' }))
+    it('maps a 401 to a retryable "Logged out" screen', () => {
+        const display = getErrorDisplay(
+            engineError({
+                type: 'access',
+                httpStatusCode: 401,
+                message: 'Unauthorized',
+            })
+        )
+
+        expect(display.title).toBe('Logged out')
+        expect(display.description).toContain('Log in again')
+        expect(display.retryable).toBe(true)
+    })
+
+    it('maps a 403 to a missing permission', () => {
+        const display = getErrorDisplay(
+            engineError({ type: 'access', httpStatusCode: 403 })
+        )
 
         expect(display.title).toBe('Restricted access')
+        expect(display.description).toContain("doesn't have permission")
         expect(display.retryable).toBeFalsy()
+    })
+
+    it('shows fixed copy for a 409 without a code', () => {
+        /* The engine fills in "Forbidden" when the body has no message. */
+        const display = getErrorDisplay(
+            engineError({
+                type: 'access',
+                httpStatusCode: 409,
+                message: 'Forbidden',
+            })
+        )
+
+        expect(display.title).toBe('Analytics request error')
+        expect(display.description).toBe(
+            'An unknown analytics request error occurred.'
+        )
+        expect(display.retryable).toBeFalsy()
+    })
+
+    it('maps an access error without a status code to the generic screen', () => {
+        const display = getErrorDisplay(engineError({ type: 'access' }))
+
+        expect(display.title).toBe('Something went wrong')
+        expect(display.retryable).toBe(true)
     })
 
     it('keeps a named code non-retryable by default', () => {
@@ -132,10 +174,7 @@ describe('getErrorDisplay', () => {
         expect(display.description).toContain('no longer part of its program')
     })
 
-    it('matches E7121 in the code table rather than as a bare access error', () => {
-        /* E7121 arrives as a 409, which the engine types 'access', and its copy
-         * matches the no-code access screen. Ordering the code lookup first is
-         * what keeps its case reachable. */
+    it('maps E7121 to the screen about the data in this visualization', () => {
         const display = getErrorDisplay(
             engineError({
                 type: 'access',
@@ -156,6 +195,7 @@ describe('getErrorDisplay', () => {
         const display = getErrorDisplay(
             engineError({
                 type: 'access',
+                httpStatusCode: 409,
                 errorCode: 'E7250',
                 message: 'Dimension is not a fully qualified: `abc.def`',
             })
