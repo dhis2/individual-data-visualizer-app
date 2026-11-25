@@ -33,20 +33,20 @@ const withoutResource = (resource: string): QueryData =>
     )
 
 const CachedDataSummary = () => {
-    const { currentUser, relativePeriodsNames } = useAppCachedData()
+    const { currentUser, relativePeriodsNames, locale } = useAppCachedData()
 
     return (
         <div data-test="summary">
-            {currentUser.username}: {relativePeriodsNames.LAST_YEAR}
+            {currentUser.username}: {relativePeriodsNames.LAST_YEAR} ({locale})
         </div>
     )
 }
 
-const renderProvider = (data: QueryData) =>
+const renderProvider = (data: QueryData, userInfo = meData) =>
     render(
         <ConfigProvider config={mockRuntimeConfig}>
             <CustomDataProvider data={data}>
-                <UserProvider userInfo={meData}>
+                <UserProvider userInfo={userInfo}>
                     <AppCachedDataProvider>
                         <CachedDataSummary />
                     </AppCachedDataProvider>
@@ -60,7 +60,18 @@ describe('AppCachedDataProvider', () => {
         renderProvider(serverData)
 
         expect(await screen.findByTestId('summary')).toHaveTextContent(
-            `${meData.username}: Last year`
+            `${meData.username}: Last year (en)`
+        )
+    })
+
+    it('provides the user locale in a form Intl accepts', async () => {
+        renderProvider(serverData, {
+            ...meData,
+            settings: { ...meData.settings, keyUiLocale: 'pt_BR' },
+        })
+
+        expect(await screen.findByTestId('summary')).toHaveTextContent(
+            '(pt-BR)'
         )
     })
 
@@ -85,7 +96,9 @@ describe('useAppCachedData', () => {
 
         expect(() =>
             render(
-                <CachedDataProvider data={{ relativePeriodsNames: {} }}>
+                <CachedDataProvider
+                    data={{ relativePeriodsNames: {}, locale: 'en' }}
+                >
                     <CachedDataSummary />
                 </CachedDataProvider>
             )

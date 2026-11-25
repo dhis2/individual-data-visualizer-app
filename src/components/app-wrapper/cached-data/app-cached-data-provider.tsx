@@ -3,6 +3,7 @@ import {
     useCachedData,
     type CachedData,
 } from '@components/app-wrapper/cached-data/cached-data-provider'
+import { toIntlLocale } from '@components/app-wrapper/cached-data/current-user'
 import { useRelativePeriodsNames } from '@dhis2/analytics'
 /* useDataQuery, not the RTK-query hooks: the Redux store is created from this
  * data, so it does not exist yet. */
@@ -89,6 +90,7 @@ export type TransformedAppCachedData = {
     rootOrgUnits: RootOrgUnitsData
     orgUnitLevels: OrgUnitLevelsData
     relativePeriodsNames: CachedData['relativePeriodsNames']
+    locale: CachedData['locale']
 }
 
 const toCurrentUserData = ({
@@ -117,8 +119,8 @@ const providerDataTransformation = (
     const transformedCurrentUser = {
         ...currentUser,
         settings: {
-            dbLocale: currentUser.settings?.keyDbLocale ?? 'en',
-            uiLocale: currentUser.settings?.keyUiLocale ?? 'en',
+            dbLocale: toIntlLocale(currentUser.settings?.keyDbLocale),
+            uiLocale: toIntlLocale(currentUser.settings?.keyUiLocale),
             displayProperty: currentUser.settings?.keyAnalysisDisplayProperty,
             displayNameProperty,
         },
@@ -145,6 +147,7 @@ const providerDataTransformation = (
         rootOrgUnits: transformedRootOrgUnits,
         orgUnitLevels: transformedOrgUnitLevels,
         relativePeriodsNames,
+        locale: transformedCurrentUser.settings.uiLocale,
     })
 }
 

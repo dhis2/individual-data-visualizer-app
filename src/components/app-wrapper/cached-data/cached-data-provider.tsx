@@ -4,6 +4,8 @@ import { createContext, useContext, type FC, type ReactNode } from 'react'
 
 export type CachedData = {
     relativePeriodsNames: Record<string, string>
+    /* The user's UI locale as a BCP 47 tag, for Intl */
+    locale: string
 }
 
 const CachedDataContext = createContext<CachedData | null>(null)
@@ -50,3 +52,5 @@ export const useCachedData = (): CachedData => {
 
     return cachedData
 }
+
+export const useUserLocale = (): CachedData['locale'] => useCachedData().locale

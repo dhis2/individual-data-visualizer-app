@@ -11,7 +11,7 @@ const PeriodName = () => (
     </div>
 )
 
-const data = { relativePeriodsNames: { LAST_YEAR: 'Last year' } }
+const data = { relativePeriodsNames: { LAST_YEAR: 'Last year' }, locale: 'en' }
 
 describe('CachedDataProvider', () => {
     it('provides the data to its children', () => {

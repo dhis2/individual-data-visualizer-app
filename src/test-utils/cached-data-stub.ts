@@ -6,6 +6,7 @@ import type { AppCachedData } from '@types'
  * it reads from. */
 export const stubPluginCachedData = (): PluginCachedData => ({
     relativePeriodsNames: getRelativePeriodsName(),
+    locale: 'en',
 })
 
 export const stubAppCachedData =

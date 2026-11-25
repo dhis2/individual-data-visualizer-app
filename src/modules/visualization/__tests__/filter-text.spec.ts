@@ -45,6 +45,7 @@ describe('getVisualizationFilterText', () => {
             getVisualizationFilterText({
                 visualization: buildVis([]),
                 metadataStore: buildStore(),
+                locale: 'en',
             })
         ).toBe('')
     })
@@ -75,6 +76,7 @@ describe('getVisualizationFilterText', () => {
             getVisualizationFilterText({
                 visualization: vis,
                 metadataStore: store,
+                locale: 'en',
             })
         ).toBe('Org unit: Sierra Leone, Bo')
     })
@@ -105,6 +107,7 @@ describe('getVisualizationFilterText', () => {
             getVisualizationFilterText({
                 visualization: vis,
                 metadataStore: store,
+                locale: 'en',
             })
         ).toBe('Org unit: Sierra Leone, Levels: District')
     })
@@ -136,6 +139,7 @@ describe('getVisualizationFilterText', () => {
         const text = getVisualizationFilterText({
             visualization: vis,
             metadataStore: store,
+            locale: 'en',
         })
 
         expect(text).toContain('Age:')
@@ -182,6 +186,7 @@ describe('getVisualizationFilterText', () => {
             getVisualizationFilterText({
                 visualization: vis,
                 metadataStore: store,
+                locale: 'en',
             })
         ).toBe('Org unit: Sierra Leone - Report date: This year')
     })
@@ -212,6 +217,7 @@ describe('getVisualizationFilterText', () => {
             getVisualizationFilterText({
                 visualization: vis,
                 metadataStore: store,
+                locale: 'en',
             })
         ).toBe('Enrollment org unit: Sierra Leone')
     })
@@ -267,6 +273,7 @@ describe('getVisualizationFilterText', () => {
             getVisualizationFilterText({
                 visualization: vis,
                 metadataStore: store,
+                locale: 'en',
             })
         ).toBe('Org unit · Stage one: Sierra Leone')
     })
@@ -295,6 +302,7 @@ describe('getVisualizationFilterText', () => {
             getVisualizationFilterText({
                 visualization: vis,
                 metadataStore: store,
+                locale: 'en',
             })
         ).toBe('')
     })
@@ -313,6 +321,7 @@ describe('getVisualizationFilterText', () => {
             getVisualizationFilterText({
                 visualization: vis,
                 metadataStore: buildStore(),
+                locale: 'en',
             })
         ).toThrow()
     })

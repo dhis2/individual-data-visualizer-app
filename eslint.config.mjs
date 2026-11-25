@@ -11,6 +11,63 @@ const baseAppRuntimeHooksRestriction = {
     message: "Use 'useRtkQuery' and 'useRtkMutation' from 'src/hooks' instead.",
 }
 
+const currentUserInfoRestrictions = [
+    '@dhis2/app-runtime',
+    '@dhis2/app-service-user',
+].map((name) => ({
+    name,
+    importNames: ['useCurrentUserInfo'],
+    message:
+        "It returns /api/me unconverted. Read the user from the cached data instead ('useCurrentUser', 'useUserLocale').",
+}))
+
+const restrictedImports = {
+    patterns: [
+        {
+            group: [
+                '**/types/dhis2-openapi-schemas',
+                '**/types/dhis2-openapi-schemas/*',
+            ],
+            message:
+                "Import DHIS2 Core schema-types from '@types' instead of directly from generated files.",
+        },
+        {
+            group: [
+                '**/plugin-host',
+                './plugin-host',
+                '**/plugin-host/**',
+                './plugin-host/**',
+                '**/dashboard-plugin',
+                './dashboard-plugin',
+            ],
+            message:
+                'Entry points and the dev-only plugin host must not be imported by app code — it would pull them into the app bundle.',
+        },
+        {
+            group: ['../*'],
+            message:
+                "Relative parent imports are not allowed. Use path aliases (e.g. '@hooks', '@components') instead.",
+        },
+    ],
+    paths: [
+        {
+            name: '@dhis2/app-runtime',
+            ...baseAppRuntimeHooksRestriction,
+        },
+        {
+            name: '@dhis2/app-service-data',
+            ...baseAppRuntimeHooksRestriction,
+        },
+        ...currentUserInfoRestrictions,
+        {
+            name: 'react-redux',
+            importNames: ['useDispatch', 'useSelector', 'useStore'],
+            message:
+                "Use 'useAppDispatch', 'useAppSelector', and 'useAppStore' from 'src/hooks' instead for proper typing.",
+        },
+    ],
+}
+
 export default defineConfig([
     includeIgnoreFile(gitignorePath),
 
@@ -41,56 +98,24 @@ export default defineConfig([
             'react-hooks/globals': 'off',
             'import/no-default-export': 'error',
             'no-console': 'error',
+            'no-restricted-imports': ['error', restrictedImports],
+        },
+    },
+
+    // Override: the cached data providers convert the app-shell's user
+    {
+        files: [
+            'src/components/app-wrapper/cached-data/app-cached-data-provider.tsx',
+            'src/components/app-wrapper/cached-data/plugin-cached-data-provider.tsx',
+        ],
+        rules: {
             'no-restricted-imports': [
                 'error',
                 {
-                    patterns: [
-                        {
-                            group: [
-                                '**/types/dhis2-openapi-schemas',
-                                '**/types/dhis2-openapi-schemas/*',
-                            ],
-                            message:
-                                "Import DHIS2 Core schema-types from '@types' instead of directly from generated files.",
-                        },
-                        {
-                            group: [
-                                '**/plugin-host',
-                                './plugin-host',
-                                '**/plugin-host/**',
-                                './plugin-host/**',
-                                '**/dashboard-plugin',
-                                './dashboard-plugin',
-                            ],
-                            message:
-                                'Entry points and the dev-only plugin host must not be imported by app code — it would pull them into the app bundle.',
-                        },
-                        {
-                            group: ['../*'],
-                            message:
-                                "Relative parent imports are not allowed. Use path aliases (e.g. '@hooks', '@components') instead.",
-                        },
-                    ],
-                    paths: [
-                        {
-                            name: '@dhis2/app-runtime',
-                            ...baseAppRuntimeHooksRestriction,
-                        },
-                        {
-                            name: '@dhis2/app-service-data',
-                            ...baseAppRuntimeHooksRestriction,
-                        },
-                        {
-                            name: 'react-redux',
-                            importNames: [
-                                'useDispatch',
-                                'useSelector',
-                                'useStore',
-                            ],
-                            message:
-                                "Use 'useAppDispatch', 'useAppSelector', and 'useAppStore' from 'src/hooks' instead for proper typing.",
-                        },
-                    ],
+                    ...restrictedImports,
+                    paths: restrictedImports.paths.filter(
+                        (path) => !currentUserInfoRestrictions.includes(path)
+                    ),
                 },
             ],
         },

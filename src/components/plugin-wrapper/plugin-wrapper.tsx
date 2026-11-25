@@ -1,9 +1,9 @@
 import type { EngineError } from '@api/parse-engine-error'
+import { useUserLocale } from '@components/app-wrapper/cached-data/cached-data-provider'
 import { useMetadataStore } from '@components/app-wrapper/metadata-provider/metadata-provider'
 import { CanvasError } from '@components/canvas-error/canvas-error'
 import { CanvasErrorFallback } from '@components/canvas-error/canvas-error-fallback'
 import type { ColumnHeaderClickFn } from '@components/line-list/types'
-import { useCurrentUserInfo } from '@dhis2/app-runtime'
 import { Center, CircularLoader } from '@dhis2/ui'
 import { assertNever } from '@modules/utils/guards'
 import { getVisualizationFilterText } from '@modules/visualization/filter-text'
@@ -90,7 +90,7 @@ export const PluginWrapper: FC<PluginWrapperProps> = ({
     )
 
     const metadataStore = useMetadataStore()
-    const locale = useCurrentUserInfo()?.settings?.keyUiLocale
+    const locale = useUserLocale()
 
     const visualizationWithTitle = useMemo(
         () =>

@@ -14,9 +14,6 @@ const FRAGMENT_SEPARATOR = ' - '
 /**
  * The text of the filter line shown beneath the title and subtitle, for both
  * the line list and the pivot table.
- *
- * `locale` is only used to format custom start/end dates, and falls back to
- * the runtime default when the user's locale has not resolved yet.
  */
 export const getVisualizationFilterText = ({
     visualization,
@@ -25,7 +22,7 @@ export const getVisualizationFilterText = ({
 }: {
     visualization: CurrentVisualization
     metadataStore: MetadataStore
-    locale?: string
+    locale: string
 }): string => {
     const { layout, itemsByDimension, conditionsByDimension } =
         getVisualizationUiConfig(visualization, metadataStore)
