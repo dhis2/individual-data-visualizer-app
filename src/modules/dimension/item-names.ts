@@ -34,7 +34,13 @@ export const getItemDisplayNames = ({
     const formatStartEndDate = getStartEndDateFormatter(locale)
     const listFormatter = new Intl.ListFormat(locale, { style: 'narrow' })
     const getNameList = (ids: string[], label: string) =>
-        `${label}: ${listFormatter.format(ids.map((id) => metadataItems[id]?.name ?? id))}`
+        i18n.t('{{- label}}: {{- value}}', {
+            label,
+            value: listFormatter.format(
+                ids.map((id) => metadataItems[id]?.name ?? id)
+            ),
+            nsSeparator: '^^',
+        })
     const levelIds: string[] = []
     const groupIds: string[] = []
     const displayNames: string[] = []

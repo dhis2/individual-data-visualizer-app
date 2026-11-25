@@ -67,7 +67,10 @@ export const getRowCountText = (
     /* Programs and tracked entity types only have a custom plural label, so
      * a single row always uses the standard singular. */
     return count !== 1 && isPopulatedString(pluralLabel)
-        ? `${formattedCount} ${pluralLabel}`
+        ? i18n.t('{{- formattedCount}} {{- pluralLabel}}', {
+              formattedCount,
+              pluralLabel,
+          })
         : getStandardRowCountText(
               count,
               formattedCount,

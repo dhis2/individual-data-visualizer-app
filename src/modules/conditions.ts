@@ -441,7 +441,11 @@ export const getOperatorConditionTexts = ({
                 operatorName.substring(1)
 
             return value
-                ? `${capitalCaseOperatorName}: ${value}`
+                ? i18n.t('{{- label}}: {{- value}}', {
+                      label: capitalCaseOperatorName,
+                      value,
+                      nsSeparator: '^^',
+                  })
                 : capitalCaseOperatorName
         } else {
             throw new Error('Could not read operatorName')

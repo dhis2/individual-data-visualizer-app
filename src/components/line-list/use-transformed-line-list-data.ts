@@ -170,7 +170,10 @@ export const getHeaderDisplayText = (
             })
         }
 
-        return `${label} (${repetitionSuffix})`
+        return i18n.t('{{- label}} ({{- repetition}})', {
+            label,
+            repetition: repetitionSuffix,
+        })
     }
 
     return label

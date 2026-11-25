@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n'
 import { toLayoutDimension } from '@modules/dimension/layout-dimension'
 import { getDimensionLabel, getSuffixContext } from '@modules/dimension/suffix'
 import {
@@ -60,7 +61,14 @@ export const getVisualizationFilterText = ({
 
             return valueTexts.length
                 ? [
-                      `${getDimensionLabel(dimension.name, dimension.suffix)}: ${listFormatter.format(valueTexts)}`,
+                      i18n.t('{{- label}}: {{- value}}', {
+                          label: getDimensionLabel(
+                              dimension.name,
+                              dimension.suffix
+                          ),
+                          value: listFormatter.format(valueTexts),
+                          nsSeparator: '^^',
+                      }),
                   ]
                 : []
         })
