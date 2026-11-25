@@ -12,6 +12,7 @@ import {
 } from '@components/grid'
 import { InterpretationModal } from '@components/interpretation-modal/interpretation-modal'
 import { LayoutPanel } from '@components/layout-panel/layout-panel'
+import { DiscardChangesModal } from '@components/shared/discard-changes/discard-changes-modal'
 import { Sidebar } from '@components/sidebar/sidebar'
 import { Toolbar } from '@components/toolbar/toolbar'
 import { CssVariables } from '@dhis2/ui'
@@ -55,6 +56,7 @@ const IndividualDataVisualizer: FC = () => {
                 <DetailsPanel />
             </GridEndColumn>
             <InterpretationModal />
+            <DiscardChangesModal />
         </GridContainer>
     )
 }

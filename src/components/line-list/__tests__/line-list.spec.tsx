@@ -54,6 +54,7 @@ const renderLineList = async (
                     navigation: {
                         visualizationId: visualizationPayload.id as string,
                         interpretationId: null,
+                        pendingNavigation: null,
                     },
                 },
             },

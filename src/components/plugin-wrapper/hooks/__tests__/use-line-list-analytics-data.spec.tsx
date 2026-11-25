@@ -103,6 +103,7 @@ const renderHookProbe = async (analytics: AnalyticsHandler) => {
                     navigation: {
                         visualizationId: visualization.id,
                         interpretationId: null,
+                        pendingNavigation: null,
                     },
                 },
             },

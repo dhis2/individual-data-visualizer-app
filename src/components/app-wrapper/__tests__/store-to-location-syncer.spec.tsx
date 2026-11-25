@@ -16,6 +16,7 @@ describe('StoreToLocationSyncer', () => {
     const navigationInitialState: NavigationState = {
         visualizationId: 'test-visualization',
         interpretationId: 'test-interpretation',
+        pendingNavigation: null,
     }
 
     beforeEach(() => {
@@ -123,6 +124,7 @@ describe('StoreToLocationSyncer', () => {
                 navigation: {
                     visualizationId: 'new',
                     interpretationId: null,
+                    pendingNavigation: null,
                 },
             }
         )

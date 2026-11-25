@@ -35,6 +35,7 @@ const mountLineList = (
                         navigation: {
                             visualizationId: visualizationPayload.id,
                             interpretationId: null,
+                            pendingNavigation: null,
                         },
                     },
                 }}
