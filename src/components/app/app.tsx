@@ -12,6 +12,8 @@ import {
 } from '@components/grid'
 import { InterpretationModal } from '@components/interpretation-modal/interpretation-modal'
 import { LayoutPanel } from '@components/layout-panel/layout-panel'
+import { DiscardChangesModal } from '@components/shared/discard-changes/discard-changes-modal'
+import { useConfirmBeforeUnload } from '@components/shared/discard-changes/use-confirm-before-unload'
 import { Sidebar } from '@components/sidebar/sidebar'
 import { Toolbar } from '@components/toolbar/toolbar'
 import { CssVariables } from '@dhis2/ui'
@@ -26,6 +28,7 @@ import './styles/app.css'
 
 const IndividualDataVisualizer: FC = () => {
     useLoadVisualizationOnMount()
+    useConfirmBeforeUnload()
     const dispatch = useAppDispatch()
     const activeDimensionModal = useAppSelector(getUiActiveDimensionModal)
 
@@ -55,6 +58,7 @@ const IndividualDataVisualizer: FC = () => {
                 <DetailsPanel />
             </GridEndColumn>
             <InterpretationModal />
+            <DiscardChangesModal />
         </GridContainer>
     )
 }

@@ -115,6 +115,7 @@ describe('renderHookWithAppWrapper', () => {
             navigation: {
                 visualizationId: 'test-vis-123',
                 interpretationId: 'test-interp-456',
+                pendingNavigation: null,
             },
         }
 
@@ -182,6 +183,7 @@ describe('renderHookWithAppWrapper', () => {
             navigation: {
                 visualizationId: 'custom-vis',
                 interpretationId: null,
+                pendingNavigation: null,
             },
         }
 
@@ -261,6 +263,7 @@ describe('renderHookWithAppWrapper', () => {
             navigation: {
                 visualizationId: 'initial-vis',
                 interpretationId: null,
+                pendingNavigation: null,
             },
         }
 

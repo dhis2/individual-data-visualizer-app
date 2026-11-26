@@ -639,6 +639,22 @@ msgstr "Show without filters"
 msgid "Page {{page}} not found, returned to page {{shownPage}}"
 msgstr "Page {{page}} not found, returned to page {{shownPage}}"
 
+msgid "Discard unsaved changes?"
+msgstr "Discard unsaved changes?"
+
+msgid ""
+"Are you sure you want to leave this visualization? Any unsaved changes will "
+"be lost."
+msgstr ""
+"Are you sure you want to leave this visualization? Any unsaved changes will "
+"be lost."
+
+msgid "No, cancel"
+msgstr "No, cancel"
+
+msgid "Yes, leave"
+msgstr "Yes, leave"
+
 msgid "Create a {{- visType}} before updating"
 msgstr "Create a {{- visType}} before updating"
 
