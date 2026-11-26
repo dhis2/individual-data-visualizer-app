@@ -5,11 +5,13 @@ import { createSlice } from '@reduxjs/toolkit'
 export interface LoaderState {
     visualizationLoadError: EngineError | null
     isVisualizationLoading: boolean
+    unauthorizedError: EngineError | null
 }
 
 export const initialState: LoaderState = {
     visualizationLoadError: null,
     isVisualizationLoading: false,
+    unauthorizedError: null,
 }
 
 export const loaderSlice = createSlice({
@@ -31,10 +33,17 @@ export const loaderSlice = createSlice({
         clearVisualizationLoadError: (state) => {
             state.visualizationLoadError = initialState.visualizationLoadError
         },
+        setUnauthorizedError: (state, action: PayloadAction<EngineError>) => {
+            state.unauthorizedError = action.payload
+        },
+        clearUnauthorizedError: (state) => {
+            state.unauthorizedError = null
+        },
     },
     selectors: {
         getIsVisualizationLoading: (state) => state.isVisualizationLoading,
         getVisualizationLoadError: (state) => state.visualizationLoadError,
+        getUnauthorizedError: (state) => state.unauthorizedError,
     },
 })
 
@@ -42,6 +51,11 @@ export const {
     setIsVisualizationLoading,
     setVisualizationLoadError,
     clearVisualizationLoadError,
+    setUnauthorizedError,
+    clearUnauthorizedError,
 } = loaderSlice.actions
-export const { getIsVisualizationLoading, getVisualizationLoadError } =
-    loaderSlice.selectors
+export const {
+    getIsVisualizationLoading,
+    getVisualizationLoadError,
+    getUnauthorizedError,
+} = loaderSlice.selectors

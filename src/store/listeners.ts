@@ -1,6 +1,9 @@
+import { isEngineError } from '@api/parse-engine-error'
 import { setSidebarWidthToLocalStorage } from '@components/sidebar/local-storage'
+import { isUnauthorizedError } from '@modules/error/unauthorized-error'
 import { setLastUsedVisualizationTypeToLocalStorage } from '@modules/visualization/local-storage'
-import { isAnyOf } from '@reduxjs/toolkit'
+import { isAnyOf, isRejectedWithValue } from '@reduxjs/toolkit'
+import { setUnauthorizedError } from './loader-slice'
 import { startAppListening } from './middleware-listener'
 import { setNavigationState } from './navigation-slice'
 import {
@@ -92,6 +95,20 @@ export const registerAppListeners = () => {
                 action.payload !== null
             ) {
                 dispatch(tSeedDefaultGrouping([action.payload]))
+            }
+        },
+    })
+
+    /* Every RTK request rejects with the parsed engine error, so this one
+     * listener catches a 401 from any of them */
+    startAppListening({
+        matcher: isRejectedWithValue,
+        effect: (action, { dispatch }) => {
+            if (
+                isEngineError(action.payload) &&
+                isUnauthorizedError(action.payload)
+            ) {
+                dispatch(setUnauthorizedError(action.payload))
             }
         },
     })

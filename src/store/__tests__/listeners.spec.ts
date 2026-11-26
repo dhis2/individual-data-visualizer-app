@@ -1,8 +1,10 @@
+import type { EngineError } from '@api/parse-engine-error'
 import { getSidebarWidthFromLocalStorage } from '@components/sidebar/local-storage'
 import { getLastUsedVisualizationTypeFromLocalStorage } from '@modules/visualization/local-storage'
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore, createAsyncThunk } from '@reduxjs/toolkit'
 import { currentVisSlice } from '@store/current-vis-slice'
 import { registerAppListeners } from '@store/listeners'
+import { getUnauthorizedError, loaderSlice } from '@store/loader-slice'
 import {
     resetUiSidebarWidth,
     setUiSidebarWidth,
@@ -201,5 +203,55 @@ describe('ui sidebar width listener', () => {
         expect(getSidebarWidthFromLocalStorage()).toBe(
             uiSlice.getInitialState().sidebarWidth
         )
+    })
+})
+
+describe('unauthorized error listener', () => {
+    beforeEach(() => {
+        listenerMiddleware.clearListeners()
+        registerAppListeners()
+    })
+
+    const createLoaderStore = () =>
+        configureStore({
+            reducer: { loader: loaderSlice.reducer },
+            middleware: (getDefaultMiddleware) =>
+                getDefaultMiddleware().prepend(listenerMiddleware.middleware),
+        })
+
+    const failingRequest = createAsyncThunk(
+        'test/request',
+        (error: EngineError, { rejectWithValue }) => rejectWithValue(error)
+    )
+
+    it('stores a 401 from a request', async () => {
+        const store = createLoaderStore()
+        const error: EngineError = {
+            type: 'access',
+            message: 'Unauthorized',
+            httpStatusCode: 401,
+        }
+
+        await store.dispatch(failingRequest(error))
+
+        expect(getUnauthorizedError({ loader: store.getState().loader })).toBe(
+            error
+        )
+    })
+
+    it('ignores other request errors', async () => {
+        const store = createLoaderStore()
+
+        await store.dispatch(
+            failingRequest({
+                type: 'access',
+                message: 'Forbidden',
+                httpStatusCode: 403,
+            })
+        )
+
+        expect(
+            getUnauthorizedError({ loader: store.getState().loader })
+        ).toBeNull()
     })
 })
