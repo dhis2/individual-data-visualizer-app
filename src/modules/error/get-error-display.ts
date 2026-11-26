@@ -55,7 +55,7 @@ export const getErrorDisplay = (
                     icon: 'generic',
                     title: i18n.t('Logged out'),
                     description: i18n.t(
-                        'Your session has ended. Log in again, then retry.'
+                        'Your session has ended. Log in again in another tab, then retry.'
                     ),
                     retryable: true,
                 }

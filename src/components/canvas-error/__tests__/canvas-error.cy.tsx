@@ -176,7 +176,8 @@ const ERROR_SCREENS: ErrorScreen[] = [
         label: 'session ended',
         error: engineError({ type: 'access', httpStatusCode: 401 }),
         title: 'Logged out',
-        description: 'Your session has ended. Log in again, then retry.',
+        description:
+            'Your session has ended. Log in again in another tab, then retry.',
         icon: 'generic',
         retryable: true,
     },
