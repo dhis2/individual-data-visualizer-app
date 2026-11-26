@@ -4,7 +4,7 @@ const config = {
     name: 'individual-data-visualizer',
     // id: TBD,
     title: 'Individual Data Visualizer',
-    minDHIS2Version: '2.43',
+    minDHIS2Version: '2.43.3',
     direction: 'auto',
     pwa: {
         enabled: true,
