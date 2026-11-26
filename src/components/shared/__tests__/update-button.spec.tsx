@@ -7,7 +7,7 @@ import {
 import { renderWithAppWrapper } from '@test-utils/app-wrapper'
 import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import type { RootState, VisualizationType } from '@types'
+import type { OutputType, RootState, VisualizationType } from '@types'
 import { describe, it, expect, vi } from 'vitest'
 
 const metadata = {
@@ -51,9 +51,11 @@ const buildMockOptions = (
     currentVis: RootState['currentVis'],
     {
         visualizationType = 'PIVOT_TABLE',
+        outputType = 'EVENT',
         selection = completeSelection,
     }: {
         visualizationType?: VisualizationType
+        outputType?: OutputType
         selection?: Partial<VisUiConfigState>
     } = {}
 ) => ({
@@ -65,6 +67,7 @@ const buildMockOptions = (
                 ...visUiConfigInitialState,
                 ...selection,
                 visualizationType,
+                outputType,
             },
         } as Partial<RootState>,
     },
@@ -163,6 +166,43 @@ describe('UpdateButton', () => {
 
         await user.click(button)
         expect(onClick).not.toHaveBeenCalled()
+    })
+
+    it('disables the button and shows the create tooltip when the pivot table has a tracked entity output type', async () => {
+        const user = userEvent.setup()
+        const onClick = vi.fn()
+
+        await renderWithAppWrapper(
+            <UpdateButton onClick={onClick} />,
+            buildMockOptions(populatedVis, {
+                outputType: 'TRACKED_ENTITY_INSTANCE',
+            })
+        )
+
+        const button = screen.getByRole('button', { name: 'Update' })
+        expect(button).toBeDisabled()
+
+        await user.hover(button)
+        await expect(
+            screen.findByText(
+                `Create a ${visTypeDisplayNames['PIVOT_TABLE']} before updating`
+            )
+        ).resolves.toBeInTheDocument()
+
+        await user.click(button)
+        expect(onClick).not.toHaveBeenCalled()
+    })
+
+    it('enables the button for a line list with a tracked entity output type', async () => {
+        await renderWithAppWrapper(
+            <UpdateButton onClick={vi.fn()} />,
+            buildMockOptions(populatedVis, {
+                visualizationType: 'LINE_LIST',
+                outputType: 'TRACKED_ENTITY_INSTANCE',
+            })
+        )
+
+        expect(screen.getByRole('button', { name: 'Update' })).toBeEnabled()
     })
 
     it('submits the associated form when used as a submit button', async () => {
