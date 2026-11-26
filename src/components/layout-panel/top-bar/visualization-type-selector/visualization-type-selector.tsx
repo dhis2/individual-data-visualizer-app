@@ -193,7 +193,12 @@ export const VisualizationTypeSelector: FC = () => {
             {pendingConversion && (
                 <ConversionConfirmationModal
                     targetVisType={pendingConversion.targetVisType}
-                    discardedDimensionNames={pendingConversion.discardedNames}
+                    discardedProgramIndicatorNames={
+                        pendingConversion.discardedProgramIndicatorNames
+                    }
+                    discardedUserDimensionNames={
+                        pendingConversion.discardedUserDimensionNames
+                    }
                     emptyDimensionNames={pendingConversion.emptyDimensionNames}
                     defaultItemNames={pendingConversion.defaultItemNames}
                     onConfirm={confirmConversion}

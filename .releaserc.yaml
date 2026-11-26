@@ -1,0 +1,31 @@
+branches:
+    - master
+plugins:
+    # Works out the next version from the commit messages since the last
+    # release tag: feat bumps the minor version, fix and perf the patch
+    # version, and a `BREAKING CHANGE:` footer the major version
+    - '@semantic-release/commit-analyzer'
+    - '@semantic-release/release-notes-generator'
+    - - '@semantic-release/changelog'
+      - changelogFile: CHANGELOG.md
+    # Writes the new version to package.json. The app is not an npm package.
+    - - '@semantic-release/npm'
+      - npmPublish: false
+    # Builds after the version bump, so the app and its zip carry the new
+    # version. Calling the binary directly skips pnpm's dependency check,
+    # which would otherwise run `pnpm install` because package.json changed.
+    - - '@semantic-release/exec'
+      - prepareCmd: ./node_modules/.bin/d2-app-scripts build
+    # Commits the version bump to master as dhis2-bot
+    - - '@semantic-release/git'
+      - assets:
+            - package.json
+            - CHANGELOG.md
+        message: "chore(release): cut ${nextRelease.version}\n\n${nextRelease.notes}"
+    # Publishes the GitHub release with the app zip attached. A failed release
+    # is reported in Slack by the release workflow, not in a GitHub issue.
+    - - '@semantic-release/github'
+      - assets:
+            - path: build/bundle/*.zip
+              label: DHIS2 app bundle
+        failCommentCondition: false
