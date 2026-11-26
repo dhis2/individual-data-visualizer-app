@@ -1,3 +1,9 @@
+## [0.0.3](https://github.com/dhis2/individual-data-visualizer-app/compare/v0.0.2...v0.0.3) (2026-11-26)
+
+### Bug Fixes
+
+* remove unsupported aggregation types [DHIS2-22529] ([#499](https://github.com/dhis2/individual-data-visualizer-app/issues/499)) ([c257b75](https://github.com/dhis2/individual-data-visualizer-app/commit/c257b752a22a8abfb3f10311a173831b6251b13c))
+
 ## [0.0.2](https://github.com/dhis2/individual-data-visualizer-app/compare/v0.0.1...v0.0.2) (2026-11-26)
 
 ### Bug Fixes

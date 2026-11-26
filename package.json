@@ -1,6 +1,6 @@
 {
     "name": "individual-data-visualizer-app",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "Individual data visualizer app and plugin",
     "license": "BSD-3-Clause",
     "private": true,
