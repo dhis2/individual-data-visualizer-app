@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-25T16:12:41.188Z\n"
-"PO-Revision-Date: 2026-11-25T16:12:41.188Z\n"
+"POT-Creation-Date: 2026-11-26T08:32:23.170Z\n"
+"PO-Revision-Date: 2026-11-26T08:32:23.170Z\n"
 
 msgid "Network error"
 msgstr "Network error"
@@ -1217,9 +1217,6 @@ msgstr ""
 
 msgid "Analytics request error"
 msgstr "Analytics request error"
-
-msgid "An unknown analytics request error occurred."
-msgstr "An unknown analytics request error occurred."
 
 msgid "Something went wrong"
 msgstr "Something went wrong"

@@ -173,18 +173,6 @@ const ERROR_SCREENS: ErrorScreen[] = [
         retryable: false,
     },
     {
-        label: 'rejected request without a code',
-        error: engineError({
-            type: 'access',
-            httpStatusCode: 409,
-            message: 'Forbidden',
-        }),
-        title: 'Analytics request error',
-        description: 'An unknown analytics request error occurred.',
-        icon: 'generic',
-        retryable: false,
-    },
-    {
         label: 'session ended',
         error: engineError({ type: 'access', httpStatusCode: 401 }),
         title: 'Logged out',

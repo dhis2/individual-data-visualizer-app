@@ -105,20 +105,17 @@ describe('getErrorDisplay', () => {
         expect(display.retryable).toBeFalsy()
     })
 
-    it('shows fixed copy for a 409 without a code', () => {
-        /* The engine fills in "Forbidden" when the body has no message. */
+    it('shows the server message for a 409 without a code', () => {
         const display = getErrorDisplay(
             engineError({
                 type: 'access',
                 httpStatusCode: 409,
-                message: 'Forbidden',
+                message: 'The request could not be run',
             })
         )
 
         expect(display.title).toBe('Analytics request error')
-        expect(display.description).toBe(
-            'An unknown analytics request error occurred.'
-        )
+        expect(display.description).toBe('The request could not be run')
         expect(display.retryable).toBeFalsy()
     })
 

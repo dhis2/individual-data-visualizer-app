@@ -69,20 +69,14 @@ export const getErrorDisplay = (
                         "Your account doesn't have permission to do this. Contact a system administrator."
                     ),
                 }
-            /* A 409 whose code has copy is matched above. With a code, the
-             * message is the server's own text for it and names the offending
-             * dimension, so it is shown untranslated. Without one, the engine
-             * may have filled in "Forbidden" itself. */
+            /* A 409 whose code has copy is matched above. The server's message
+             * is shown untranslated: it names the offending dimension, and the
+             * case it reports should not happen. */
             case 409:
                 return {
                     icon: 'generic',
                     title: i18n.t('Analytics request error'),
-                    description:
-                        error.errorCode || error.errorCodes?.length
-                            ? error.message
-                            : i18n.t(
-                                  'An unknown analytics request error occurred.'
-                              ),
+                    description: error.message,
                 }
         }
     }
