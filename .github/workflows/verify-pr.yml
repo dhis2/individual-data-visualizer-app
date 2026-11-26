@@ -11,8 +11,8 @@ env:
     GIT_COMMITTER_EMAIL: 'apps@dhis2.org'
     GH_TOKEN: ${{secrets.DHIS2_BOT_GITHUB_TOKEN}}
     CI: true
-    E2E_URL: 'https://e2e.im.dhis2.org/idv-playground'
-    API_VERSION: '44'
+    E2E_URL: 'https://dev.im.dhis2.org/idv-kfmt-43dev'
+    API_VERSION: '43'
     SHOULD_RECORD: ${{ contains(github.event.pull_request.labels.*.name, 'e2e record') }}
 
 concurrency:
