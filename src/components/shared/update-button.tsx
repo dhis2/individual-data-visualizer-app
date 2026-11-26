@@ -1,4 +1,7 @@
-import { getLayoutSelectionTooltipConfig } from '@components/layout-panel/bottom-bar/output-type-validity'
+import {
+    getAvailableOutputTypes,
+    getLayoutSelectionTooltipConfig,
+} from '@components/layout-panel/bottom-bar/output-type-validity'
 import { visTypeDisplayNames } from '@dhis2/analytics'
 import i18n from '@dhis2/d2-i18n'
 import { Button, Tooltip } from '@dhis2/ui'
@@ -26,18 +29,21 @@ export const UpdateButton: FC<UpdateButtonProps> = ({
     const visUiConfig = useAppSelector((state) => state.visUiConfig)
     const metadataStore = useMetadataStore()
 
-    const disabledReason = useMemo(
-        () =>
-            isVisualizationEmpty(currentVis)
-                ? i18n.t('Create a {{- visType}} before updating', {
-                      visType: visTypeDisplayNames[visType],
-                  })
-                : getLayoutSelectionTooltipConfig({
-                      visUiConfig,
-                      metadataStore,
-                  })?.content,
-        [currentVis, visType, visUiConfig, metadataStore]
-    )
+    const disabledReason = useMemo(() => {
+        const isOutputTypeUnavailable = !getAvailableOutputTypes(
+            visType
+        ).includes(visUiConfig.outputType)
+
+        if (isVisualizationEmpty(currentVis) || isOutputTypeUnavailable) {
+            return i18n.t('Create a {{- visType}} before updating', {
+                visType: visTypeDisplayNames[visType],
+            })
+        }
+        return getLayoutSelectionTooltipConfig({
+            visUiConfig,
+            metadataStore,
+        })?.content
+    }, [currentVis, visType, visUiConfig, metadataStore])
 
     if (disabledReason) {
         return (
