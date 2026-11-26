@@ -1,25 +1,21 @@
 import {
-    AGGREGATION_TYPES,
+    SUPPORTED_AGGREGATION_TYPES,
     aggregationTypeDisplayNames,
 } from '@constants/aggregation-types'
 import i18n from '@dhis2/d2-i18n'
 import { FlyoutMenu, Layer, MenuItem, Popper } from '@dhis2/ui'
-import { resolveAggregationType } from '@modules/dimension/aggregation-type'
+import {
+    isSupportedAggregationType,
+    resolveAggregationType,
+} from '@modules/dimension/aggregation-type'
 import type { AggregationType } from '@types'
 import { useCallback, useEffect, useRef, useState, type FC } from 'react'
 import classes from './styles/cell-value-aggregation-menu.module.css'
 
-/* `DEFAULT` is resolved to a concrete type before a cell value is stored, so it
- * is never a choice here — which is what lets the axis show a real aggregation
- * name rather than the word "default". */
-const SELECTABLE_AGGREGATION_TYPES = AGGREGATION_TYPES.filter(
-    (aggregationType) => aggregationType !== 'DEFAULT'
-)
-
 type CellValueAggregationMenuProps = {
     aggregationType: AggregationType
     /* The data item's own aggregation type, so the entry matching it can say so.
-     * `NONE` cannot be aggregated, so it is not a usable default. */
+     * An unsupported type, such as `NONE`, is not a usable default. */
     itemAggregationType?: AggregationType
     onChange: (aggregationType: AggregationType) => void
 }
@@ -29,10 +25,9 @@ export const CellValueAggregationMenu: FC<CellValueAggregationMenuProps> = ({
     itemAggregationType,
     onChange,
 }) => {
-    const itemDefault =
-        itemAggregationType && itemAggregationType !== 'NONE'
-            ? itemAggregationType
-            : undefined
+    const itemDefault = isSupportedAggregationType(itemAggregationType)
+        ? itemAggregationType
+        : undefined
     /* The trigger always names a real aggregation, never the word "default". */
     const resolvedAggregationType = resolveAggregationType(aggregationType, {
         aggregationType: itemAggregationType,
@@ -106,7 +101,7 @@ export const CellValueAggregationMenu: FC<CellValueAggregationMenuProps> = ({
                                     dataTest="cell-value-aggregation-item-default"
                                 />
                             )}
-                            {SELECTABLE_AGGREGATION_TYPES.map((value) => (
+                            {SUPPORTED_AGGREGATION_TYPES.map((value) => (
                                 <MenuItem
                                     key={value}
                                     label={aggregationTypeDisplayNames[value]}
