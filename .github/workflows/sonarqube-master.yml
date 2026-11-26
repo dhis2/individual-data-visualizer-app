@@ -5,6 +5,9 @@ on:
             - master
 jobs:
     sonarqube:
+        # dhis2-bot's pushes to master are release commits, which only change
+        # package.json and CHANGELOG.md
+        if: ${{ github.actor != 'dhis2-bot' }}
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v7
