@@ -5,6 +5,7 @@ on:
             - master
 jobs:
     sonarqube:
+        if: ${{ github.actor != 'dhis2-bot' }}
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v7
