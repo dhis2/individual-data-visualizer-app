@@ -54,23 +54,21 @@ jobs:
             - name: Install
               run: pnpm install --frozen-lockfile --ignore-scripts
 
-            # Runs semantic-release (configured in .releaserc.yaml) and tells the
-            # steps and jobs below whether it released.
             - name: Release
               id: release
+              # Runs semantic-release (configured in .releaserc.yaml). When the
+              # commits since the last release contain a feat, fix or perf, it
+              # bumps the version, builds the app, pushes the release commit and
+              # tag to master and publishes the GitHub release. Otherwise it does
+              # nothing. A failure fails the step, which skips everything below
+              # and sends the Slack alert.
+              #
+              # semantic-release only makes a commit when it releases, so a moved
+              # HEAD means this run released. HEAD is then the release commit,
+              # which the deploy jobs check out.
               run: |
                   head_before=$(git rev-parse HEAD)
-
-                  # When the commits since the last release contain a feat, fix
-                  # or perf, this bumps the version, builds the app, pushes the
-                  # release commit and tag to master and publishes the GitHub
-                  # release. Otherwise it does nothing. A failure fails the step,
-                  # which skips everything below and sends the Slack alert.
                   pnpm exec semantic-release
-
-                  # semantic-release only makes a commit when it releases, so a
-                  # moved HEAD means this run released. HEAD is then the release
-                  # commit, which the deploy jobs check out.
                   if [ "$(git rev-parse HEAD)" != "$head_before" ]; then
                       echo "released=true" >> "$GITHUB_OUTPUT"
                       echo "ref=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
