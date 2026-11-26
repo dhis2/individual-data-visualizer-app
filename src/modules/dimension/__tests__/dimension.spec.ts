@@ -698,6 +698,18 @@ describe('isDimensionTypeUnsupportedByVisType', () => {
         ).toBe(false)
     })
 
+    it('marks USER unsupported by PIVOT_TABLE', () => {
+        expect(isDimensionTypeUnsupportedByVisType('USER', 'PIVOT_TABLE')).toBe(
+            true
+        )
+    })
+
+    it('marks USER supported by LINE_LIST', () => {
+        expect(isDimensionTypeUnsupportedByVisType('USER', 'LINE_LIST')).toBe(
+            false
+        )
+    })
+
     it('marks DATA_ELEMENT supported by PIVOT_TABLE', () => {
         expect(
             isDimensionTypeUnsupportedByVisType('DATA_ELEMENT', 'PIVOT_TABLE')
