@@ -1001,12 +1001,45 @@ describe('normalizeApiSavedVisualization', () => {
         expect(result.aggregationType).toBe('MAX')
     })
 
-    it('keeps a saved aggregation type', () => {
+    it.each(['SUM', 'LAST'] as const)(
+        'keeps a saved %s aggregation type',
+        (aggregationType) => {
+            const result = normalizeApiSavedVisualization(
+                buildCellValueVis({ aggregationType })
+            )
+
+            expect(result.aggregationType).toBe(aggregationType)
+        }
+    )
+
+    /* ER let users save types that analytics rejects or gets wrong. */
+    it.each([
+        'LAST_IN_PERIOD',
+        'LAST_IN_PERIOD_AVERAGE_ORG_UNIT',
+        'AVERAGE_SUM_ORG_UNIT',
+        'MIN_SUM_ORG_UNIT',
+        'MAX_SUM_ORG_UNIT',
+        'CUSTOM',
+    ] as const)('turns a saved %s into AVERAGE', (aggregationType) => {
         const result = normalizeApiSavedVisualization(
-            buildCellValueVis({ aggregationType: 'SUM' })
+            buildCellValueVis({ aggregationType })
         )
 
-        expect(result.aggregationType).toBe('SUM')
+        expect(result.aggregationType).toBe('AVERAGE')
+    })
+
+    it('turns DEFAULT into AVERAGE when the item aggregates by an unsupported type', () => {
+        const result = normalizeApiSavedVisualization(
+            buildCellValueVis({
+                aggregationType: 'DEFAULT',
+                dataElementValueDimension: {
+                    id: UID,
+                    aggregationType: 'LAST_IN_PERIOD',
+                },
+            })
+        )
+
+        expect(result.aggregationType).toBe('AVERAGE')
     })
 
     it('leaves the aggregation type unset when there is no cell value', () => {

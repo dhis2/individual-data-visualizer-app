@@ -60,6 +60,15 @@ const metadata = {
         programId: 'p1',
         programStageId: 's1',
     },
+    's1.de2': {
+        id: 's1.de2',
+        name: 'Hemoglobin',
+        dimensionType: 'DATA_ELEMENT',
+        valueType: 'NUMBER',
+        aggregationType: 'LAST_IN_PERIOD',
+        programId: 'p1',
+        programStageId: 's1',
+    },
     's2.de1': {
         id: 's2.de1',
         name: 'Height in cm',
@@ -325,6 +334,58 @@ describe('CellValueAxis', () => {
         await user.click(screen.getByTestId('cell-value-aggregation-trigger'))
 
         expect(getActiveMenuItemLabel()).toBe('Sum')
+    })
+
+    it('lists only the aggregation types analytics supports', async () => {
+        const user = userEvent.setup()
+        await renderWithAppWrapper(
+            <CellValueAxis />,
+            buildMockOptions({
+                columns: ['s1.de1'],
+                cellValue: { id: 's1.de1', aggregationType: 'AVERAGE' },
+            })
+        )
+
+        await user.click(screen.getByTestId('cell-value-aggregation-trigger'))
+
+        expect(
+            screen.getAllByRole('menuitem').map((item) => item.textContent)
+        ).toEqual([
+            'Use item default (Sum)',
+            'Sum',
+            'Average',
+            'Count',
+            'Min',
+            'Max',
+            'Standard deviation',
+            'Variance',
+            'Last value (sum in org unit hierarchy)',
+            'Last value (average in org unit hierarchy)',
+            'First value (sum in org unit hierarchy)',
+            'First value (average in org unit hierarchy)',
+        ])
+    })
+
+    it('offers no item default when the item aggregates by an unsupported type', async () => {
+        const user = userEvent.setup()
+        await renderWithAppWrapper(
+            <CellValueAxis />,
+            buildMockOptions({
+                columns: ['s1.de2'],
+                cellValue: { id: 's1.de2', aggregationType: 'DEFAULT' },
+            })
+        )
+
+        expect(
+            screen.getByTestId('cell-value-aggregation-trigger')
+        ).toHaveTextContent('Average')
+
+        await user.click(screen.getByTestId('cell-value-aggregation-trigger'))
+
+        expect(
+            screen.queryByTestId('cell-value-aggregation-item-default')
+        ).not.toBeInTheDocument()
+        expect(getActiveMenuItemLabel()).toBe('Average')
     })
 })
 
