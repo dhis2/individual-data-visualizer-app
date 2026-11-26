@@ -18,6 +18,9 @@ env:
 
 jobs:
     release:
+        outputs:
+            released: ${{ steps.release.outputs.released }}
+            ref: ${{ steps.release.outputs.ref }}
         # dhis2-bot's only pushes to master are release commits, which have nothing to release
         if: ${{ !github.event.repository.fork && github.actor != 'dhis2-bot' }}
         runs-on: ubuntu-latest
@@ -50,6 +53,7 @@ jobs:
                   pnpm exec semantic-release
                   if [ "$(git rev-parse HEAD)" != "$head_before" ]; then
                       echo "released=true" >> "$GITHUB_OUTPUT"
+                      echo "ref=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
                   fi
               env:
                   GITHUB_TOKEN: ${{ secrets.DHIS2_BOT_GITHUB_TOKEN }}
@@ -67,6 +71,22 @@ jobs:
             #   run: ./node_modules/.bin/d2-app-scripts publish
             #   env:
             #       D2_APP_HUB_TOKEN: ${{ secrets.DHIS2_BOT_APPHUB_TOKEN }}
+
+    deploy-netlify:
+        needs: release
+        if: needs.release.outputs.released == 'true'
+        uses: ./.github/workflows/netlify-deploy-master.yml
+        with:
+            ref: ${{ needs.release.outputs.ref }}
+        secrets: inherit
+
+    deploy-im-instance:
+        needs: release
+        if: needs.release.outputs.released == 'true'
+        uses: ./.github/workflows/deploy-to-im-instance.yml
+        with:
+            ref: ${{ needs.release.outputs.ref }}
+        secrets: inherit
 
     report-release-failure:
         runs-on: ubuntu-latest

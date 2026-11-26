@@ -1,7 +1,7 @@
 # Individual Data Visualizer (IDV) app and plugin
 
 [![CI](https://github.com/dhis2/individual-data-visualizer-app/actions/workflows/verify-pr.yml/badge.svg)](https://github.com/dhis2/individual-data-visualizer-app/actions/workflows/verify-pr.yml)
-[![deploy: netlify production](https://github.com/dhis2/individual-data-visualizer-app/actions/workflows/netlify-deploy-master.yml/badge.svg)](https://github.com/dhis2/individual-data-visualizer-app/actions/workflows/netlify-deploy-master.yml)
+[![release](https://github.com/dhis2/individual-data-visualizer-app/actions/workflows/release.yml/badge.svg)](https://github.com/dhis2/individual-data-visualizer-app/actions/workflows/release.yml)
 
 **[Live demo](https://latest.individual-data-visualizer.netlify.dhis2.org)** (standalone build, requires a DHIS2 backend)
 
