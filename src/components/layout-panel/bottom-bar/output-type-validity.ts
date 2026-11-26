@@ -1,6 +1,10 @@
 import { type TooltipConfig } from '@components/layout-panel/bottom-bar/tooltip-config'
 import i18n from '@dhis2/d2-i18n'
 import { isDataSourceProgramWithoutRegistration } from '@modules/data-source'
+import {
+    isEventOnlyAggregationType,
+    resolveAggregationType,
+} from '@modules/dimension/aggregation-type'
 import { getEmptyPeriodAndOrgUnitDimensionIds } from '@modules/dimension/empty-dimensions'
 import { resolveCellValueContext, resolveLayoutContext } from '@modules/layout'
 import {
@@ -91,6 +95,7 @@ const getEventTooltipConfig = ({
 }
 
 type EnrollmentTooltipConfigParams = {
+    hasEventOnlyCellValueAggregation: boolean
     hasEventProgramSelected: boolean
     hasCategoryInLayout: boolean
     hasCategoryOptionGroupSetInLayout: boolean
@@ -100,6 +105,7 @@ type EnrollmentTooltipConfigParams = {
 }
 
 const getEnrollmentTooltipConfig = ({
+    hasEventOnlyCellValueAggregation,
     hasEventProgramSelected,
     hasCategoryInLayout,
     hasCategoryOptionGroupSetInLayout,
@@ -123,10 +129,37 @@ const getEnrollmentTooltipConfig = ({
         return { content: i18n.t('Not valid with event programs') }
     }
 
+    if (hasEventOnlyCellValueAggregation) {
+        return {
+            content: i18n.t('Not valid with first or last value aggregation'),
+        }
+    }
+
     return getCategoryTooltipConfig({
         hasCategoryInLayout,
         hasCategoryOptionGroupSetInLayout,
     })
+}
+
+/* `DEFAULT` counts as the item's own type, since that is what analytics
+ * applies. */
+const hasEventOnlyCellValueAggregation = (
+    visUiConfig: VisUiConfigState,
+    metadataStore: MetadataStore
+): boolean => {
+    const { cellValue, visualizationType } = visUiConfig
+
+    if (visualizationType !== 'PIVOT_TABLE' || !cellValue) {
+        return false
+    }
+
+    const item = metadataStore.getDimensionMetadataItem(cellValue.id)
+
+    return isEventOnlyAggregationType(
+        resolveAggregationType(cellValue.aggregationType, {
+            aggregationType: item?.aggregationType,
+        })
+    )
 }
 
 type TrackedEntityInstanceTooltipConfigParams = {
@@ -364,6 +397,11 @@ export const getOutputTypeTooltipConfig = ({
             })
         case 'ENROLLMENT':
             return getEnrollmentTooltipConfig({
+                hasEventOnlyCellValueAggregation:
+                    hasEventOnlyCellValueAggregation(
+                        visUiConfig,
+                        metadataStore
+                    ),
                 hasEventProgramSelected,
                 hasCategoryInLayout,
                 hasCategoryOptionGroupSetInLayout,

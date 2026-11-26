@@ -340,3 +340,125 @@ describe('getOutputTypeTooltipConfig', () => {
         }
     )
 })
+
+describe('getOutputTypeTooltipConfig with a cell value', () => {
+    const inProgram = (item: DimensionMetadataItem): DimensionMetadataItem => ({
+        ...item,
+        programId: 'p1',
+        programStageId: 's1',
+    })
+
+    const cellValueStore = createMetadataStoreStub({
+        programs: {
+            p1: {
+                id: 'p1',
+                name: 'Program 1',
+                programType: 'WITH_REGISTRATION',
+                programStages: [],
+                trackedEntityType: { id: 'tet1', name: 'Person' },
+            },
+        },
+        dimensions: {
+            's1.eventDate': inProgram(
+                dimension('s1.eventDate', 'PERIOD', 'DATE')
+            ),
+            's1.ou': inProgram(
+                dimension('s1.ou', 'ORGANISATION_UNIT', 'ORGANISATION_UNIT')
+            ),
+            's1.sumItem': inProgram({
+                ...dimension('s1.sumItem', 'DATA_ELEMENT', 'NUMBER'),
+                aggregationType: 'SUM',
+            }),
+            's1.lastItem': inProgram({
+                ...dimension('s1.lastItem', 'DATA_ELEMENT', 'NUMBER'),
+                aggregationType: 'LAST',
+            }),
+        },
+    })
+
+    const EVENT_ONLY_AGGREGATION = {
+        content: 'Not valid with first or last value aggregation',
+    }
+
+    const checkWithCellValue = ({
+        outputType,
+        cellValue,
+        visualizationType = 'PIVOT_TABLE',
+    }: {
+        outputType: OutputType
+        cellValue: VisUiConfigState['cellValue']
+        visualizationType?: VisUiConfigState['visualizationType']
+    }) =>
+        getOutputTypeTooltipConfig({
+            outputType,
+            visUiConfig: {
+                ...buildVisUiConfig({
+                    layout: { columns: ['s1.ou'], rows: ['s1.eventDate'] },
+                    visualizationType,
+                }),
+                cellValue,
+            },
+            metadataStore: cellValueStore,
+        })
+
+    it.each([
+        'LAST',
+        'LAST_AVERAGE_ORG_UNIT',
+        'FIRST',
+        'FIRST_AVERAGE_ORG_UNIT',
+    ] as const)('rejects enrollment for %s', (aggregationType) => {
+        expect(
+            checkWithCellValue({
+                outputType: 'ENROLLMENT',
+                cellValue: { id: 's1.sumItem', aggregationType },
+            })
+        ).toEqual(EVENT_ONLY_AGGREGATION)
+    })
+
+    it('rejects enrollment for DEFAULT on an item that aggregates by LAST', () => {
+        expect(
+            checkWithCellValue({
+                outputType: 'ENROLLMENT',
+                cellValue: { id: 's1.lastItem', aggregationType: 'DEFAULT' },
+            })
+        ).toEqual(EVENT_ONLY_AGGREGATION)
+    })
+
+    it('accepts enrollment for DEFAULT on an item that aggregates by SUM', () => {
+        expect(
+            checkWithCellValue({
+                outputType: 'ENROLLMENT',
+                cellValue: { id: 's1.sumItem', aggregationType: 'DEFAULT' },
+            })
+        ).toBeUndefined()
+    })
+
+    it('accepts enrollment for an explicit SUM on an item that aggregates by LAST', () => {
+        expect(
+            checkWithCellValue({
+                outputType: 'ENROLLMENT',
+                cellValue: { id: 's1.lastItem', aggregationType: 'SUM' },
+            })
+        ).toBeUndefined()
+    })
+
+    it('accepts event for LAST', () => {
+        expect(
+            checkWithCellValue({
+                outputType: 'EVENT',
+                cellValue: { id: 's1.sumItem', aggregationType: 'LAST' },
+            })
+        ).toBeUndefined()
+    })
+
+    /* A line list neither shows nor sends the cell value. */
+    it('ignores the cell value in a line list', () => {
+        expect(
+            checkWithCellValue({
+                outputType: 'ENROLLMENT',
+                cellValue: { id: 's1.sumItem', aggregationType: 'LAST' },
+                visualizationType: 'LINE_LIST',
+            })
+        ).toBeUndefined()
+    })
+})
