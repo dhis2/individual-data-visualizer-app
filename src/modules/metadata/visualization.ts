@@ -7,10 +7,6 @@ import {
 } from '@modules/dimension/fixed'
 import { getCompoundDimensionId } from '@modules/dimension/ids'
 import {
-    getTimeDimensionName,
-    getTimeDimensions,
-} from '@modules/dimension/time'
-import {
     combineAllDimensionsFromVisualization,
     toAppLocalDimensions,
 } from '@modules/dimension/translation'
@@ -20,8 +16,6 @@ import type {
     MetadataInputItem,
     MetadataInputMap,
     OrganisationUnitMetadataItem,
-    Program,
-    ProgramStage,
     SavedVisualization,
 } from '@types'
 import deepmerge from 'deepmerge'
@@ -49,22 +43,6 @@ const dimensionMetadataExtractors: DimensionMetadataExtractor[] = [
             (w) => w.dataElementGroupSet
         ),
 ]
-const getDefaultDynamicTimeDimensionsMetadata = (
-    program?: Program,
-    stage?: ProgramStage
-): MetadataInputMap =>
-    Object.values(getTimeDimensions()).reduce<MetadataInputMap>(
-        (acc, dimension) => {
-            acc[dimension.id] = {
-                id: dimension.id,
-                dimensionType: dimension.dimensionType,
-                name: getTimeDimensionName(dimension, program, stage),
-            }
-            return acc
-        },
-        {}
-    )
-
 export const extractTrackedEntityTypeMetadata = (
     visualization: SavedVisualization
 ): MetadataInputMap =>
@@ -276,18 +254,8 @@ export const extractMetadataFromVisualization = (
         filters: toAppLocalDimensions(visualization.filters ?? []),
     }
 
-    // Only use the single-program shortcut when there's exactly one program.
-    // Multi-program visualizations (e.g. TEI with multiple programs) need
-    // different handling — deferred for now.
-    const singleProgram =
-        vis.programDimensions?.length === 1
-            ? vis.programDimensions[0]
-            : undefined
-    const singleStage = singleProgram?.programStages?.[0]
-
     const sources: MetadataInputMap[] = [
         vis.metaData,
-        getDefaultDynamicTimeDimensionsMetadata(singleProgram, singleStage),
         extractTrackedEntityTypeMetadata(vis),
         extractProgramDimensionsMetadata(vis),
         extractDimensionMetadata(vis),

@@ -9,9 +9,13 @@ import {
     buildCurrentVisFromVisUiConfig,
     toCurrentVis,
 } from '@modules/visualization/current-vis'
-import { isVisualizationEmpty } from '@modules/visualization/guards'
+import {
+    isCurrentVisualizationPersisted,
+    isVisualizationEmpty,
+} from '@modules/visualization/guards'
 import { setLastUsedVisualizationTypeToLocalStorage } from '@modules/visualization/local-storage'
 import { getVisUiConfigSorting } from '@modules/visualization/sorting'
+import { getHasUnsavedChanges } from '@modules/visualization/state'
 import { getVisualizationUiConfig } from '@modules/visualization/ui-config'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import type { AppDispatch, RootState, Sorting } from '@types'
@@ -21,6 +25,11 @@ import {
     setIsVisualizationLoading,
     setVisualizationLoadError,
 } from './loader-slice'
+import {
+    setNavigationState,
+    setPendingNavigation,
+    type NavigationTarget,
+} from './navigation-slice'
 import { clearSavedVis, setSavedVis } from './saved-vis-slice'
 import { clearUi, setUiUpdateAnimationShowingFor } from './ui-slice'
 import {
@@ -256,4 +265,55 @@ export const tSeedDefaultGrouping =
                 }
             })
         )
+    }
+
+const tNavigate =
+    (target: NavigationTarget) =>
+    (dispatch: AppDispatch, getState: () => RootState) => {
+        const { currentVis } = getState()
+
+        if (
+            isCurrentVisualizationPersisted(currentVis) &&
+            currentVis.id === target.visualizationId
+        ) {
+            /* Opening the visualization that is already open reloads it.
+             * Cleared first, so the canvas starts over as for another
+             * visualization, without unsaved changes or the page size */
+            dispatch(tClearVisualization())
+            dispatch(
+                tLoadSavedVisualization({
+                    id: target.visualizationId,
+                    updateStatistics: false,
+                })
+            )
+        } else {
+            dispatch(setNavigationState(target))
+        }
+    }
+
+/* For navigation the user asks for, which waits for confirmation when it
+ * would lose unsaved changes. The app's own navigation, after deleting or
+ * saving as, sets the navigation state directly. */
+export const tRequestNavigation =
+    (target: NavigationTarget) =>
+    (dispatch: AppDispatch, getState: () => RootState) => {
+        const { savedVis, currentVis } = getState()
+
+        if (getHasUnsavedChanges(savedVis, currentVis)) {
+            dispatch(setPendingNavigation(target))
+        } else {
+            dispatch(tNavigate(target))
+        }
+    }
+
+export const tConfirmPendingNavigation: AppThunk =
+    () => (dispatch, getState) => {
+        const { pendingNavigation } = getState().navigation
+
+        if (!pendingNavigation) {
+            return
+        }
+
+        dispatch(setPendingNavigation(null))
+        dispatch(tNavigate(pendingNavigation))
     }

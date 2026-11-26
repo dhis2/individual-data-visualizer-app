@@ -126,3 +126,12 @@ export const getVisualizationState = (
         return 'DIRTY'
     }
 }
+
+export const getHasUnsavedChanges = (
+    savedVis: SavedVisualization | EmptyVisualization,
+    currentVis: CurrentVisualization | EmptyVisualization
+): boolean => {
+    const visualizationState = getVisualizationState(savedVis, currentVis)
+
+    return visualizationState === 'UNSAVED' || visualizationState === 'DIRTY'
+}

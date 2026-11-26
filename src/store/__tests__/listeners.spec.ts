@@ -38,7 +38,11 @@ const createStore = (
             currentVis: currentVisSlice.reducer,
         },
         preloadedState: {
-            navigation: { visualizationId, interpretationId: null },
+            navigation: {
+                visualizationId,
+                interpretationId: null,
+                pendingNavigation: null,
+            },
             currentVis: loadedVisualizationId
                 ? ({ id: loadedVisualizationId } as never)
                 : {},

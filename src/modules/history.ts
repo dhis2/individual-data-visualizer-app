@@ -7,7 +7,7 @@ export const history = createHashHistory()
 
 export const getNavigationStateFromLocation = (
     location: Location = history.location
-): NavigationState => {
+): Pick<NavigationState, 'visualizationId' | 'interpretationId'> => {
     const pathVisualizationId = location.pathname.slice(1) // remove leading "/"
     const visualizationId = pathVisualizationId || 'new'
     const queryParams = queryString.parse(location.search)

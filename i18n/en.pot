@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-24T16:36:05.169Z\n"
-"PO-Revision-Date: 2026-11-24T16:36:05.169Z\n"
+"POT-Creation-Date: 2026-11-25T09:52:25.831Z\n"
+"PO-Revision-Date: 2026-11-25T09:52:25.831Z\n"
 
 msgid "Network error"
 msgstr "Network error"
@@ -662,6 +662,22 @@ msgstr "Show without filters"
 msgid "Page {{page}} not found, returned to page {{shownPage}}"
 msgstr "Page {{page}} not found, returned to page {{shownPage}}"
 
+msgid "Discard unsaved changes?"
+msgstr "Discard unsaved changes?"
+
+msgid ""
+"Are you sure you want to leave this visualization? Any unsaved changes will "
+"be lost."
+msgstr ""
+"Are you sure you want to leave this visualization? Any unsaved changes will "
+"be lost."
+
+msgid "No, cancel"
+msgstr "No, cancel"
+
+msgid "Yes, leave"
+msgstr "Yes, leave"
+
 msgid "Create a {{- visType}} before updating"
 msgstr "Create a {{- visType}} before updating"
 
@@ -1087,9 +1103,6 @@ msgstr "Levels"
 
 msgid "Groups"
 msgstr "Groups"
-
-msgid "Enrollment date"
-msgstr "Enrollment date"
 
 msgid "Restricted access"
 msgstr "Restricted access"
