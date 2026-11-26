@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-11-26T09:43:59.292Z\n"
-"PO-Revision-Date: 2026-11-26T09:43:59.292Z\n"
+"POT-Creation-Date: 2026-11-26T09:47:10.865Z\n"
+"PO-Revision-Date: 2026-11-26T09:47:10.865Z\n"
 
 msgid "Network error"
 msgstr "Network error"
@@ -309,6 +309,9 @@ msgstr "Not valid with multiple program stages"
 
 msgid "Not valid with event programs"
 msgstr "Not valid with event programs"
+
+msgid "Not valid with first or last value aggregation"
+msgstr "Not valid with first or last value aggregation"
 
 msgid "Not valid with Completed on"
 msgstr "Not valid with Completed on"
