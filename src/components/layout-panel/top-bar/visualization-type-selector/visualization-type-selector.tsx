@@ -15,20 +15,15 @@ import {
     IconVisualizationLine16,
     IconVisualizationArea16,
 } from '@dhis2/ui'
-import { useAppDispatch, useAppSelector, useMetadataStore } from '@hooks'
-import { convertLayoutForVisType } from '@modules/layout'
-import {
-    setVisUiConfigLayout,
-    setVisUiConfigVisualizationType,
-    getVisUiConfigLayout,
-    getVisUiConfigVisualizationType,
-} from '@store/vis-ui-config-slice'
-import type { EventVisualizationType, Layout, VisualizationType } from '@types'
+import { useAppSelector } from '@hooks'
+import { getVisUiConfigVisualizationType } from '@store/vis-ui-config-slice'
+import type { EventVisualizationType, VisualizationType } from '@types'
 import cx from 'classnames'
 import type { FC, ReactNode } from 'react'
 import { useState, useRef } from 'react'
 import { ConversionConfirmationModal } from './conversion-confirmation-modal'
 import classes from './styles/visualization-type-selector.module.css'
+import { useVisTypeConversion } from './use-vis-type-conversion'
 
 const visTypeIcons: Record<VisualizationType, ReactNode> = {
     LINE_LIST: <IconVisualizationLinelist16 />,
@@ -93,61 +88,55 @@ const ComingSoonListItem: FC<{ visType: ComingSoonVisType }> = ({
     </div>
 )
 
-type PendingConversion = {
-    targetVisType: VisualizationType
-    convertedLayout: Layout
-    discardedNames: string[]
+type VisTypeSectionProps = {
+    title: string
+    visTypes: readonly VisualizationType[]
+    selectedVisType: VisualizationType
+    onSelect: (visType: VisualizationType) => void
+    children?: ReactNode
 }
 
-export const VisualizationTypeSelector: FC = () => {
-    const dispatch = useAppDispatch()
-    const metadataStore = useMetadataStore()
+const VisTypeSection: FC<VisTypeSectionProps> = ({
+    title,
+    visTypes,
+    selectedVisType,
+    onSelect,
+    children,
+}) => (
+    <div className={classes.section}>
+        <div className={classes.sectionHeader}>{title}</div>
+        <div className={classes.grid}>
+            {visTypes.map((visType) => (
+                <ListItem
+                    key={visType}
+                    visType={visType}
+                    isSelected={visType === selectedVisType}
+                    onClick={() => onSelect(visType)}
+                />
+            ))}
+            {children}
+        </div>
+    </div>
+)
 
+export const VisualizationTypeSelector: FC = () => {
     const visualizationType = useAppSelector(getVisUiConfigVisualizationType)
-    const layout = useAppSelector(getVisUiConfigLayout)
+    const {
+        pendingConversion,
+        convertTo,
+        confirmConversion,
+        cancelConversion,
+    } = useVisTypeConversion()
 
     const [listIsOpen, setListIsOpen] = useState(false)
-    const [pendingConversion, setPendingConversion] =
-        useState<PendingConversion | null>(null)
+    const buttonRef = useRef<HTMLDivElement>(null)
 
     const toggleList = () => setListIsOpen(!listIsOpen)
 
-    const applyChange = (
-        targetVisType: VisualizationType,
-        convertedLayout: Layout
-    ) => {
-        dispatch(setVisUiConfigLayout(convertedLayout))
-        dispatch(setVisUiConfigVisualizationType(targetVisType))
-    }
-
-    const handleListItemClick = (nextVisType: VisualizationType) => () => {
-        if (nextVisType === visualizationType) {
-            setListIsOpen(false)
-            return
-        }
-        const { convertedLayout, invalidDimensionIds } =
-            convertLayoutForVisType({
-                layout,
-                targetVisType: nextVisType,
-                getDimension: metadataStore.getDimensionMetadataItemOrThrow,
-            })
-        if (invalidDimensionIds.length === 0) {
-            applyChange(nextVisType, convertedLayout)
-            setListIsOpen(false)
-            return
-        }
-        const discardedNames = invalidDimensionIds.map(
-            (id) => metadataStore.getDimensionMetadataItem(id)?.name ?? id
-        )
-        setPendingConversion({
-            targetVisType: nextVisType,
-            convertedLayout,
-            discardedNames,
-        })
+    const selectVisType = (visType: VisualizationType) => {
         setListIsOpen(false)
+        convertTo(visType)
     }
-
-    const buttonRef = useRef<HTMLDivElement>(null)
 
     return (
         <>
@@ -178,56 +167,25 @@ export const VisualizationTypeSelector: FC = () => {
                             className={classes.container}
                             data-test="visualization-type-selector-list"
                         >
-                            <div className={classes.section}>
-                                <div className={classes.sectionHeader}>
-                                    {i18n.t('Individual data view')}
-                                </div>
-                                <div className={classes.grid}>
-                                    {INDIVIDUAL_VISUALIZATION_TYPES.map(
-                                        (visType) => (
-                                            <ListItem
-                                                key={visType}
-                                                visType={visType}
-                                                isSelected={
-                                                    visType ===
-                                                    visualizationType
-                                                }
-                                                onClick={handleListItemClick(
-                                                    visType
-                                                )}
-                                            />
-                                        )
-                                    )}
-                                </div>
-                            </div>
-                            <div className={classes.section}>
-                                <div className={classes.sectionHeader}>
-                                    {i18n.t('Aggregated view')}
-                                </div>
-                                <div className={classes.grid}>
-                                    {AGGREGATED_VISUALIZATION_TYPES.map(
-                                        (visType) => (
-                                            <ListItem
-                                                key={visType}
-                                                visType={visType}
-                                                isSelected={
-                                                    visType ===
-                                                    visualizationType
-                                                }
-                                                onClick={handleListItemClick(
-                                                    visType
-                                                )}
-                                            />
-                                        )
-                                    )}
-                                    {COMING_SOON_VIS_TYPES.map((visType) => (
-                                        <ComingSoonListItem
-                                            key={visType}
-                                            visType={visType}
-                                        />
-                                    ))}
-                                </div>
-                            </div>
+                            <VisTypeSection
+                                title={i18n.t('Individual data view')}
+                                visTypes={INDIVIDUAL_VISUALIZATION_TYPES}
+                                selectedVisType={visualizationType}
+                                onSelect={selectVisType}
+                            />
+                            <VisTypeSection
+                                title={i18n.t('Aggregated view')}
+                                visTypes={AGGREGATED_VISUALIZATION_TYPES}
+                                selectedVisType={visualizationType}
+                                onSelect={selectVisType}
+                            >
+                                {COMING_SOON_VIS_TYPES.map((visType) => (
+                                    <ComingSoonListItem
+                                        key={visType}
+                                        visType={visType}
+                                    />
+                                ))}
+                            </VisTypeSection>
                         </div>
                     </Popper>
                 </Layer>
@@ -236,14 +194,10 @@ export const VisualizationTypeSelector: FC = () => {
                 <ConversionConfirmationModal
                     targetVisType={pendingConversion.targetVisType}
                     discardedDimensionNames={pendingConversion.discardedNames}
-                    onConfirm={() => {
-                        applyChange(
-                            pendingConversion.targetVisType,
-                            pendingConversion.convertedLayout
-                        )
-                        setPendingConversion(null)
-                    }}
-                    onCancel={() => setPendingConversion(null)}
+                    emptyDimensionNames={pendingConversion.emptyDimensionNames}
+                    defaultItemNames={pendingConversion.defaultItemNames}
+                    onConfirm={confirmConversion}
+                    onCancel={cancelConversion}
                 />
             )}
         </>

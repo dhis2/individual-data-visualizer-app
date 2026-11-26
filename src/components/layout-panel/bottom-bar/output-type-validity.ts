@@ -1,6 +1,7 @@
 import { type TooltipConfig } from '@components/layout-panel/bottom-bar/tooltip-config'
 import i18n from '@dhis2/d2-i18n'
 import { isDataSourceProgramWithoutRegistration } from '@modules/data-source'
+import { getEmptyPeriodAndOrgUnitDimensionIds } from '@modules/dimension/empty-dimensions'
 import { resolveCellValueContext, resolveLayoutContext } from '@modules/layout'
 import {
     selectLayoutAllDimensionIds,
@@ -190,7 +191,9 @@ const getTrackedEntityInstanceTooltipConfig = ({
 /* Without a period or an org unit the analytics API applies a fallback (the
  * last 12 months, the user's org unit), so the result would show data the user
  * never asked for. Only fixed period and org unit dimensions count: a date or
- * org unit data element does not stop the fallback, even with a condition. */
+ * org unit data element does not stop the fallback, even with a condition.
+ * A pivot table also needs items on every period and org unit on columns or
+ * rows, because an empty one splits the table by raw value. */
 export const getLayoutSelectionTooltipConfig = ({
     visUiConfig,
     metadataStore,
@@ -222,11 +225,26 @@ export const getLayoutSelectionTooltipConfig = ({
         return { content: i18n.t('Add at least one dimension to columns') }
     }
 
+    if (
+        visualizationType === 'PIVOT_TABLE' &&
+        getEmptyPeriodAndOrgUnitDimensionIds({
+            layout,
+            itemsByDimension,
+            getDimension: metadataStore.getDimensionMetadataItemOrThrow,
+        }).length
+    ) {
+        return {
+            content: i18n.t(
+                'Select at least one item for every period and org unit dimension'
+            ),
+        }
+    }
+
     const hasDimensionWithItems = (dimensionType: DimensionType): boolean =>
         layoutDimensionIds.some(
             (dimensionId) =>
-                metadataStore.getDimensionMetadataItem(dimensionId)
-                    ?.dimensionType === dimensionType &&
+                metadataStore.getDimensionMetadataItemOrThrow(dimensionId)
+                    .dimensionType === dimensionType &&
                 Boolean(itemsByDimension[dimensionId]?.length)
         )
 
@@ -290,16 +308,16 @@ export const getOutputTypeTooltipConfig = ({
     const dimensionTypeCount = (dimensionType: string): number =>
         layoutDimensionIds.filter(
             (dimensionId) =>
-                metadataStore.getDimensionMetadataItem(dimensionId)
-                    ?.dimensionType === dimensionType
+                metadataStore.getDimensionMetadataItemOrThrow(dimensionId)
+                    .dimensionType === dimensionType
         ).length
 
     const tetIdsInLayout = new Set(
         layoutDimensionIds
             .map(
                 (dimensionId) =>
-                    metadataStore.getDimensionMetadataItem(dimensionId)
-                        ?.trackedEntityTypeId
+                    metadataStore.getDimensionMetadataItemOrThrow(dimensionId)
+                        .trackedEntityTypeId
             )
             .filter(Boolean)
     )
@@ -323,7 +341,7 @@ export const getOutputTypeTooltipConfig = ({
     const hasMultipleProgramsSelected = selectedProgramIds.size > 1
     const hasEventProgramSelected = [...selectedProgramIds].some((programId) =>
         isDataSourceProgramWithoutRegistration(
-            metadataStore.getProgramMetadataItem(programId)
+            metadataStore.getProgramMetadataItemOrThrow(programId)
         )
     )
     switch (outputType) {

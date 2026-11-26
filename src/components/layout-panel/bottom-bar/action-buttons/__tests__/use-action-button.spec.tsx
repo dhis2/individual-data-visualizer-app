@@ -144,8 +144,8 @@ const metadata = {
     },
 }
 
-/* Every layout gets a period and an org unit in filters, so the output type
- * rules are what decides each case. */
+/* Every layout gets a period and an org unit in filters, and every period and
+ * org unit has items, so the output type rules are what decides each case. */
 const initialPreloadedState: Partial<RootState> = {
     currentVis: currentVisInitialState,
     dimensionSelection: dimensionSelectionInitialState,
@@ -158,6 +158,9 @@ const initialPreloadedState: Partial<RootState> = {
         itemsByDimension: {
             [metadata.lastUpdated.id]: ['LAST_12_MONTHS'],
             [metadata.ou.id]: ['USER_ORGUNIT'],
+            [metadata['p2.p2s1.d1'].id]: ['USER_ORGUNIT'],
+            [metadata['tei1.ou'].id]: ['USER_ORGUNIT'],
+            [metadata.completed.id]: ['LAST_12_MONTHS'],
         },
     },
 }

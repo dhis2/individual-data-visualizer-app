@@ -1073,11 +1073,13 @@ describe('convertLayoutForVisType', () => {
         const result = convertLayoutForVisType({
             layout: emptyLayout(),
             targetVisType: 'PIVOT_TABLE',
+            itemsByDimension: {},
             getDimension: makeGetDimension({}),
         })
         expect(result).toEqual({
             convertedLayout: emptyLayout(),
             invalidDimensionIds: [],
+            emptyDimensionIds: [],
         })
     })
 
@@ -1090,6 +1092,7 @@ describe('convertLayoutForVisType', () => {
                     filters: [],
                 },
                 targetVisType: 'PIVOT_TABLE',
+                itemsByDimension: {},
                 getDimension: makeGetDimension({
                     pi: makeDim({
                         dimensionId: 'pi',
@@ -1116,6 +1119,7 @@ describe('convertLayoutForVisType', () => {
                     filters: [],
                 },
                 targetVisType: 'PIVOT_TABLE',
+                itemsByDimension: {},
                 getDimension: makeGetDimension({
                     'stageId.ou': makeDim({
                         dimensionId: 'ou',
@@ -1146,6 +1150,7 @@ describe('convertLayoutForVisType', () => {
                     filters: [],
                 },
                 targetVisType: 'PIVOT_TABLE',
+                itemsByDimension: {},
                 getDimension: makeGetDimension({
                     numericDe: makeDim({
                         dimensionId: 'numericDe',
@@ -1175,6 +1180,7 @@ describe('convertLayoutForVisType', () => {
                     filters: ['pi', 'filterDim'],
                 },
                 targetVisType: 'PIVOT_TABLE',
+                itemsByDimension: {},
                 getDimension: makeGetDimension({
                     'stageId.ou': makeDim({
                         dimensionId: 'ou',
@@ -1204,6 +1210,7 @@ describe('convertLayoutForVisType', () => {
                     filters: ['filterDim'],
                 },
                 targetVisType: 'PIVOT_TABLE',
+                itemsByDimension: {},
                 getDimension: makeGetDimension({
                     textDe: makeDim({
                         dimensionId: 'textDe',
@@ -1236,6 +1243,7 @@ describe('convertLayoutForVisType', () => {
                     filters: [],
                 },
                 targetVisType: 'PIVOT_TABLE',
+                itemsByDimension: {},
                 getDimension: makeGetDimension({
                     'programId.enrollmentOu': makeDim({
                         dimensionId: 'enrollmentOu',
@@ -1266,9 +1274,64 @@ describe('convertLayoutForVisType', () => {
             ])
             expect(result.convertedLayout.filters).toEqual([])
         })
+
+        const periodAndOrgUnitDimensions = {
+            ou1: makeDim({
+                dimensionId: 'ou',
+                dimensionType: 'ORGANISATION_UNIT',
+            }),
+            pe1: makeDim({ dimensionId: 'eventDate', dimensionType: 'PERIOD' }),
+            pe2: makeDim({
+                dimensionId: 'enrollmentDate',
+                dimensionType: 'PERIOD',
+            }),
+        }
+
+        it('reports empty period and org unit dimensions', () => {
+            const result = convertLayoutForVisType({
+                layout: {
+                    columns: ['ou1', 'pe1', 'pe2'],
+                    rows: [],
+                    filters: [],
+                },
+                targetVisType: 'PIVOT_TABLE',
+                itemsByDimension: { pe1: ['LAST_12_MONTHS'], ou1: [] },
+                getDimension: makeGetDimension(periodAndOrgUnitDimensions),
+            })
+            expect(result.emptyDimensionIds).toEqual(['ou1', 'pe2'])
+        })
+
+        it('does not report empty dimensions in filters', () => {
+            const result = convertLayoutForVisType({
+                layout: { columns: [], rows: [], filters: ['pe1'] },
+                targetVisType: 'PIVOT_TABLE',
+                itemsByDimension: {},
+                getDimension: makeGetDimension(periodAndOrgUnitDimensions),
+            })
+            expect(result.emptyDimensionIds).toEqual([])
+        })
     })
 
     describe('PIVOT_TABLE -> LINE_LIST', () => {
+        it('reports no empty dimensions', () => {
+            const result = convertLayoutForVisType({
+                layout: { columns: ['ou1'], rows: ['pe1'], filters: [] },
+                targetVisType: 'LINE_LIST',
+                itemsByDimension: {},
+                getDimension: makeGetDimension({
+                    ou1: makeDim({
+                        dimensionId: 'ou',
+                        dimensionType: 'ORGANISATION_UNIT',
+                    }),
+                    pe1: makeDim({
+                        dimensionId: 'eventDate',
+                        dimensionType: 'PERIOD',
+                    }),
+                }),
+            })
+            expect(result.emptyDimensionIds).toEqual([])
+        })
+
         it('merges dimensions in rows into columns, appended after pre-existing columns', () => {
             const result = convertLayoutForVisType({
                 layout: {
@@ -1277,6 +1340,7 @@ describe('convertLayoutForVisType', () => {
                     filters: ['filterDim'],
                 },
                 targetVisType: 'LINE_LIST',
+                itemsByDimension: {},
                 getDimension: makeGetDimension({
                     colDim: makeDim({
                         dimensionId: 'colDim',
@@ -1317,6 +1381,7 @@ describe('convertLayoutForVisType', () => {
                     filters: [],
                 },
                 targetVisType: 'LINE_LIST',
+                itemsByDimension: {},
                 getDimension: makeGetDimension({
                     pi: makeDim({
                         dimensionId: 'pi',
@@ -1343,6 +1408,7 @@ describe('convertLayoutForVisType', () => {
                 filters: ['filterDim'],
             },
             targetVisType: 'PIVOT_TABLE',
+            itemsByDimension: {},
             getDimension: makeGetDimension({
                 pi: makeDim({
                     dimensionId: 'pi',

@@ -1,5 +1,6 @@
 import i18n from '@dhis2/d2-i18n'
 import { isDimensionUnsupportedByVisType } from '@modules/dimension/blocking'
+import { getEmptyPeriodAndOrgUnitDimensionIds } from '@modules/dimension/empty-dimensions'
 import { toEventVisualizationDimensionId } from '@modules/dimension/translation'
 import { parseUiRepetitions } from '@modules/repetitions'
 import {
@@ -145,8 +146,8 @@ export const resolveDimensionTetId = (
     }
     if (dim.programId) {
         return (
-            metadataStore.getProgramMetadataItem(dim.programId)
-                ?.trackedEntityType?.id ?? null
+            metadataStore.getProgramMetadataItemOrThrow(dim.programId)
+                .trackedEntityType?.id ?? null
         )
     }
     return null
@@ -208,14 +209,17 @@ export const resolveCellValueContext = (
 type LayoutConversionResult = {
     convertedLayout: Layout
     invalidDimensionIds: string[]
+    emptyDimensionIds: string[]
 }
 
 export const convertLayoutForVisType = ({
     layout,
+    itemsByDimension,
     targetVisType,
     getDimension,
 }: {
     layout: Layout
+    itemsByDimension: Record<string, string[] | undefined>
     targetVisType: VisualizationType
     getDimension: (id: string) => DimensionMetadataItem
 }): LayoutConversionResult => {
@@ -229,6 +233,7 @@ export const convertLayoutForVisType = ({
                 filters: [...layout.filters],
             },
             invalidDimensionIds: [],
+            emptyDimensionIds: [],
         }
     }
 
@@ -264,7 +269,15 @@ export const convertLayoutForVisType = ({
 
     /* A line list has no rows in the layout, so there is no need to iterate
      * layout.rows. */
-    return { convertedLayout, invalidDimensionIds }
+    return {
+        convertedLayout,
+        invalidDimensionIds,
+        emptyDimensionIds: getEmptyPeriodAndOrgUnitDimensionIds({
+            layout: convertedLayout,
+            itemsByDimension,
+            getDimension,
+        }),
+    }
 }
 
 export const resolveTeiFields = (
