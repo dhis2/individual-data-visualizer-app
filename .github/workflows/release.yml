@@ -50,7 +50,8 @@ jobs:
                   ssh-signing-key-passphrase: ${{ secrets.DHIS2_BOT_SSH_SIGNING_PASSPHRASE }}
 
             # The postinstall script only sets up local development (git hooks,
-            # generated API types), which a build does not need
+            # generated API types), which a build does not need. The build
+            # generates the translations (src/locales) itself.
             - name: Install
               run: pnpm install --frozen-lockfile --ignore-scripts
 
