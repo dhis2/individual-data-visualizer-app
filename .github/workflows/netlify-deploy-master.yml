@@ -10,6 +10,7 @@ name: 'deploy: netlify production'
 
 on:
     workflow_dispatch:
+    # The release workflow calls this after a release, with the release commit
     workflow_call:
         inputs:
             ref:
@@ -26,6 +27,7 @@ jobs:
         runs-on: ubuntu-latest
         if: ${{ !github.event.repository.fork && github.ref == 'refs/heads/master' }}
         steps:
+            # Without a ref (a manual run) this checks out master
             - uses: actions/checkout@v7
               with:
                   ref: ${{ inputs.ref }}

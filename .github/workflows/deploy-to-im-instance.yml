@@ -4,6 +4,7 @@ on:
     schedule:
         - cron: '0 5 * * *' # Runs every day at 5:00 AM UTC
     workflow_dispatch: # Allows manual triggering of the workflow
+    # The release workflow calls this after a release, with the release commit
     workflow_call:
         inputs:
             ref:
@@ -21,6 +22,7 @@ jobs:
 
         runs-on: ubuntu-latest
         steps:
+            # Without a ref (the nightly and manual runs) this checks out master
             - uses: actions/checkout@v7
               with:
                   ref: ${{ inputs.ref }}
