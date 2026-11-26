@@ -11,6 +11,9 @@ name: 'deploy: netlify production'
 on:
     workflow_dispatch:
     # The release workflow calls this after a release, with the release commit
+    # as ref. A plain checkout would get the merge commit that started the
+    # release, which predates the version bump. Checking out master instead
+    # could pick up a commit merged while the release was building.
     workflow_call:
         inputs:
             ref:
