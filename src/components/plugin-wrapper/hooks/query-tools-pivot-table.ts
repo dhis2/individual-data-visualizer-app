@@ -1,6 +1,6 @@
 import { getAnalyticsRequestHeaderName } from '@modules/analytics-request'
 import { isActiveFilterDimensionRecord } from '@modules/dimension/active-filter'
-import { replaceDefaultForNoneItem } from '@modules/dimension/aggregation-type'
+import { replaceDefaultForUnsupportedItem } from '@modules/dimension/aggregation-type'
 import {
     getCellValueAnalyticsId,
     getCellValueMetadataItemOrThrow,
@@ -112,11 +112,12 @@ export const getCellValueAnalyticsRequestParams = (
         metadataStore
     )
     /* Analytics works out what DEFAULT means for the item itself, but rejects
-     * it for an item that aggregates by NONE (E7265). A visualization saved
-     * with DEFAULT can still meet one when the item's type changed later. */
+     * it or returns wrong data for an item whose own type is unsupported, such
+     * as NONE (E7265). A visualization saved with DEFAULT can still meet one
+     * when the item's type changed later. */
     return {
         ...params,
-        aggregationType: replaceDefaultForNoneItem(
+        aggregationType: replaceDefaultForUnsupportedItem(
             params.aggregationType,
             item
         ),
