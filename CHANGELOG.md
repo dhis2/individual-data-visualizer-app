@@ -1,3 +1,9 @@
+## [0.0.2](https://github.com/dhis2/individual-data-visualizer-app/compare/v0.0.1...v0.0.2) (2026-11-26)
+
+### Bug Fixes
+
+* disable createdBy/lastUpdatedBy in PT (DHIS2-22604) ([#504](https://github.com/dhis2/individual-data-visualizer-app/issues/504)) ([6999d2e](https://github.com/dhis2/individual-data-visualizer-app/commit/6999d2ea38a3897eae62607abbbedbbcce537568))
+
 ## [0.0.1](https://github.com/dhis2/individual-data-visualizer-app/compare/v0.0.0...v0.0.1) (2026-11-26)
 
 ### Bug Fixes
