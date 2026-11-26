@@ -1,11 +1,13 @@
+import type { CurrentUser } from '@components/app-wrapper/cached-data/current-user'
 import i18n from '@dhis2/d2-i18n'
 import { Center, CircularLoader, Layer, NoticeBox } from '@dhis2/ui'
 import { createContext, useContext, type FC, type ReactNode } from 'react'
 
+/* What both the app and the plugin provide. The app provider puts more in the
+ * same context, which is read with `useAppCachedData`. */
 export type CachedData = {
     relativePeriodsNames: Record<string, string>
-    /* The user's UI locale as a BCP 47 tag, for Intl */
-    locale: string
+    currentUser: CurrentUser
 }
 
 const CachedDataContext = createContext<CachedData | null>(null)
@@ -53,4 +55,4 @@ export const useCachedData = (): CachedData => {
     return cachedData
 }
 
-export const useUserLocale = (): CachedData['locale'] => useCachedData().locale
+export const useCurrentUser = (): CurrentUser => useCachedData().currentUser

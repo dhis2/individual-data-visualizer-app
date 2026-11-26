@@ -14,11 +14,11 @@ import {
 } from '../metadata-provider'
 
 vi.mock(
-    '@components/app-wrapper/cached-data/plugin-cached-data-provider',
+    '@components/app-wrapper/cached-data/cached-data-provider',
     async (importOriginal) => ({
         ...(await importOriginal<object>()),
-        usePluginCachedData: (await import('@test-utils/cached-data-stub'))
-            .stubPluginCachedData,
+        useCachedData: (await import('@test-utils/cached-data-stub'))
+            .stubCachedData,
     })
 )
 

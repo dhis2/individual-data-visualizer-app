@@ -1,5 +1,5 @@
 import { useAppCachedData } from '@components/app-wrapper/cached-data/app-cached-data-provider'
-import { usePluginCachedData } from '@components/app-wrapper/cached-data/plugin-cached-data-provider'
+import { useCachedData } from '@components/app-wrapper/cached-data/cached-data-provider'
 import { getInitialMetadata } from '@modules/metadata/initial-metadata'
 import {
     isProgramMetadataItem,
@@ -71,7 +71,7 @@ export const AppMetadataProvider: FC<{ children: ReactNode }> = ({
 export const PluginMetadataProvider: FC<{ children: ReactNode }> = ({
     children,
 }) => {
-    const { relativePeriodsNames } = usePluginCachedData()
+    const { relativePeriodsNames } = useCachedData()
 
     return (
         <MetadataStoreProvider

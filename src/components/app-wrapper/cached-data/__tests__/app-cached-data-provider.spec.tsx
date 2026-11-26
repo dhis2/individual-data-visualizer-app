@@ -10,6 +10,7 @@ import meData from '@test-utils/__fixtures__/me.json'
 import organisationUnitLevelsData from '@test-utils/__fixtures__/organisation-unit-levels.json'
 import organisationUnitsData from '@test-utils/__fixtures__/organisation-units.json'
 import systemSettingsData from '@test-utils/__fixtures__/system-settings.json'
+import { stubCachedData } from '@test-utils/cached-data-stub'
 import {
     mockPeriodTypesQueryData,
     mockRuntimeConfig,
@@ -33,11 +34,12 @@ const withoutResource = (resource: string): QueryData =>
     )
 
 const CachedDataSummary = () => {
-    const { currentUser, relativePeriodsNames, locale } = useAppCachedData()
+    const { currentUser, relativePeriodsNames } = useAppCachedData()
 
     return (
         <div data-test="summary">
-            {currentUser.username}: {relativePeriodsNames.LAST_YEAR} ({locale})
+            {currentUser.username}: {relativePeriodsNames.LAST_YEAR} (
+            {currentUser.settings.uiLocale})
         </div>
     )
 }
@@ -96,9 +98,7 @@ describe('useAppCachedData', () => {
 
         expect(() =>
             render(
-                <CachedDataProvider
-                    data={{ relativePeriodsNames: {}, locale: 'en' }}
-                >
+                <CachedDataProvider data={stubCachedData()}>
                     <CachedDataSummary />
                 </CachedDataProvider>
             )

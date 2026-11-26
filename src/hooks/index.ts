@@ -7,9 +7,9 @@ import { useDispatch, useSelector, useStore } from 'react-redux'
 export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
 export const useAppSelector = useSelector.withTypes<RootState>()
 export const useAppStore = useStore.withTypes<AppStore>()
+export { useCurrentUser } from '@components/app-wrapper/cached-data/cached-data-provider'
 export {
     useAppCachedData,
-    useCurrentUser,
     useSystemSettings,
     useRootOrgUnits,
     useOrgUnitLevels,

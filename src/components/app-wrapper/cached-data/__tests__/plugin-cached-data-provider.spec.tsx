@@ -1,4 +1,4 @@
-import { useUserLocale } from '@components/app-wrapper/cached-data/cached-data-provider'
+import { useCurrentUser } from '@components/app-wrapper/cached-data/cached-data-provider'
 import { PluginCachedDataProvider } from '@components/app-wrapper/cached-data/plugin-cached-data-provider'
 import { getRelativePeriodsName } from '@dhis2/analytics'
 import { UserProvider } from '@dhis2/app-service-user'
@@ -14,23 +14,37 @@ vi.mock('@dhis2/analytics', async (importOriginal) => ({
     }),
 }))
 
-const Locale = () => <div data-test="locale">{useUserLocale()}</div>
+const UserSummary = () => {
+    const { username, settings } = useCurrentUser()
+
+    return (
+        <div data-test="user">
+            {username} ({settings.uiLocale}, {settings.displayNameProperty})
+        </div>
+    )
+}
 
 describe('PluginCachedDataProvider', () => {
-    it('provides the user locale in a form Intl accepts', () => {
+    it('provides the current user, with the locale in a form Intl accepts', () => {
         render(
             <UserProvider
                 userInfo={{
                     ...meData,
-                    settings: { ...meData.settings, keyUiLocale: 'uz_UZ_Cyrl' },
+                    settings: {
+                        ...meData.settings,
+                        keyUiLocale: 'uz_UZ_Cyrl',
+                        keyAnalysisDisplayProperty: 'name',
+                    },
                 }}
             >
                 <PluginCachedDataProvider>
-                    <Locale />
+                    <UserSummary />
                 </PluginCachedDataProvider>
             </UserProvider>
         )
 
-        expect(screen.getByTestId('locale')).toHaveTextContent('uz-Cyrl-UZ')
+        expect(screen.getByTestId('user')).toHaveTextContent(
+            `${meData.username} (uz-Cyrl-UZ, displayName)`
+        )
     })
 })

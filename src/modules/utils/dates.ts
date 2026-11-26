@@ -1,4 +1,4 @@
-import { useUserLocale } from '@components/app-wrapper/cached-data/cached-data-provider'
+import { useCurrentUser } from '@components/app-wrapper/cached-data/cached-data-provider'
 import { useCallback, useMemo } from 'react'
 
 export const getStartEndDate = (startEndDate: string): Array<string> => {
@@ -28,7 +28,7 @@ export const getStartEndDateFormatter = (
 
 export const useLocalizedStartEndDateFormatter =
     (): UseLocalizedStartEndDateFormatterResult => {
-        const locale = useUserLocale()
+        const locale = useCurrentUser().settings.uiLocale
 
         const formatter = useMemo(
             () => getStartEndDateFormatter(locale),

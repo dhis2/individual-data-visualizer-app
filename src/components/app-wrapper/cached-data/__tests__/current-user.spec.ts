@@ -1,4 +1,8 @@
-import { toIntlLocale } from '@components/app-wrapper/cached-data/current-user'
+import {
+    toCurrentUser,
+    toIntlLocale,
+} from '@components/app-wrapper/cached-data/current-user'
+import meData from '@test-utils/__fixtures__/me.json'
 import { describe, expect, it } from 'vitest'
 
 describe('toIntlLocale', () => {
@@ -24,4 +28,45 @@ describe('toIntlLocale', () => {
             expect(toIntlLocale(dhis2Locale)).toBe('en')
         }
     )
+})
+
+describe('toCurrentUser', () => {
+    it('converts both locales and picks the name property to display', () => {
+        const currentUser = toCurrentUser({
+            ...meData,
+            settings: {
+                ...meData.settings,
+                keyUiLocale: 'pt_BR',
+                keyDbLocale: 'uz_UZ_Latn',
+                keyAnalysisDisplayProperty: 'name',
+            },
+        })
+
+        expect(currentUser).toEqual({
+            id: meData.id,
+            username: meData.username,
+            name: meData.displayName,
+            authorities: meData.authorities,
+            settings: {
+                uiLocale: 'pt-BR',
+                dbLocale: 'uz-Latn-UZ',
+                displayProperty: 'name',
+                displayNameProperty: 'displayName',
+            },
+        })
+    })
+
+    it('displays short names unless the user chose names', () => {
+        const currentUser = toCurrentUser({
+            ...meData,
+            settings: {
+                ...meData.settings,
+                keyAnalysisDisplayProperty: 'shortName',
+            },
+        })
+
+        expect(currentUser.settings.displayNameProperty).toBe(
+            'displayShortName'
+        )
+    })
 })

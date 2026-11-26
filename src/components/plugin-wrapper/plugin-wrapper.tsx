@@ -1,5 +1,5 @@
 import type { EngineError } from '@api/parse-engine-error'
-import { useUserLocale } from '@components/app-wrapper/cached-data/cached-data-provider'
+import { useCurrentUser } from '@components/app-wrapper/cached-data/cached-data-provider'
 import { useMetadataStore } from '@components/app-wrapper/metadata-provider/metadata-provider'
 import { CanvasError } from '@components/canvas-error/canvas-error'
 import { CanvasErrorFallback } from '@components/canvas-error/canvas-error-fallback'
@@ -10,7 +10,6 @@ import { getVisualizationFilterText } from '@modules/visualization/filter-text'
 import { isVisualizationEmpty } from '@modules/visualization/guards'
 import { getVisualizationTitle } from '@modules/visualization/title'
 import type {
-    CurrentUser,
     CurrentVisualization,
     EmptyVisualization,
     PluginFilters,
@@ -47,7 +46,6 @@ const getBaseRequestIdentity = (
 }
 
 type PluginWrapperProps = {
-    displayProperty: CurrentUser['settings']['displayProperty']
     visualization: CurrentVisualization | EmptyVisualization
     filters?: PluginFilters
     isInDashboard?: boolean
@@ -60,7 +58,6 @@ type PluginWrapperProps = {
 }
 
 export const PluginWrapper: FC<PluginWrapperProps> = ({
-    displayProperty,
     visualization,
     filters,
     isInDashboard = false,
@@ -90,7 +87,9 @@ export const PluginWrapper: FC<PluginWrapperProps> = ({
     )
 
     const metadataStore = useMetadataStore()
-    const locale = useUserLocale()
+    const {
+        settings: { uiLocale: locale, displayProperty },
+    } = useCurrentUser()
 
     const visualizationWithTitle = useMemo(
         () =>

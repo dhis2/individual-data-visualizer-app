@@ -18,7 +18,7 @@ const currentUserInfoRestrictions = [
     name,
     importNames: ['useCurrentUserInfo'],
     message:
-        "It returns /api/me unconverted. Read the user from the cached data instead ('useCurrentUser', 'useUserLocale').",
+        "It returns /api/me unconverted. Read the user from the cached data instead ('useCurrentUser').",
 }))
 
 const restrictedImports = {

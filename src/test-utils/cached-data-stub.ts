@@ -1,12 +1,14 @@
-import type { PluginCachedData } from '@components/app-wrapper/cached-data/plugin-cached-data-provider'
+import type { CachedData } from '@components/app-wrapper/cached-data/cached-data-provider'
+import { toCurrentUser } from '@components/app-wrapper/cached-data/current-user'
 import { getRelativePeriodsName } from '@dhis2/analytics'
 import type { AppCachedData } from '@types'
+import meData from './__fixtures__/me.json'
 
 /* For specs that render a metadata provider without the cached data provider
  * it reads from. */
-export const stubPluginCachedData = (): PluginCachedData => ({
+export const stubCachedData = (): CachedData => ({
     relativePeriodsNames: getRelativePeriodsName(),
-    locale: 'en',
+    currentUser: toCurrentUser(meData),
 })
 
 export const stubAppCachedData =

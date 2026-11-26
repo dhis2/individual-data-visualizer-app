@@ -1,3 +1,5 @@
+import type { CurrentUser as CurrentUserInfo } from '@dhis2/app-service-user'
+
 const FALLBACK_LOCALE = 'en'
 
 /* DHIS2 stores locales in Java's Locale.toString() format,
@@ -17,3 +19,41 @@ export const toIntlLocale = (dhis2Locale: string | undefined): string => {
         return FALLBACK_LOCALE
     }
 }
+
+type DisplayNameProperty = 'displayName' | 'displayShortName'
+
+export type CurrentUser = Pick<
+    CurrentUserInfo,
+    'id' | 'username' | 'authorities'
+> & {
+    name: string
+    settings: {
+        /* BCP 47 tags, for Intl */
+        dbLocale: string
+        uiLocale: string
+        displayProperty: string | undefined
+        displayNameProperty: DisplayNameProperty
+    }
+}
+
+export const toCurrentUser = ({
+    id,
+    username,
+    displayName,
+    authorities,
+    settings,
+}: CurrentUserInfo): CurrentUser => ({
+    id,
+    username,
+    name: displayName,
+    authorities,
+    settings: {
+        dbLocale: toIntlLocale(settings?.keyDbLocale),
+        uiLocale: toIntlLocale(settings?.keyUiLocale),
+        displayProperty: settings?.keyAnalysisDisplayProperty,
+        displayNameProperty:
+            settings?.keyAnalysisDisplayProperty === 'name'
+                ? 'displayName'
+                : 'displayShortName',
+    },
+})
