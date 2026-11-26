@@ -24,7 +24,8 @@
                         "path": "build/bundle/*.zip",
                         "label": "DHIS2 app bundle"
                     }
-                ]
+                ],
+                "failCommentCondition": false
             }
         ]
     ]

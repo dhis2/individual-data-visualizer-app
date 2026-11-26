@@ -2,7 +2,7 @@
 const config = {
     type: 'app',
     name: 'individual-data-visualizer',
-    // id: TBD,
+    // id: TBD, needed to publish to the App Hub (see release.yml)
     title: 'Individual Data Visualizer',
     minDHIS2Version: '2.43.3',
     direction: 'auto',
