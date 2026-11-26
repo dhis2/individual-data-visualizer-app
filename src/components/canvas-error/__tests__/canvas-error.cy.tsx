@@ -15,9 +15,6 @@ const engineError = (partial: Partial<EngineError>): EngineError => ({
     ...partial,
 })
 
-const NO_ACCESS_TO_DATA =
-    "You don't have access to the data in this visualization. Contact a system administrator."
-
 type ErrorScreen = {
     label: string
     error: EngineError | EmptyResponseError
@@ -59,7 +56,8 @@ const ERROR_SCREENS: ErrorScreen[] = [
         label: 'E7121 — no access to data',
         error: engineError({ errorCode: 'E7121' }),
         title: 'Restricted access',
-        description: NO_ACCESS_TO_DATA,
+        description:
+            "You don't have access to the data in this visualization. Contact a system administrator.",
         icon: 'data',
         retryable: false,
     },
@@ -165,6 +163,7 @@ const ERROR_SCREENS: ErrorScreen[] = [
         label: 'unrecognised code on a rejected request',
         error: engineError({
             type: 'access',
+            httpStatusCode: 409,
             errorCode: 'E7250',
             message: 'Dimension is not a fully qualified: `abc.def`',
         }),
@@ -174,10 +173,20 @@ const ERROR_SCREENS: ErrorScreen[] = [
         retryable: false,
     },
     {
-        label: 'access denied without an error code',
-        error: engineError({ type: 'access' }),
+        label: 'session ended',
+        error: engineError({ type: 'access', httpStatusCode: 401 }),
+        title: 'Logged out',
+        description:
+            'Your session has ended. Log in again in another tab, then retry.',
+        icon: 'generic',
+        retryable: true,
+    },
+    {
+        label: 'missing authority',
+        error: engineError({ type: 'access', httpStatusCode: 403 }),
         title: 'Restricted access',
-        description: NO_ACCESS_TO_DATA,
+        description:
+            "Your account doesn't have permission to do this. Contact a system administrator.",
         icon: 'data',
         retryable: false,
     },

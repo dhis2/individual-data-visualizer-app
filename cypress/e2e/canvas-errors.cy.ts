@@ -43,6 +43,40 @@ describe('canvas errors', () => {
         cy.contains('button', 'Retry').should('not.exist')
     })
 
+    it('shows the "Logged out" screen when the session has ended, and recovers on Retry', () => {
+        /* Only the first request fails, as if the user logged in again before
+         * clicking Retry. */
+        let shouldFail = true
+
+        cy.intercept({ method: 'GET', url: analyticsRequest }, (req) => {
+            if (shouldFail) {
+                shouldFail = false
+                req.reply({
+                    statusCode: 401,
+                    body: {
+                        httpStatus: 'Unauthorized',
+                        httpStatusCode: 401,
+                        status: 'ERROR',
+                        message: 'forced by test',
+                    },
+                })
+            } else {
+                req.continue()
+            }
+        })
+
+        ignoreProvokedError('forced by test')
+
+        cy.visit(`/#/${LINE_LIST_ID}`)
+
+        canvasError().should('contain.text', 'Logged out')
+
+        cy.contains('button', 'Retry').click()
+
+        cy.get('table').should('be.visible')
+        canvasError().should('not.exist')
+    })
+
     it('shows the "No data available" screen for an analytics response with no rows', () => {
         cy.intercept(
             { method: 'GET', url: analyticsRequest },
