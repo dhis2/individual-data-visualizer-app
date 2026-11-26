@@ -2,7 +2,7 @@ import i18n from '@dhis2/d2-i18n'
 import type { AggregationType } from '@types'
 
 /* Analytics supports these for enrollment aggregate too. */
-const ALL_OUTPUT_AGGREGATION_TYPES: AggregationType[] = [
+const ALL_OUTPUT_AGGREGATION_TYPES: ReadonlySet<AggregationType> = new Set([
     'SUM',
     'AVERAGE',
     'COUNT',
@@ -10,24 +10,23 @@ const ALL_OUTPUT_AGGREGATION_TYPES: AggregationType[] = [
     'MAX',
     'STDDEV',
     'VARIANCE',
-]
+])
 
 /* Analytics applies these only to event aggregate: enrollment aggregate
  * rejects them or returns wrong data. */
-export const EVENT_ONLY_AGGREGATION_TYPES: AggregationType[] = [
-    'LAST',
-    'LAST_AVERAGE_ORG_UNIT',
-    'FIRST',
-    'FIRST_AVERAGE_ORG_UNIT',
-]
+export const EVENT_ONLY_AGGREGATION_TYPES: ReadonlySet<AggregationType> =
+    new Set([
+        'LAST',
+        'LAST_AVERAGE_ORG_UNIT',
+        'FIRST',
+        'FIRST_AVERAGE_ORG_UNIT',
+    ])
 
 /* The types a cell value can be aggregated by. Analytics rejects the others or
  * returns wrong data for them. `DEFAULT` is supported too, when the item's own
  * type is one of these. */
-export const SUPPORTED_AGGREGATION_TYPES: AggregationType[] = [
-    ...ALL_OUTPUT_AGGREGATION_TYPES,
-    ...EVENT_ONLY_AGGREGATION_TYPES,
-]
+export const SUPPORTED_AGGREGATION_TYPES: ReadonlySet<AggregationType> =
+    new Set([...ALL_OUTPUT_AGGREGATION_TYPES, ...EVENT_ONLY_AGGREGATION_TYPES])
 
 export const aggregationTypeDisplayNames: Record<AggregationType, string> = {
     DEFAULT: i18n.t('Use item default'),

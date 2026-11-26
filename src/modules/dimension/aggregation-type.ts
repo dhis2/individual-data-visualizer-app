@@ -17,13 +17,11 @@ type AggregatableItem = { aggregationType?: AggregationType }
 export const isSupportedAggregationType = (
     aggregationType: AggregationType | undefined
 ): aggregationType is AggregationType =>
-    Boolean(
-        aggregationType && SUPPORTED_AGGREGATION_TYPES.includes(aggregationType)
-    )
+    Boolean(aggregationType && SUPPORTED_AGGREGATION_TYPES.has(aggregationType))
 
 export const isEventOnlyAggregationType = (
     aggregationType: AggregationType
-): boolean => EVENT_ONLY_AGGREGATION_TYPES.includes(aggregationType)
+): boolean => EVENT_ONLY_AGGREGATION_TYPES.has(aggregationType)
 
 /* `DEFAULT` means "whatever this item aggregates by", and it is saved and sent
  * to analytics as is, so the visualization keeps following the item. It is

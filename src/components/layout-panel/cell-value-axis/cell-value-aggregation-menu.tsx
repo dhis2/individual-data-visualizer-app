@@ -101,7 +101,7 @@ export const CellValueAggregationMenu: FC<CellValueAggregationMenuProps> = ({
                                     dataTest="cell-value-aggregation-item-default"
                                 />
                             )}
-                            {SUPPORTED_AGGREGATION_TYPES.map((value) => (
+                            {[...SUPPORTED_AGGREGATION_TYPES].map((value) => (
                                 <MenuItem
                                     key={value}
                                     label={aggregationTypeDisplayNames[value]}
