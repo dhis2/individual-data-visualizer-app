@@ -67,7 +67,14 @@ jobs:
               # semantic-release only makes a commit when it releases, so a moved
               # HEAD means this run released. HEAD is then the release commit,
               # which the deploy jobs check out.
+              #
+              # semantic-release runs with .github/semantic-release/git in
+              # place of git, which keeps its git note from being pushed. The
+              # script explains why.
               run: |
+                  REAL_GIT=$(command -v git)
+                  export REAL_GIT
+                  export PATH="$GITHUB_WORKSPACE/.github/semantic-release:$PATH"
                   head_before=$(git rev-parse HEAD)
                   pnpm exec semantic-release
                   if [ "$(git rev-parse HEAD)" != "$head_before" ]; then

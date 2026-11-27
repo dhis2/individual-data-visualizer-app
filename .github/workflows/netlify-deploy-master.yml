@@ -9,7 +9,16 @@ name: 'deploy: netlify production'
 #       NETLIFY_SITE_ID
 
 on:
+    # Deploys a release by hand, e.g. when the release workflow stopped
+    # before its deploy jobs. A re-run of that workflow can't do it: it
+    # checks out the commit that started it, which is then behind master, so
+    # semantic-release finds nothing to release.
     workflow_dispatch:
+        inputs:
+            ref:
+                description: 'The release tag to deploy, e.g. v1.2.3'
+                type: string
+                required: true
     # The release workflow calls this after a release, with the release commit
     # as ref. A plain checkout would get the merge commit that started the
     # release, which predates the version bump. Checking out master instead
@@ -30,7 +39,6 @@ jobs:
         runs-on: ubuntu-latest
         if: ${{ !github.event.repository.fork && github.ref == 'refs/heads/master' }}
         steps:
-            # Without a ref (a manual run) this checks out master
             - uses: actions/checkout@v7
               with:
                   ref: ${{ inputs.ref }}

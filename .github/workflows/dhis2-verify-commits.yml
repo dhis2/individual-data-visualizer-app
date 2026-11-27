@@ -15,7 +15,10 @@ jobs:
                   node-version: lts/*
                   cache: pnpm
             - run: pnpm install --frozen-lockfile --ignore-scripts
-            - run: echo "${{ github.event.pull_request.title }}" | pnpm exec commitlint
+            # The title goes through env, so it is never run as shell code
+            - run: printf '%s\n' "$PR_TITLE" | pnpm exec commitlint
+              env:
+                  PR_TITLE: ${{ github.event.pull_request.title }}
 
     lint-commits:
         runs-on: ubuntu-latest

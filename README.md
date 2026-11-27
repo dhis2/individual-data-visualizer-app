@@ -63,7 +63,19 @@ Will (re)generate the TypesScript types from the DHIS2 Core OpenAPI schemas.
 
 Every `feat`, `fix` or `perf` commit merged to master cuts a release. The [release workflow](.github/workflows/release.yml) runs [semantic-release](https://semantic-release.org), which works out the next version from the commit messages since the last release tag, writes it to `package.json` and `CHANGELOG.md`, and has dhis2-bot commit both to master. Other commit types, such as `chore`, `refactor` or `test`, don't release.
 
-The installable `.zip` is attached to each [GitHub release](https://github.com/dhis2/individual-data-visualizer-app/releases). The same build is copied to [d2-ci](https://github.com/d2-ci/individual-data-visualizer-app).
+The installable `.zip` is attached to each [GitHub release](https://github.com/dhis2/individual-data-visualizer-app/releases). The build is also copied to [d2-ci](https://github.com/d2-ci/individual-data-visualizer-app), where DHIS2 core picks it up to bundle the app. The `master` branch there has the latest release, and each release also gets its own branch, such as `v1.2.3`, for core's patch branches to pin.
+
+A release also deploys the app to Netlify production and to the [idv-playground](https://dev.im.dhis2.org/idv-playground) IM instance. To try a branch or PR as an installed app, run the [IM deploy workflow](.github/workflows/deploy-to-im-instance.yml) by hand. It takes a branch, tag, commit or PR number and the URL of the instance.
+
+### When a release run fails
+
+If the release workflow fails after dhis2-bot pushed the `chore(release): cut x.y.z` commit, re-running it does nothing: it checks out the commit that started it, which is now behind master, so semantic-release finds nothing to release. Finish the release by hand instead:
+
+- If the `vx.y.z` tag is missing, create and push it on the release commit. Without it, the next release gets the same version. Tags can't be moved or deleted, so check the commit first.
+- Create the GitHub release on the tag, with the `.zip` from `pnpm build` on that tag attached.
+- Run the [Netlify production](.github/workflows/netlify-deploy-master.yml) and [IM deploy](.github/workflows/deploy-to-im-instance.yml) workflows with the tag as ref.
+
+d2-ci only gets a release from the release workflow, so it catches up with the next release.
 
 ## Contribution Guide
 

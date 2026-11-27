@@ -1,9 +1,21 @@
-name: 'deploy to IM idv-playground instance'
+name: 'deploy to IM instance'
 
 on:
-    schedule:
-        - cron: '0 5 * * *' # Runs every day at 5:00 AM UTC
-    workflow_dispatch: # Allows manual triggering of the workflow
+    # A manual run deploys any branch or PR to any IM instance, e.g. to try a
+    # change as an installed app (the dashboard plugin) or against an older
+    # DHIS2 version. A deploy to idv-playground replaces the released version
+    # there until the next release.
+    workflow_dispatch:
+        inputs:
+            ref:
+                description: 'Branch, tag, commit or PR number to deploy. Empty deploys the branch picked above.'
+                type: string
+                required: false
+            instance:
+                description: 'URL of the DHIS2 instance. It must accept the admin/district login.'
+                type: string
+                required: true
+                default: 'https://dev.im.dhis2.org/idv-playground'
     # The release workflow calls this after a release, with the release commit
     # as ref. A plain checkout would get the merge commit that started the
     # release, which predates the version bump. Checking out master instead
@@ -16,19 +28,32 @@ on:
                 required: true
 
 env:
-    GH_TOKEN: ${{secrets.DHIS2_BOT_GITHUB_TOKEN}}
     CI: true
 
 jobs:
-    deploy-to-im-idv-playground-instance:
-        if: ${{ !github.event.repository.fork && github.ref == 'refs/heads/master' }}
+    deploy-to-im-instance:
+        if: ${{ !github.event.repository.fork }}
 
         runs-on: ubuntu-latest
         steps:
-            # Without a ref (the nightly and manual runs) this checks out master
+            # A PR number becomes the PR's head ref, which also covers PRs
+            # from forks. Inputs go through env, so they are never run as
+            # shell code.
+            - name: Resolve ref
+              id: ref
+              env:
+                  REF: ${{ inputs.ref }}
+              run: |
+                  if [[ "$REF" =~ ^[0-9]+$ ]]; then
+                      echo "ref=refs/pull/$REF/head" >> "$GITHUB_OUTPUT"
+                  else
+                      echo "ref=$REF" >> "$GITHUB_OUTPUT"
+                  fi
+
+            # An empty ref checks out the branch the workflow runs from
             - uses: actions/checkout@v7
               with:
-                  ref: ${{ inputs.ref }}
+                  ref: ${{ steps.ref.outputs.ref }}
 
             - uses: pnpm/action-setup@v6
             - uses: actions/setup-node@v7
@@ -42,5 +67,8 @@ jobs:
             - name: Build
               run: pnpm d2-app-scripts build
 
-            - name: Deploy build to IM idv-playground instance
-              run: pnpm d2-app-scripts deploy https://dev.im.dhis2.org/idv-playground --username=admin --password=district
+            # The release workflow passes no instance, so it deploys to idv-playground
+            - name: Deploy build to the IM instance
+              env:
+                  INSTANCE: ${{ inputs.instance || 'https://dev.im.dhis2.org/idv-playground' }}
+              run: pnpm d2-app-scripts deploy "$INSTANCE" --username=admin --password=district
