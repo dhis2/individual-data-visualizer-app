@@ -19,7 +19,7 @@ import {
     getVisUiConfigPlainItemIdsByDimension,
     setVisUiConfigItemsByDimension,
 } from '@store/vis-ui-config-slice.js'
-import type { DimensionMetadataItem, PeriodType } from '@types'
+import type { DimensionMetadataItem, MetadataItem, PeriodType } from '@types'
 import { useEffect, useState, useMemo, type FC } from 'react'
 import classes from './styles/period-dimension-modal-content.module.css'
 
@@ -81,6 +81,15 @@ const StartEndDate: FC<StartEndDateProps> = ({
         </Field>
     )
 }
+
+export const getSelectedPeriods = (
+    selectedIds: string[],
+    metadataItems: Record<string, MetadataItem>
+): Array<{ id: string; name: string }> =>
+    selectedIds.map((id) => ({
+        id,
+        name: metadataItems[id]?.name ?? id,
+    }))
 
 type PeriodDimensionModalContentProps = {
     dimension: DimensionMetadataItem
@@ -192,10 +201,10 @@ export const PeriodDimensionModalContent: FC<
             <div className={classes.entry}>
                 {entryMethod === OPTION_PRESETS && (
                     <PeriodDimension
-                        selectedPeriods={selectedIds.map((id) => ({
-                            id,
-                            name: selectedIdsMetadata[id]?.name,
-                        }))}
+                        selectedPeriods={getSelectedPeriods(
+                            selectedIds,
+                            selectedIdsMetadata
+                        )}
                         onSelect={({ items }) =>
                             updatePeriodDimensionItems(items)
                         }
