@@ -65,6 +65,8 @@ Every `feat`, `fix` or `perf` commit merged to master cuts a release. The [relea
 
 The installable `.zip` is attached to each [GitHub release](https://github.com/dhis2/individual-data-visualizer-app/releases). The same build is copied to [d2-ci](https://github.com/d2-ci/individual-data-visualizer-app).
 
+A release also deploys the app to Netlify production and to the [idv-playground](https://dev.im.dhis2.org/idv-playground) IM instance. To try a branch or PR as an installed app, run the [IM deploy workflow](.github/workflows/deploy-to-im-instance.yml) by hand. It takes a branch, tag, commit or PR number and the URL of the instance.
+
 ## Contribution Guide
 
 All changes to the app are done via PRs which need to be approved by a member of Team Analytics. All new features require decent test coverage, using a suitable combination of unit and e2e tests. When working on the app, please keep the guidelines below in mind.
