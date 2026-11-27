@@ -14,7 +14,7 @@
     min-inline-size: 356px;
     block-size: 100%;
     padding: 4px;
-    gap: 8px;
+    gap: 5px;
     overflow: auto;
 }
 .card {
