@@ -78,7 +78,7 @@ jobs:
             - uses: actions/checkout@v7
             - name: Generate Test matrix
               id: set-matrix
-              run: echo "::set-output name=specs::$(node scripts/generate-test-matrix.cjs)"
+              run: echo "specs=$(node scripts/generate-test-matrix.cjs)" >> "$GITHUB_OUTPUT"
 
     e2e:
         needs: setup-matrix
@@ -128,7 +128,7 @@ jobs:
         if: ${{ success() || failure() }}
         runs-on: ubuntu-latest
         steps:
-            - run: if [ $result != 'success' ]; then exit 1; fi;
+            - run: if [ "$result" != 'success' ]; then exit 1; fi;
               env:
                   result: ${{ needs.e2e.result }}
 
