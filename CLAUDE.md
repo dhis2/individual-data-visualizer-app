@@ -493,21 +493,33 @@ Two fields share the name `aggregationType`:
 - The item's own aggregation type is on `dataElementValueDimension` or `attributeValueDimension`
   (see below). It is read, never written.
 
+Only some aggregation types work for a cell value; analytics rejects the others or returns wrong
+data. The lists are in `@constants/aggregation-types`:
+
+- **Supported**: SUM, AVERAGE, COUNT, MIN, MAX, STDDEV, VARIANCE, and `DEFAULT`.
+- **Event only** (`EVENT_ONLY_AGGREGATION_TYPES`): LAST, LAST_AVERAGE_ORG_UNIT, FIRST,
+  FIRST_AVERAGE_ORG_UNIT. Enrollment aggregate doesn't support them, so `getOutputTypeTooltipConfig`
+  disables the Enrollment output type while the cell value uses one, also through `DEFAULT`.
+- Every other type (NONE, CUSTOM, LAST_IN_PERIOD, MIN_SUM_ORG_UNIT, …) is unsupported. The menu
+  doesn't offer it.
+
 `DEFAULT` means "whatever the item aggregates by". It is saved as `DEFAULT` and sent to analytics as
 `DEFAULT`, so the visualization keeps following the item and analytics decides what that is. The
 app resolves `DEFAULT` to a real type (`resolveAggregationType` in
-`@modules/dimension/aggregation-type`) only to show an aggregation name.
+`@modules/dimension/aggregation-type`) to show an aggregation name and to check the Enrollment rule.
 
-An item that aggregates by NONE has no type to follow, and analytics rejects `DEFAULT` for it
-(E7265). `replaceDefaultForNoneItem` turns `DEFAULT` into AVERAGE for such an item in three places:
+An item whose own type is unsupported (many attributes aggregate by NONE, which analytics rejects
+with E7265) has no type to follow. `replaceDefaultForUnsupportedItem` turns `DEFAULT` into AVERAGE
+for such an item in three places:
 
 - **Picking the value**: AVERAGE is stored, not `DEFAULT`, so the visualization keeps showing the
-  same values if the item later gets a real aggregation type. This reads the item's own type from
-  the metadata store (see [Cell value identity](#cell-value-identity)).
-- **Loading**: `normalizeApiSavedVisualization` rewrites a saved `DEFAULT` to AVERAGE. ER let users
-  save that combination.
+  same values if the item later gets a supported type. This reads the item's own type from the
+  metadata store (see [Cell value identity](#cell-value-identity)).
+- **Loading**: `normalizeApiSavedVisualization` rewrites it, through
+  `replaceUnsupportedAggregationType`, which also turns an unsupported saved type into AVERAGE. ER
+  let users save both. Neither sets `legacy`: ER visualizations are legacy already.
 - **The analytics request** (`getCellValueAnalyticsRequestParams`): a visualization saved with
-  `DEFAULT` can still meet a NONE item when the item's type changed after saving.
+  `DEFAULT` can still meet an unsupported item when the item's type changed after saving.
 
 ### Cell value identity
 

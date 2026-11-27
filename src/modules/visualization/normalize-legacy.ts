@@ -1,4 +1,4 @@
-import { replaceDefaultForNoneItem } from '@modules/dimension/aggregation-type'
+import { replaceUnsupportedAggregationType } from '@modules/dimension/aggregation-type'
 import { getCellValueItem } from '@modules/dimension/cell-value'
 import { dropInvalidGrouping } from '@modules/dimension/grouping'
 import {
@@ -196,9 +196,11 @@ const normalizeLegacyValue = (
  *   says how the value is aggregated, so it is dropped when there is no value,
  *   and a missing one becomes `DEFAULT`, which analytics treats the same way:
  *   the value item's own type. The backend accepts either field without the
- *   other, though no known client saves that. `DEFAULT` on an item that
- *   aggregates by NONE becomes the fallback type the app saves for such an
- *   item; ER let users save that combination. Neither implies `legacy`.
+ *   other, though no known client saves that. A type analytics does not
+ *   support for a cell value, and `DEFAULT` on an item whose own type is
+ *   unsupported (such as NONE), become the fallback type; ER let users save
+ *   both. Neither implies `legacy`: only ER visualizations carry these, and
+ *   they are legacy already.
  * - Rename an `ou` with a program and no stage, the enrollment org unit, to
  *   `enrollmentOu`. It does not imply `legacy`: an older app's visualization
  *   is already marked legacy by its top-level program.
@@ -320,7 +322,7 @@ export const normalizeApiSavedVisualization = (
             normalizedVis,
             context.stageRef
         )
-        normalizedVis.aggregationType = replaceDefaultForNoneItem(
+        normalizedVis.aggregationType = replaceUnsupportedAggregationType(
             normalizedVis.aggregationType ?? 'DEFAULT',
             getCellValueItem(normalizedVis) ?? {}
         )

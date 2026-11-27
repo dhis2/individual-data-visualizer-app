@@ -8,7 +8,7 @@ import {
     useListFormatter,
     useMetadataStore,
 } from '@hooks'
-import { replaceDefaultForNoneItem } from '@modules/dimension/aggregation-type'
+import { replaceDefaultForUnsupportedItem } from '@modules/dimension/aggregation-type'
 import {
     getDimensionBlockReason,
     type DimensionBlockReason,
@@ -164,7 +164,7 @@ export const useOnDragEnd = (): OnDragEndFn => {
                 dispatch(
                     setVisUiConfigCellValue({
                         id: draggedItemData.dimensionId,
-                        aggregationType: replaceDefaultForNoneItem(
+                        aggregationType: replaceDefaultForUnsupportedItem(
                             'DEFAULT',
                             dimension
                         ),
