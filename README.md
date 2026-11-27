@@ -67,6 +67,16 @@ The installable `.zip` is attached to each [GitHub release](https://github.com/d
 
 A release also deploys the app to Netlify production and to the [idv-playground](https://dev.im.dhis2.org/idv-playground) IM instance. To try a branch or PR as an installed app, run the [IM deploy workflow](.github/workflows/deploy-to-im-instance.yml) by hand. It takes a branch, tag, commit or PR number and the URL of the instance.
 
+### When a release run fails
+
+If the release workflow fails after dhis2-bot pushed the `chore(release): cut x.y.z` commit, re-running it does nothing: it checks out the commit that started it, which is now behind master, so semantic-release finds nothing to release. Finish the release by hand instead:
+
+- If the `vx.y.z` tag is missing, create and push it on the release commit. Without it, the next release gets the same version. Tags can't be moved or deleted, so check the commit first.
+- Create the GitHub release on the tag, with the `.zip` from `pnpm build` on that tag attached.
+- Run the [Netlify production](.github/workflows/netlify-deploy-master.yml) and [IM deploy](.github/workflows/deploy-to-im-instance.yml) workflows with the tag as ref.
+
+d2-ci only gets a release from the release workflow, so it catches up with the next release.
+
 ## Contribution Guide
 
 All changes to the app are done via PRs which need to be approved by a member of Team Analytics. All new features require decent test coverage, using a suitable combination of unit and e2e tests. When working on the app, please keep the guidelines below in mind.
