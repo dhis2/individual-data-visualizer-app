@@ -1,10 +1,8 @@
 import { CanvasError } from '@components/canvas-error/canvas-error'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { UnauthorizedError } from '@modules/error/unauthorized-error'
-import {
-    clearUnauthorizedError,
-    getUnauthorizedError,
-} from '@store/loader-slice'
+import { getUnauthorizedError } from '@store/loader-slice'
+import { tRetryAfterUnauthorized } from '@store/thunks'
 import { useCallback, type FC, type ReactNode } from 'react'
 import { ErrorBoundary, type FallbackProps } from 'react-error-boundary'
 import classes from './styles/app-error-boundary.module.css'
@@ -44,7 +42,7 @@ export const AppErrorFallback: FC<FallbackProps> = ({
 export const AppErrorBoundary: FC<{ children: ReactNode }> = ({ children }) => {
     const dispatch = useAppDispatch()
     const onReset = useCallback(
-        () => dispatch(clearUnauthorizedError()),
+        () => dispatch(tRetryAfterUnauthorized()),
         [dispatch]
     )
 

@@ -4,6 +4,7 @@ import { legendSetsApi } from '@api/legend-sets-api'
 import { isEngineError, parseEngineError } from '@api/parse-engine-error'
 import { extractDataSourceIdFromVisualization } from '@modules/data-source'
 import { canDimensionHaveLegendSets } from '@modules/dimension/grouping'
+import { isUnauthorizedError } from '@modules/error/unauthorized-error'
 import { logger } from '@modules/logger'
 import {
     buildCurrentVisFromVisUiConfig,
@@ -22,6 +23,7 @@ import type { AppDispatch, RootState, Sorting } from '@types'
 import { clearCurrentVis, setCurrentVis } from './current-vis-slice'
 import { setDataSourceId } from './dimensions-selection-slice'
 import {
+    clearUnauthorizedError,
     setIsVisualizationLoading,
     setVisualizationLoadError,
 } from './loader-slice'
@@ -139,6 +141,22 @@ export const tLoadSavedVisualization = createAsyncThunk<
         }
     }
 )
+
+/* The app remounts on retry and refetches what it shows, but a visualization
+ * that failed to load is only loaded on navigation */
+export const tRetryAfterUnauthorized: AppThunk = () => (dispatch, getState) => {
+    const { loader, navigation } = getState()
+
+    dispatch(clearUnauthorizedError())
+
+    if (
+        loader.visualizationLoadError &&
+        isUnauthorizedError(loader.visualizationLoadError) &&
+        navigation.visualizationId !== 'new'
+    ) {
+        dispatch(tLoadSavedVisualization({ id: navigation.visualizationId }))
+    }
+}
 
 export const tUpdateCurrentVisFromVisUiConfig =
     () =>
