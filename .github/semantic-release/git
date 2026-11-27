@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+#
+# Stands in for git while semantic-release runs (see release.yml) and skips
+# its push of the release's git note. Every other git command runs as is.
+#
+# semantic-release records in a git note (refs/notes/semantic-release-<tag>)
+# which release channels a version was published on. It pushes the note
+# right after the tag, before the GitHub release, and GitHub sometimes
+# rejects that push with a bare "(failed)" and no reason. Release 0.0.4 hit
+# this (run 45978207436): the commit and tag were pushed, but the GitHub
+# release, the d2-ci copy and the deploys were not done. Other projects
+# report the same, e.g.
+# https://github.com/ai-ecoverse/slicc-browsers/issues/54
+#
+# We release from master only, on the default channel. semantic-release
+# reads a tag without a note as released on the default channel, and only
+# needs the notes to move releases between the channels of several release
+# branches. Without that, nothing reads the notes, so they need not leave
+# the runner. If we ever add a second release branch, remove this script.
+#
+# semantic-release pushes a note as `git push -- <url> refs/notes/<ref>`.
+# If that changes, this no longer matches and the note is pushed again.
+
+if [ "$1" = "push" ] && [[ "${!#}" == refs/notes/* ]]; then
+    echo "Skipping the push of git note ${!#}" >&2
+    exit 0
+fi
+
+exec "$REAL_GIT" "$@"
