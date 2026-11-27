@@ -1,3 +1,10 @@
+## [0.0.8](https://github.com/dhis2/individual-data-visualizer-app/compare/v0.0.7...v0.0.8) (2026-11-27)
+
+### Bug Fixes
+
+* give the app and the plugin the current user with locales Intl accepts ([#506](https://github.com/dhis2/individual-data-visualizer-app/issues/506)) ([bbbaf9d](https://github.com/dhis2/individual-data-visualizer-app/commit/bbbaf9d8fe492cbad2bbc1d567005023651249d7))
+* make interpolated user-facing text work in every locale ([#497](https://github.com/dhis2/individual-data-visualizer-app/issues/497)) ([db336d4](https://github.com/dhis2/individual-data-visualizer-app/commit/db336d4b15c49ea02c51f6758fd21f7af3dbbd81))
+
 ## [0.0.7](https://github.com/dhis2/individual-data-visualizer-app/compare/v0.0.6...v0.0.7) (2026-11-27)
 
 ### Bug Fixes
