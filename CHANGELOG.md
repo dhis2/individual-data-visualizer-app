@@ -1,3 +1,15 @@
+## [0.0.6](https://github.com/dhis2/individual-data-visualizer-app/compare/v0.0.5...v0.0.6) (2026-11-27)
+
+### Bug Fixes
+
+* reduce gap from 8px to 5px ([#511](https://github.com/dhis2/individual-data-visualizer-app/issues/511)) ([63f31dc](https://github.com/dhis2/individual-data-visualizer-app/commit/63f31dc959f5f11b2cad974a5f0ce3b6b0140e50))
+
+## [0.0.5](https://github.com/dhis2/individual-data-visualizer-app/compare/v0.0.4...v0.0.5) (2026-11-27)
+
+### Bug Fixes
+
+* fallback to id when period metadata is missing (DHIS2-22610) ([#508](https://github.com/dhis2/individual-data-visualizer-app/issues/508)) ([c1773e8](https://github.com/dhis2/individual-data-visualizer-app/commit/c1773e88ebdc512ab1994047764552f25879f41e))
+
 ## [0.0.4](https://github.com/dhis2/individual-data-visualizer-app/compare/v0.0.3...v0.0.4) (2026-11-27)
 
 ### Bug Fixes
