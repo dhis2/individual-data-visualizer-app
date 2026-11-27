@@ -1,3 +1,9 @@
+## [0.0.9](https://github.com/dhis2/individual-data-visualizer-app/compare/v0.0.8...v0.0.9) (2026-11-27)
+
+### Bug Fixes
+
+* show the logged out screen over the whole app (DHIS2-22611) ([#510](https://github.com/dhis2/individual-data-visualizer-app/issues/510)) ([33222d4](https://github.com/dhis2/individual-data-visualizer-app/commit/33222d47b9d2c7e40292d1602d95a09e08234081))
+
 ## [0.0.8](https://github.com/dhis2/individual-data-visualizer-app/compare/v0.0.7...v0.0.8) (2026-11-27)
 
 ### Bug Fixes
