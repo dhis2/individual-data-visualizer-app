@@ -3,6 +3,10 @@ import {
     useCachedData,
     type CachedData,
 } from '@components/app-wrapper/cached-data/cached-data-provider'
+import {
+    toCurrentUser,
+    type CurrentUser,
+} from '@components/app-wrapper/cached-data/current-user'
 import { useRelativePeriodsNames } from '@dhis2/analytics'
 /* useDataQuery, not the RTK-query hooks: the Redux store is created from this
  * data, so it does not exist yet. */
@@ -40,14 +44,6 @@ const query: Query = {
         },
     },
 }
-type CurrentUserInfo = NonNullable<ReturnType<typeof useCurrentUserInfo>>
-type CurrentUserData = Pick<
-    CurrentUserInfo,
-    'id' | 'username' | 'authorities'
-> & {
-    name: string
-    settings?: Record<string, string | undefined>
-}
 type RootOrgUnitsData = Array<
     PickWithFieldFilters<Required<OrganisationUnit>, typeof rootOrgUnitsFields>
 >
@@ -65,13 +61,6 @@ type AppCachedQueryData = {
     }
     orgUnitLevels: { organisationUnitLevels: OrgUnitLevelsData }
 }
-type DisplayNameProperty = 'displayName' | 'displayShortName'
-type TransformedCurrentUserSettings = {
-    dbLocale: string
-    uiLocale: string
-    displayProperty: string | undefined
-    displayNameProperty: DisplayNameProperty
-}
 type TransformedSystemSettings = {
     dateFormat: SystemSettings['keyDateFormat']
     relativePeriod: SystemSettings['keyAnalysisRelativePeriod']
@@ -83,46 +72,17 @@ type TransformedSystemSettings = {
     hideBiMonthlyPeriods: SystemSettings['keyHideBiMonthlyPeriods']
     ignoreApprovalYearThreshold: SystemSettings['keyIgnoreAnalyticsApprovalYearThreshold']
 }
-export type TransformedAppCachedData = {
-    currentUser: CurrentUserData & { settings: TransformedCurrentUserSettings }
+export type AppCachedData = CachedData & {
     systemSettings: TransformedSystemSettings
     rootOrgUnits: RootOrgUnitsData
     orgUnitLevels: OrgUnitLevelsData
-    relativePeriodsNames: CachedData['relativePeriodsNames']
 }
-
-const toCurrentUserData = ({
-    id,
-    username,
-    displayName,
-    authorities,
-    settings,
-}: CurrentUserInfo): CurrentUserData => ({
-    id,
-    username,
-    name: displayName,
-    authorities,
-    settings,
-})
 
 const providerDataTransformation = (
     { systemSettings, rootOrgUnits, orgUnitLevels }: AppCachedQueryData,
     relativePeriodsNames: CachedData['relativePeriodsNames'],
-    currentUser: CurrentUserData
-): TransformedAppCachedData => {
-    const displayNameProperty: DisplayNameProperty =
-        currentUser.settings?.keyAnalysisDisplayProperty === 'name'
-            ? 'displayName'
-            : 'displayShortName'
-    const transformedCurrentUser = {
-        ...currentUser,
-        settings: {
-            dbLocale: currentUser.settings?.keyDbLocale ?? 'en',
-            uiLocale: currentUser.settings?.keyUiLocale ?? 'en',
-            displayProperty: currentUser.settings?.keyAnalysisDisplayProperty,
-            displayNameProperty,
-        },
-    }
+    currentUser: CurrentUser
+): AppCachedData => {
     const transformedSystemSettings: TransformedSystemSettings = {
         dateFormat: systemSettings.keyDateFormat,
         relativePeriod: systemSettings.keyAnalysisRelativePeriod,
@@ -140,7 +100,7 @@ const providerDataTransformation = (
 
     // This is read only data, so we freeze it
     return freeze({
-        currentUser: transformedCurrentUser,
+        currentUser,
         systemSettings: transformedSystemSettings,
         rootOrgUnits: transformedRootOrgUnits,
         orgUnitLevels: transformedOrgUnitLevels,
@@ -166,7 +126,7 @@ export const AppCachedDataProvider: FC<{ children: ReactNode }> = ({
             ? providerDataTransformation(
                   queryResult.data,
                   relativePeriods.relativePeriodsNames,
-                  toCurrentUserData(currentUserInfo)
+                  toCurrentUser(currentUserInfo)
               )
             : undefined
 
@@ -180,11 +140,10 @@ export const AppCachedDataProvider: FC<{ children: ReactNode }> = ({
     )
 }
 
-const isAppCachedData = (
-    cachedData: CachedData
-): cachedData is TransformedAppCachedData => 'currentUser' in cachedData
+const isAppCachedData = (cachedData: CachedData): cachedData is AppCachedData =>
+    'systemSettings' in cachedData
 
-export const useAppCachedData = (): TransformedAppCachedData => {
+export const useAppCachedData = (): AppCachedData => {
     const cachedData = useCachedData()
 
     if (!isAppCachedData(cachedData)) {
@@ -193,20 +152,15 @@ export const useAppCachedData = (): TransformedAppCachedData => {
 
     return cachedData
 }
-export const useCurrentUser = (): TransformedAppCachedData['currentUser'] => {
-    const { currentUser } = useAppCachedData()
-    return currentUser
-}
 export const useSystemSettings = (): TransformedSystemSettings => {
     const { systemSettings } = useAppCachedData()
     return systemSettings
 }
-export const useRootOrgUnits = (): TransformedAppCachedData['rootOrgUnits'] => {
+export const useRootOrgUnits = (): AppCachedData['rootOrgUnits'] => {
     const { rootOrgUnits } = useAppCachedData()
     return rootOrgUnits
 }
-export const useOrgUnitLevels =
-    (): TransformedAppCachedData['orgUnitLevels'] => {
-        const { orgUnitLevels } = useAppCachedData()
-        return orgUnitLevels
-    }
+export const useOrgUnitLevels = (): AppCachedData['orgUnitLevels'] => {
+    const { orgUnitLevels } = useAppCachedData()
+    return orgUnitLevels
+}

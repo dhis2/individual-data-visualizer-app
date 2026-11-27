@@ -10,6 +10,7 @@ import meData from '@test-utils/__fixtures__/me.json'
 import organisationUnitLevelsData from '@test-utils/__fixtures__/organisation-unit-levels.json'
 import organisationUnitsData from '@test-utils/__fixtures__/organisation-units.json'
 import systemSettingsData from '@test-utils/__fixtures__/system-settings.json'
+import { stubCachedData } from '@test-utils/cached-data-stub'
 import {
     mockPeriodTypesQueryData,
     mockRuntimeConfig,
@@ -37,16 +38,17 @@ const CachedDataSummary = () => {
 
     return (
         <div data-test="summary">
-            {currentUser.username}: {relativePeriodsNames.LAST_YEAR}
+            {currentUser.username}: {relativePeriodsNames.LAST_YEAR} (
+            {currentUser.settings.uiLocale})
         </div>
     )
 }
 
-const renderProvider = (data: QueryData) =>
+const renderProvider = (data: QueryData, userInfo = meData) =>
     render(
         <ConfigProvider config={mockRuntimeConfig}>
             <CustomDataProvider data={data}>
-                <UserProvider userInfo={meData}>
+                <UserProvider userInfo={userInfo}>
                     <AppCachedDataProvider>
                         <CachedDataSummary />
                     </AppCachedDataProvider>
@@ -60,7 +62,18 @@ describe('AppCachedDataProvider', () => {
         renderProvider(serverData)
 
         expect(await screen.findByTestId('summary')).toHaveTextContent(
-            `${meData.username}: Last year`
+            `${meData.username}: Last year (en)`
+        )
+    })
+
+    it('provides the user locale in a form Intl accepts', async () => {
+        renderProvider(serverData, {
+            ...meData,
+            settings: { ...meData.settings, keyUiLocale: 'pt_BR' },
+        })
+
+        expect(await screen.findByTestId('summary')).toHaveTextContent(
+            '(pt-BR)'
         )
     })
 
@@ -85,7 +98,7 @@ describe('useAppCachedData', () => {
 
         expect(() =>
             render(
-                <CachedDataProvider data={{ relativePeriodsNames: {} }}>
+                <CachedDataProvider data={stubCachedData()}>
                     <CachedDataSummary />
                 </CachedDataProvider>
             )

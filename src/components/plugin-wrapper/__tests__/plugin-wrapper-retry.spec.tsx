@@ -1,5 +1,5 @@
 import { FetchError } from '@dhis2/app-runtime'
-import { useCurrentUser, useAppSelector } from '@hooks'
+import { useAppSelector } from '@hooks'
 import { getCurrentVis } from '@store/current-vis-slice'
 import { getIsVisualizationLoading } from '@store/loader-slice'
 import { setNavigationState } from '@store/navigation-slice'
@@ -19,7 +19,6 @@ import { PluginWrapper } from '../plugin-wrapper'
 const eventVisualization1Id = 'TIuOzZ0ID0V'
 
 const TestComponent = () => {
-    const currentUser = useCurrentUser()
     const currentVis = useAppSelector(getCurrentVis)
     const isVisualizationLoading = useAppSelector(getIsVisualizationLoading)
 
@@ -27,7 +26,6 @@ const TestComponent = () => {
         <PluginWrapper
             isVisualizationLoading={isVisualizationLoading}
             visualization={currentVis}
-            displayProperty={currentUser.settings.displayProperty}
         />
     )
 }

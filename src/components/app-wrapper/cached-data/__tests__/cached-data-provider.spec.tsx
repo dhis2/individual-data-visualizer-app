@@ -2,6 +2,7 @@ import {
     CachedDataProvider,
     useCachedData,
 } from '@components/app-wrapper/cached-data/cached-data-provider'
+import { stubCachedData } from '@test-utils/cached-data-stub'
 import { render, screen } from '@testing-library/react'
 import { expect, describe, it } from 'vitest'
 
@@ -11,7 +12,10 @@ const PeriodName = () => (
     </div>
 )
 
-const data = { relativePeriodsNames: { LAST_YEAR: 'Last year' } }
+const data = {
+    ...stubCachedData(),
+    relativePeriodsNames: { LAST_YEAR: 'Last year' },
+}
 
 describe('CachedDataProvider', () => {
     it('provides the data to its children', () => {

@@ -53,12 +53,30 @@ two entry points with deliberately different provider stacks.
   plugin instance on a dashboard.
 
 **The rule:** `PluginWrapper` and everything below it in the component tree may
-depend only on the metadata store provider plus the providers supplied by the
-DHIS2 app-shell / app-adapter (the data engine and `useDataQuery`, config,
-alerts, etc.). It must not touch the app's Redux store — no `useAppSelector`,
-`useAppDispatch`, or RTK-query hooks (`useRtkQuery`) — and not either cached
-data provider. Data the shared components need from the cached data, like the
-relative period names, reaches them through the metadata store.
+depend only on the metadata store provider, the shared cached data and the
+providers supplied by the DHIS2 app-shell / app-adapter (the data engine and
+`useDataQuery`, config, alerts, etc.). It must not touch the app's Redux store —
+no `useAppSelector`, `useAppDispatch`, or RTK-query hooks (`useRtkQuery`) — and
+not the app-only cached data (`useAppCachedData`, `useSystemSettings`,
+`useRootOrgUnits`, `useOrgUnitLevels`).
+
+The shared cached data is the `CachedData` type, which both
+`AppCachedDataProvider` and `PluginCachedDataProvider` provide; read it with
+`useCachedData` or a hook for one of its fields, such as `useCurrentUser`. Data
+that is metadata, like the relative period names, reaches the shared components
+through the metadata store.
+
+### The current user
+
+The app-shell exposes `/api/me` through `useCurrentUserInfo`, unconverted: its
+`keyUiLocale` and `keyDbLocale` are in DHIS2's Java format (`pt_BR`), which
+`Intl` rejects. Only the cached data providers call `useCurrentUserInfo`
+(enforced by ESLint), and both turn the result into the current user with
+`toCurrentUser` (in `cached-data/current-user.ts`), which also converts both
+locales to BCP 47 tags (`pt-BR`). So the app and the plugin get the same user.
+Everything else reads it with `useCurrentUser`, in the app and the plugin alike:
+the locale, the display property and the rest of the user's settings come from
+there and nowhere else.
 
 Consequences that follow from this:
 

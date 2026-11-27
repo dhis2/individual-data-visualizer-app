@@ -1,4 +1,4 @@
-import { useCurrentUser } from '@hooks'
+import { useCurrentUser } from '@components/app-wrapper/cached-data/cached-data-provider'
 import { useCallback, useMemo } from 'react'
 
 export const getStartEndDate = (startEndDate: string): Array<string> => {
@@ -15,10 +15,8 @@ export const isStartEndDate = (id: string): boolean =>
 
 type UseLocalizedStartEndDateFormatterResult = (startEndDate: string) => string
 
-/* `locale` undefined resolves to the runtime default, which is what the
- * dashboard plugin gets: it has no access to the user's settings. */
 export const getStartEndDateFormatter = (
-    locale?: string
+    locale: string
 ): UseLocalizedStartEndDateFormatterResult => {
     const formatter = new Intl.DateTimeFormat(locale, { dateStyle: 'long' })
 
@@ -30,12 +28,11 @@ export const getStartEndDateFormatter = (
 
 export const useLocalizedStartEndDateFormatter =
     (): UseLocalizedStartEndDateFormatterResult => {
-        const currentUser = useCurrentUser()
-        const uiLocale = currentUser.settings.uiLocale
+        const locale = useCurrentUser().settings.uiLocale
 
         const formatter = useMemo(
-            () => getStartEndDateFormatter(uiLocale),
-            [uiLocale]
+            () => getStartEndDateFormatter(locale),
+            [locale]
         )
 
         return useCallback(

@@ -5,6 +5,8 @@ import {
 } from '@components/app-wrapper/metadata-provider/metadata-provider'
 import { CustomDataProvider } from '@dhis2/app-runtime'
 import { ConfigProvider } from '@dhis2/app-service-config'
+import { UserProvider } from '@dhis2/app-service-user'
+import meData from '@test-utils/__fixtures__/me.json'
 import { renderHookWithAppWrapper } from '@test-utils/app-wrapper'
 import {
     mockPeriodTypesQueryData,
@@ -67,11 +69,13 @@ describe('relative period names in the metadata store', () => {
                         'Les 5 dernières années'
                     )}
                 >
-                    <PluginCachedDataProvider>
-                        <PluginMetadataProvider>
-                            <PeriodName id="LAST_5_YEARS" />
-                        </PluginMetadataProvider>
-                    </PluginCachedDataProvider>
+                    <UserProvider userInfo={meData}>
+                        <PluginCachedDataProvider>
+                            <PluginMetadataProvider>
+                                <PeriodName id="LAST_5_YEARS" />
+                            </PluginMetadataProvider>
+                        </PluginCachedDataProvider>
+                    </UserProvider>
                 </CustomDataProvider>
             </ConfigProvider>
         )
