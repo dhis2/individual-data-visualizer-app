@@ -287,6 +287,21 @@ describe('applying a sorted line list', () => {
         ])
     })
 
+    it('keeps the sort on a tracked entity stage org unit when the hierarchy is shown', () => {
+        expect(
+            sortThenApply({
+                headerName: `${STAGE_ID}.ouname`,
+                sortedConfig: {
+                    ...visUiConfig,
+                    outputType: 'TRACKED_ENTITY_INSTANCE',
+                },
+                changes: {
+                    options: { ...DEFAULT_OPTIONS, showHierarchy: true },
+                },
+            })
+        ).toEqual([{ dimension: `${STAGE_ID}.ouname`, direction: 'DESC' }])
+    })
+
     describe('on a repeated column', () => {
         const repeatedConfig: VisUiConfigState = {
             ...visUiConfig,
