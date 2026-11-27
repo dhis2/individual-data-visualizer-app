@@ -1210,6 +1210,23 @@ describe('getVisualizationState treats default-valued options as unchanged', () 
         expect(getVisualizationState(savedVis, currentVis)).toBe('SAVED')
     })
 
+    /* Reloading after a save merges the loaded vis into the options it was
+     * saved from. The API leaves an empty title or subtitle out, so the empty
+     * string stays in those options. */
+    it.each(['title', 'subtitle'] as const)(
+        'stays SAVED when reloaded over options with an empty %s',
+        (key) => {
+            const savedVis = normalizeApiSavedVisualization(buildApiVis())
+
+            const currentVis = rebuildCurrentVis(savedVis, {
+                ...DEFAULT_OPTIONS,
+                [key]: '',
+            })
+
+            expect(getVisualizationState(savedVis, currentVis)).toBe('SAVED')
+        }
+    )
+
     it('hides an empty subtitle when rebuilding', () => {
         const savedVis = normalizeApiSavedVisualization(buildApiVis())
 
@@ -1307,6 +1324,15 @@ describe('isDefaultOptionValue', () => {
             true
         )
         expect(isDefaultOptionValue('digitGroupSeparator', 'SPACE')).toBe(false)
+    })
+
+    it.each([null, ''])('treats %j as default', (value) => {
+        expect(isDefaultOptionValue('title', value)).toBe(true)
+        expect(isDefaultOptionValue('showDimensionLabels', value)).toBe(true)
+    })
+
+    it('treats a populated text option as non-default', () => {
+        expect(isDefaultOptionValue('title', 'My title')).toBe(false)
     })
 
     it('treats a populated legend as non-default (default legend is undefined)', () => {
