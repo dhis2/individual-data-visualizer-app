@@ -1,3 +1,9 @@
+## [0.0.4](https://github.com/dhis2/individual-data-visualizer-app/compare/v0.0.3...v0.0.4) (2026-11-27)
+
+### Bug Fixes
+
+* hide "Changes not applied" after saving with an empty title (DHIS2-22607) ([#505](https://github.com/dhis2/individual-data-visualizer-app/issues/505)) ([1ee35fc](https://github.com/dhis2/individual-data-visualizer-app/commit/1ee35fca7255d6bbce71ae4b3739c5894ce2c51e))
+
 ## [0.0.3](https://github.com/dhis2/individual-data-visualizer-app/compare/v0.0.2...v0.0.3) (2026-11-26)
 
 ### Bug Fixes
