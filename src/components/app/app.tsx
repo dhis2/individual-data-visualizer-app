@@ -23,12 +23,11 @@ import {
     setUiActiveDimensionModal,
 } from '@store/ui-slice'
 import { useCallback, type FC } from 'react'
+import { AppErrorBoundary } from './app-error-boundary'
 import { useLoadVisualizationOnMount } from './use-load-visualization-on-mount'
 import './styles/app.css'
 
 const IndividualDataVisualizer: FC = () => {
-    useLoadVisualizationOnMount()
-    useConfirmBeforeUnload()
     const dispatch = useAppDispatch()
     const activeDimensionModal = useAppSelector(getUiActiveDimensionModal)
 
@@ -63,11 +62,23 @@ const IndividualDataVisualizer: FC = () => {
     )
 }
 
+/* Outside the error boundary, so a retry after an error does not load the
+ * visualization again over unsaved changes, and leaving still asks to discard
+ * them while the error shows */
+const AppEffects: FC = () => {
+    useLoadVisualizationOnMount()
+    useConfirmBeforeUnload()
+    return null
+}
+
 export const App: FC = () => (
     <>
         <CssVariables colors spacers theme elevations />
         <AppWrapper>
-            <IndividualDataVisualizer />
+            <AppEffects />
+            <AppErrorBoundary>
+                <IndividualDataVisualizer />
+            </AppErrorBoundary>
         </AppWrapper>
     </>
 )

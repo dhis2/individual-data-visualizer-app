@@ -1,3 +1,4 @@
+import type { EngineError } from '@api/parse-engine-error'
 import { useHasUnappliedChanges } from '@components/layout-panel/bottom-bar/use-has-unapplied-changes'
 import { PluginWrapper } from '@components/plugin-wrapper/plugin-wrapper'
 import { StartScreen } from '@components/start-screen/start-screen'
@@ -7,6 +8,7 @@ import { getCurrentVis } from '@store/current-vis-slice'
 import {
     getIsVisualizationLoading,
     getVisualizationLoadError,
+    setUnauthorizedError,
 } from '@store/loader-slice'
 import { tLoadSavedVisualization, tSetCurrentVisSorting } from '@store/thunks'
 import { setUiActiveDimensionModal } from '@store/ui-slice'
@@ -44,6 +46,13 @@ export const Canvas: FC = () => {
         [dispatch]
     )
 
+    const onUnauthorizedError = useCallback(
+        (error: EngineError) => {
+            dispatch(setUnauthorizedError(error))
+        },
+        [dispatch]
+    )
+
     if (
         isVisualizationEmpty(currentVis) &&
         !isVisualizationLoading &&
@@ -73,6 +82,7 @@ export const Canvas: FC = () => {
                 onRetryLoad={onRetryLoad}
                 onColumnHeaderClick={onColumnHeaderClick}
                 onDataSorted={onDataSorted}
+                onUnauthorizedError={onUnauthorizedError}
             />
         </UnappliedChangesOverlay>
     )

@@ -1,10 +1,11 @@
-import type { EngineError } from '@api/parse-engine-error'
+import { parseEngineError, type EngineError } from '@api/parse-engine-error'
 import { useCurrentUser } from '@components/app-wrapper/cached-data/cached-data-provider'
 import { useMetadataStore } from '@components/app-wrapper/metadata-provider/metadata-provider'
 import { CanvasError } from '@components/canvas-error/canvas-error'
 import { CanvasErrorFallback } from '@components/canvas-error/canvas-error-fallback'
 import type { ColumnHeaderClickFn } from '@components/line-list/types'
 import { Center, CircularLoader } from '@dhis2/ui'
+import { isUnauthorizedError } from '@modules/error/unauthorized-error'
 import { assertNever } from '@modules/utils/guards'
 import { getVisualizationFilterText } from '@modules/visualization/filter-text'
 import { isVisualizationEmpty } from '@modules/visualization/guards'
@@ -55,6 +56,9 @@ type PluginWrapperProps = {
     onRetryLoad?: () => void
     onColumnHeaderClick?: ColumnHeaderClickFn
     onDataSorted?: (sorting: Sorting | undefined) => void
+    /* The app shows a 401 over the whole app; without this handler it shows
+     * on the canvas */
+    onUnauthorizedError?: (error: EngineError) => void
 }
 
 export const PluginWrapper: FC<PluginWrapperProps> = ({
@@ -67,6 +71,7 @@ export const PluginWrapper: FC<PluginWrapperProps> = ({
     onRetryLoad,
     onColumnHeaderClick,
     onDataSorted,
+    onUnauthorizedError,
 }) => {
     /* relativePeriodDate is the only applied filter (ou/pe/yourDimensions are
      * ignored — see FiltersNotAppliedNotice), so it feeds the request identity
@@ -136,6 +141,16 @@ export const PluginWrapper: FC<PluginWrapperProps> = ({
         }
     }, [isVisualizationLoading])
 
+    const onAnalyticsError = useCallback(
+        (error: unknown) => {
+            const engineError = parseEngineError(error)
+            if (isUnauthorizedError(engineError)) {
+                onUnauthorizedError?.(engineError)
+            }
+        },
+        [onUnauthorizedError]
+    )
+
     useEffect(() => {
         /* The plugin remounts when requestKey changes, so reset this wrapper's
          * local state too */
@@ -166,6 +181,7 @@ export const PluginWrapper: FC<PluginWrapperProps> = ({
         <ErrorBoundary
             key={requestKey}
             FallbackComponent={CanvasErrorFallback}
+            onError={onAnalyticsError}
             onReset={() => setHasAnalyticsData(false)}
         >
             <div className={classes.pluginWrapper}>

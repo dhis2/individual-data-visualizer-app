@@ -3,7 +3,10 @@ import { FetchError } from '@dhis2/app-runtime'
 import eventPivotTableAttributeValue from '@modules/visualization/__fixtures__/round-trip/saved/event-pivot-table-attribute-value.json'
 import { getLastUsedVisualizationTypeFromLocalStorage } from '@modules/visualization/local-storage'
 import { getCurrentVis } from '@store/current-vis-slice'
-import { getVisualizationLoadError } from '@store/loader-slice'
+import {
+    getUnauthorizedError,
+    getVisualizationLoadError,
+} from '@store/loader-slice'
 import {
     getPendingNavigation,
     setNavigationState,
@@ -14,6 +17,7 @@ import {
     tConfirmPendingNavigation,
     tLoadSavedVisualization,
     tRequestNavigation,
+    tRetryAfterUnauthorized,
     tSetCurrentVisSorting,
     tUpdateCurrentVisFromVisUiConfig,
 } from '@store/thunks'
@@ -28,6 +32,7 @@ import {
     renderHookWithAppWrapper,
     type MockOptions,
 } from '@test-utils/app-wrapper'
+import { waitFor } from '@testing-library/react'
 import type {
     AppCachedData,
     AppDispatch,
@@ -381,6 +386,63 @@ describe('tLoadSavedVisualization', () => {
             type: 'unknown',
             message: 'An unknown error occurred - Server Error (500)',
         })
+    })
+})
+
+describe('tRetryAfterUnauthorized', () => {
+    const lineListId = 'TIuOzZ0ID0V'
+
+    const renderOnLineList = (getVisualization: () => unknown) =>
+        renderHookWithAppWrapper(() => null, {
+            queryData: { eventVisualizations: getVisualization },
+            partialStore: {
+                preloadedState: {
+                    navigation: {
+                        visualizationId: lineListId,
+                        interpretationId: null,
+                        pendingNavigation: null,
+                    },
+                } as Partial<RootState>,
+            },
+        } as unknown as MockOptions)
+
+    const unauthorized = () => {
+        throw new FetchError({
+            type: 'access',
+            message: 'Unauthorized',
+            details: { httpStatusCode: 401 },
+        })
+    }
+
+    it('loads a visualization that failed to load with a 401 again', async () => {
+        const responses = [unauthorized, () => lineListWithoutSort]
+        const { store } = await renderOnLineList(() => responses.shift()!())
+        await store.dispatch(tLoadSavedVisualization({ id: lineListId }))
+        expect(getUnauthorizedError(store.getState())).not.toBeNull()
+
+        store.dispatch(tRetryAfterUnauthorized())
+
+        expect(getUnauthorizedError(store.getState())).toBeNull()
+        await waitFor(() => {
+            expect(getCurrentVis(store.getState()).id).toBe(lineListId)
+        })
+        expect(getVisualizationLoadError(store.getState())).toBeNull()
+    })
+
+    it('keeps a loaded visualization and its unsaved changes', async () => {
+        const getVisualization = vi.fn(() => lineListWithoutSort)
+        const { store } = await renderOnLineList(getVisualization)
+        await store.dispatch(tLoadSavedVisualization({ id: lineListId }))
+        store.dispatch(
+            tSetCurrentVisSorting({ dimension: 'ouname', direction: 'ASC' })
+        )
+
+        store.dispatch(tRetryAfterUnauthorized())
+
+        expect(getVisualization).toHaveBeenCalledTimes(1)
+        expect(getCurrentVis(store.getState()).sorting).toEqual([
+            { dimension: 'ouname', direction: 'ASC' },
+        ])
     })
 })
 
