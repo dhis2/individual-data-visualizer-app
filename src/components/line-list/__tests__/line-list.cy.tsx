@@ -210,21 +210,27 @@ describe(
                             'getBoundingClientRect'
                         )
                         const scrollBoxRect = scrollBox!.getBoundingClientRect()
-                        const BORDER_WIDTH = 1
+                        const clientLeft =
+                            scrollBoxRect.left + (scrollBox?.clientLeft ?? 0)
+                        const clientTop =
+                            scrollBoxRect.top + (scrollBox?.clientTop ?? 0)
+
+                        /* The table's bottom edge is the footer cell's
+                         * border, below the pagination bar. */
+                        const footerBorderBottom = parseFloat(
+                            getComputedStyle($pagination[0].parentElement!)
+                                .borderBottomWidth
+                        )
 
                         // Bottom-left and bottom-right should match (accounting for scrollbars)
-                        expect(paginationRect.left).to.equal(
-                            scrollBoxRect.left + BORDER_WIDTH
-                        )
+                        expect(paginationRect.left).to.equal(clientLeft)
                         expect(paginationRect.right).to.equal(
-                            scrollBoxRect.left +
-                                (scrollBox?.clientWidth ?? 0) +
-                                BORDER_WIDTH
+                            clientLeft + (scrollBox?.clientWidth ?? 0)
                         ) // Allow for vertical scrollbar
                         expect(paginationRect.bottom).to.equal(
-                            scrollBoxRect.top +
-                                (scrollBox?.clientHeight ?? 0) +
-                                BORDER_WIDTH
+                            clientTop +
+                                (scrollBox?.clientHeight ?? 0) -
+                                footerBorderBottom
                         )
                     }
                 )
@@ -267,14 +273,18 @@ describe(
 
                     expect(scrollBox).to.have.property('getBoundingClientRect')
                     const scrollBoxRect = scrollBox!.getBoundingClientRect()
+                    const clientLeft =
+                        scrollBoxRect.left + (scrollBox?.clientLeft ?? 0)
+                    const clientTop =
+                        scrollBoxRect.top + (scrollBox?.clientTop ?? 0)
 
-                    expect(overlayRect.left).to.equal(scrollBoxRect.left + 1)
-                    expect(overlayRect.top).to.equal(scrollBoxRect.top + 1)
+                    expect(overlayRect.left).to.equal(clientLeft)
+                    expect(overlayRect.top).to.equal(clientTop)
                     expect(overlayRect.right).to.equal(
-                        scrollBoxRect.left + (scrollBox?.clientWidth ?? 0) + 1
+                        clientLeft + (scrollBox?.clientWidth ?? 0)
                     )
                     expect(overlayRect.bottom).to.equal(
-                        scrollBoxRect.top + (scrollBox?.clientHeight ?? 0) + 1
+                        clientTop + (scrollBox?.clientHeight ?? 0)
                     )
                 })
             }

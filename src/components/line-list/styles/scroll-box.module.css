@@ -11,8 +11,6 @@
     min-block-size: 0;
     overflow: auto;
     box-sizing: border-box;
-    border: 1px solid var(--line-list-border-color);
-    background-color: var(--colors-white);
 }
 
 .content {

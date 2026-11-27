@@ -9,10 +9,15 @@
     vertical-align: middle !important;
     background-color: var(--line-list-header-background-color) !important;
     border-block-end-color: var(--line-list-border-color) !important;
+    border-inline-end-color: var(--line-list-border-color) !important;
 }
 
-.headerCell:not(:last-child) {
-    border-inline-end-color: var(--line-list-border-color) !important;
+.headerCell:first-child {
+    border-inline-start: 1px solid var(--line-list-border-color) !important;
+}
+
+:global(tr:first-child) > .headerCell {
+    border-block-start: 1px solid var(--line-list-border-color) !important;
 }
 
 .headerCell :global(.top) {

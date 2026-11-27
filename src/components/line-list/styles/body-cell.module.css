@@ -4,10 +4,11 @@
     padding: var(--line-list-cell-padding) !important;
     font-size: var(--line-list-font-size) !important;
     line-height: var(--line-list-font-size);
+    border-inline-end-color: var(--line-list-border-color) !important;
 }
 
-.cell:not(:last-child) {
-    border-inline-end-color: var(--line-list-border-color) !important;
+.cell:first-child {
+    border-inline-start: 1px solid var(--line-list-border-color) !important;
 }
 
 :global(tr:not(:last-child)) > .cell {
