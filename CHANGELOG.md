@@ -1,3 +1,9 @@
+## [0.0.7](https://github.com/dhis2/individual-data-visualizer-app/compare/v0.0.6...v0.0.7) (2026-11-27)
+
+### Bug Fixes
+
+* enable hierarchy on default ou depending on output type ([#512](https://github.com/dhis2/individual-data-visualizer-app/issues/512)) ([3571ecb](https://github.com/dhis2/individual-data-visualizer-app/commit/3571ecb5a197f1baf86b3cefb9c2abbb2d6eb889))
+
 ## [0.0.6](https://github.com/dhis2/individual-data-visualizer-app/compare/v0.0.5...v0.0.6) (2026-11-27)
 
 ### Bug Fixes
