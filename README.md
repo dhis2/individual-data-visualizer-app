@@ -63,7 +63,7 @@ Will (re)generate the TypesScript types from the DHIS2 Core OpenAPI schemas.
 
 Every `feat`, `fix` or `perf` commit merged to master cuts a release. The [release workflow](.github/workflows/release.yml) runs [semantic-release](https://semantic-release.org), which works out the next version from the commit messages since the last release tag, writes it to `package.json` and `CHANGELOG.md`, and has dhis2-bot commit both to master. Other commit types, such as `chore`, `refactor` or `test`, don't release.
 
-The installable `.zip` is attached to each [GitHub release](https://github.com/dhis2/individual-data-visualizer-app/releases). The same build is copied to [d2-ci](https://github.com/d2-ci/individual-data-visualizer-app).
+The installable `.zip` is attached to each [GitHub release](https://github.com/dhis2/individual-data-visualizer-app/releases). The build is also copied to [d2-ci](https://github.com/d2-ci/individual-data-visualizer-app), where DHIS2 core picks it up to bundle the app. The `master` branch there has the latest release, and each release also gets its own branch, such as `v1.2.3`, for core's patch branches to pin.
 
 A release also deploys the app to Netlify production and to the [idv-playground](https://dev.im.dhis2.org/idv-playground) IM instance. To try a branch or PR as an installed app, run the [IM deploy workflow](.github/workflows/deploy-to-im-instance.yml) by hand. It takes a branch, tag, commit or PR number and the URL of the instance.
 
