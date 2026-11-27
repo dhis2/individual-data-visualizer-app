@@ -372,13 +372,25 @@ describe('getOperatorConditionTexts', () => {
                 )
             ).toBe(false)
 
-            const actual = getOperatorConditionTexts(
+            const actual = getOperatorConditionTexts({
                 dimension,
                 conditionsList,
-                formatValueOptions
-            )
+                formatValueOptions,
+                locale: 'en',
+            })
             expect(actual).toEqual(t.expected)
         })
+    })
+
+    it('capitalises the operator name the way the locale does', () => {
+        expect(
+            getOperatorConditionTexts({
+                dimension: { ...dummyDimension, valueType: 'NUMBER' },
+                conditionsList: ['EQ:NV'],
+                formatValueOptions: {},
+                locale: 'tr',
+            })
+        ).toEqual(['İs empty / null'])
     })
 })
 

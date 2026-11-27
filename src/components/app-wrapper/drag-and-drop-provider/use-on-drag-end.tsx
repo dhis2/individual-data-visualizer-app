@@ -104,7 +104,7 @@ export const useOnDragEnd = (): OnDragEndFn => {
     const { show: showVisTypeAlert } = useAlert(
         ({ list, visTypeName }: { list: string; visTypeName: string }) =>
             i18n.t(
-                'Some dimensions were not added because they cannot be used in a {{visTypeName}}: {{list}}.',
+                'Some dimensions were not added because they cannot be used in a {{- visTypeName}}: {{- list}}.',
                 { list, visTypeName, nsSeparator: '^^' }
             ),
         SKIPPED_DIMENSIONS_ALERT_OPTIONS
@@ -112,7 +112,7 @@ export const useOnDragEnd = (): OnDragEndFn => {
     const { show: showCrossTetAlert } = useAlert(
         ({ list, layoutTetName }: { list: string; layoutTetName: string }) =>
             i18n.t(
-                'Some dimensions were not added because they cannot be combined with {{- layoutTetName}} dimensions: {{list}}.',
+                'Some dimensions were not added because they cannot be combined with {{- layoutTetName}} dimensions: {{- list}}.',
                 { list, layoutTetName, nsSeparator: '^^' }
             ),
         SKIPPED_DIMENSIONS_ALERT_OPTIONS

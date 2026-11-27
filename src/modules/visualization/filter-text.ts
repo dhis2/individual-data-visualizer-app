@@ -1,10 +1,10 @@
+import i18n from '@dhis2/d2-i18n'
 import { toLayoutDimension } from '@modules/dimension/layout-dimension'
 import { getDimensionLabel, getSuffixContext } from '@modules/dimension/suffix'
 import {
     getDimensionValueMetadataIds,
     getDimensionValueTexts,
 } from '@modules/dimension/value-texts'
-import { getStartEndDateFormatter } from '@modules/utils/dates'
 import { getVisualizationUiConfig } from '@modules/visualization/ui-config'
 import type { CurrentVisualization, MetadataStore } from '@types'
 
@@ -34,7 +34,7 @@ export const getVisualizationFilterText = ({
         [...layout.columns, ...layout.rows, ...layout.filters],
         metadataStore
     )
-    const formatStartEndDate = getStartEndDateFormatter(locale)
+    const listFormatter = new Intl.ListFormat(locale, { style: 'narrow' })
 
     return layout.filters
         .flatMap((dimensionId) => {
@@ -56,12 +56,19 @@ export const getVisualizationFilterText = ({
                 formatValueOptions: {
                     digitGroupSeparator: visualization.digitGroupSeparator,
                 },
-                formatStartEndDate,
+                locale,
             })
 
             return valueTexts.length
                 ? [
-                      `${getDimensionLabel(dimension.name, dimension.suffix)}: ${valueTexts.join(', ')}`,
+                      i18n.t('{{- label}}: {{- value}}', {
+                          label: getDimensionLabel(
+                              dimension.name,
+                              dimension.suffix
+                          ),
+                          value: listFormatter.format(valueTexts),
+                          nsSeparator: '^^',
+                      }),
                   ]
                 : []
         })

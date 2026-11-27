@@ -1,3 +1,4 @@
+import { useCurrentUser } from '@components/app-wrapper/cached-data/cached-data-provider'
 import {
     useMetadataStore,
     type UseMetadataStoreReturnValue,
@@ -90,12 +91,14 @@ type FormatCellValueArgs = {
     visualization: CurrentVisualization
     metaDataItems: AnalyticsResponseMetadataItems
     isUndefined: boolean
+    listFormatter: Intl.ListFormat
 }
 
 type TransformLineListDataArgs = {
     analyticsData: LineListAnalyticsData
     visualization: CurrentVisualization
     metadataStore: UseMetadataStoreReturnValue
+    locale: string
 }
 
 const NOT_DEFINED_VALUE = 'ND'
@@ -167,7 +170,10 @@ export const getHeaderDisplayText = (
             })
         }
 
-        return `${label} (${repetitionSuffix})`
+        return i18n.t('{{- label}} ({{- repetition}})', {
+            label,
+            repetition: repetitionSuffix,
+        })
     }
 
     return label
@@ -282,11 +288,13 @@ const resolveCellValue = ({
     header,
     metaDataItems,
     isUndefined,
+    listFormatter,
 }: {
     rawValue: string
     header: TransformedLineListHeader
     metaDataItems: AnalyticsResponseMetadataItems
     isUndefined: boolean
+    listFormatter: Intl.ListFormat
 }) => {
     if (!rawValue) {
         return rawValue
@@ -304,17 +312,18 @@ const resolveCellValue = ({
         default: {
             const { optionSet: optionSetId } = header
             if (optionSetId) {
-                return rawValue
-                    .split(',')
-                    .map(
-                        (code) =>
-                            lookupOptionSetOptionMetadata(
-                                optionSetId,
-                                code,
-                                metaDataItems
-                            )?.name || code
-                    )
-                    .join(', ')
+                return listFormatter.format(
+                    rawValue
+                        .split(',')
+                        .map(
+                            (code) =>
+                                lookupOptionSetOptionMetadata(
+                                    optionSetId,
+                                    code,
+                                    metaDataItems
+                                )?.name || code
+                        )
+                )
             }
 
             return metaDataItems[rawValue]?.name || rawValue
@@ -328,6 +337,7 @@ export const formatCellValue = ({
     visualization,
     metaDataItems,
     isUndefined,
+    listFormatter,
 }: FormatCellValueArgs): { value: string; formattedValue: string } => {
     // header.name might be prefixed with programStage.id
     const dimensionId = extractPlainDimensionId(header.name)
@@ -344,6 +354,7 @@ export const formatCellValue = ({
         header,
         metaDataItems,
         isUndefined,
+        listFormatter,
     })
 
     if (dimensionId && STATUS_HEADER_NAMES.has(dimensionId)) {
@@ -407,7 +418,9 @@ export const transformLineListData = ({
     analyticsData,
     visualization,
     metadataStore,
+    locale,
 }: TransformLineListDataArgs): LineListData => {
+    const listFormatter = new Intl.ListFormat(locale, { style: 'narrow' })
     const transformedHeaders = transformHeaders({
         analyticsData,
         visualization,
@@ -432,6 +445,7 @@ export const transformLineListData = ({
                 visualization,
                 metaDataItems: analyticsData.metaDataItems,
                 isUndefined,
+                listFormatter,
             })
             return {
                 formattedValue,
@@ -460,13 +474,15 @@ export const useTransformedLineListData = (
     visualization: CurrentVisualization
 ): LineListData => {
     const metadataStore = useMetadataStore()
+    const locale = useCurrentUser().settings.uiLocale
     return useMemo(
         () =>
             transformLineListData({
                 analyticsData,
                 visualization,
                 metadataStore,
+                locale,
             }),
-        [analyticsData, visualization, metadataStore]
+        [analyticsData, visualization, metadataStore, locale]
     )
 }

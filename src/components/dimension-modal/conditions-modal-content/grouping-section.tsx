@@ -3,7 +3,7 @@ import {
     RadioCardGroup,
 } from '@components/shared/radio-card/radio-card'
 import i18n from '@dhis2/d2-i18n'
-import { useAppDispatch, useAppSelector } from '@hooks'
+import { useAppDispatch, useAppSelector, useListFormatter } from '@hooks'
 import {
     getVisUiConfigConditionsByDimension,
     setVisUiConfigGroupingByDimension,
@@ -14,21 +14,29 @@ import { type FC, useCallback } from 'react'
 const NO_GROUPING_VALUE = 'NO_GROUPING'
 const MAX_PREVIEW_LEGENDS = 3
 
-const getLegendsPreview = (
+const useLegendsPreview = (): ((
     legends: LegendSetMetadataItem['legends']
-): string => {
-    const preview = legends
-        .slice(0, MAX_PREVIEW_LEGENDS)
-        .map((legend) => legend.name)
-        .join(', ')
-    const remainingCount = legends.length - MAX_PREVIEW_LEGENDS
+) => string) => {
+    const listFormatter = useListFormatter()
 
-    return remainingCount > 0
-        ? i18n.t('{{- legends}} and {{- remainingCount}} more', {
-              legends: preview,
-              remainingCount,
-          })
-        : preview
+    return useCallback(
+        (legends) => {
+            const previewNames = legends
+                .slice(0, MAX_PREVIEW_LEGENDS)
+                .map((legend) => legend.name)
+            const remainingCount = legends.length - MAX_PREVIEW_LEGENDS
+
+            return listFormatter.format(
+                remainingCount > 0
+                    ? [
+                          ...previewNames,
+                          i18n.t('{{- count}} more', { count: remainingCount }),
+                      ]
+                    : previewNames
+            )
+        },
+        [listFormatter]
+    )
 }
 
 type GroupingSectionProps = {
@@ -41,6 +49,7 @@ export const GroupingSection: FC<GroupingSectionProps> = ({
     legendSets,
 }) => {
     const dispatch = useAppDispatch()
+    const getLegendsPreview = useLegendsPreview()
     const { legendSet: selectedLegendSetId } = useAppSelector((state) =>
         getVisUiConfigConditionsByDimension(state, dimensionId)
     )

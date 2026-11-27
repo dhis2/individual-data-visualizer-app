@@ -300,10 +300,13 @@ export const useLineListAnalyticsData = (): UseAnalyticsDataResult => {
 
     const { show: showEmptyPageAlert } = useAlert(
         ({ page, shownPage }: EmptyPageAlertProps) =>
-            i18n.t('Page {{page}} not found, returned to page {{shownPage}}', {
-                page,
-                shownPage,
-            })
+            i18n.t(
+                'Page {{- page}} not found, returned to page {{- shownPage}}',
+                {
+                    page,
+                    shownPage,
+                }
+            )
     )
 
     const totalPages = useAnalyticsTotalCounts()

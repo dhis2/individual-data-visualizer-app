@@ -397,11 +397,17 @@ export const getOrgUnitConditionMetadataIds = (
     return allIds
 }
 
-export const getOperatorConditionTexts = (
-    dimension: LayoutDimension,
-    conditionsList: string[],
+export const getOperatorConditionTexts = ({
+    dimension,
+    conditionsList,
+    formatValueOptions,
+    locale,
+}: {
+    dimension: LayoutDimension
+    conditionsList: string[]
     formatValueOptions: FormatValueOptions
-): string[] => {
+    locale: string
+}): string[] => {
     const operators = getOperatorsForDimension(dimension)
 
     return conditionsList.map((condition) => {
@@ -431,10 +437,15 @@ export const getOperatorConditionTexts = (
 
         if (typeof operatorName === 'string' && operatorName.length > 0) {
             const capitalCaseOperatorName =
-                operatorName[0].toUpperCase() + operatorName.substring(1)
+                operatorName.charAt(0).toLocaleUpperCase(locale) +
+                operatorName.substring(1)
 
             return value
-                ? `${capitalCaseOperatorName}: ${value}`
+                ? i18n.t('{{- label}}: {{- value}}', {
+                      label: capitalCaseOperatorName,
+                      value,
+                      nsSeparator: '^^',
+                  })
                 : capitalCaseOperatorName
         } else {
             throw new Error('Could not read operatorName')
@@ -494,11 +505,13 @@ export const getConditionsTexts = ({
     dimension,
     formatValueOptions,
     metadataItems,
+    locale,
 }: {
     conditions: Conditions
     dimension: LayoutDimension
     formatValueOptions: FormatValueOptions
     metadataItems: Record<string, MetadataItem | undefined>
+    locale: string
 }): string[] => {
     const conditionsList = parseConditionsStringToArray(
         conditions?.condition ?? ''
@@ -545,9 +558,10 @@ export const getConditionsTexts = ({
         return getBooleanConditionTexts(conditionsList)
     }
 
-    return getOperatorConditionTexts(
+    return getOperatorConditionTexts({
         dimension,
         conditionsList,
-        formatValueOptions
-    )
+        formatValueOptions,
+        locale,
+    })
 }
