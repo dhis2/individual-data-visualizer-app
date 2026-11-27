@@ -14,7 +14,8 @@ import type { FC } from 'react'
 
 type ConversionConfirmationModalProps = {
     targetVisType: VisualizationType
-    discardedDimensionNames: string[]
+    discardedProgramIndicatorNames: string[]
+    discardedUserDimensionNames: string[]
     emptyDimensionNames: string[]
     defaultItemNames: string[]
     onConfirm: () => void
@@ -25,7 +26,8 @@ export const ConversionConfirmationModal: FC<
     ConversionConfirmationModalProps
 > = ({
     targetVisType,
-    discardedDimensionNames,
+    discardedProgramIndicatorNames,
+    discardedUserDimensionNames,
     emptyDimensionNames,
     defaultItemNames,
     onConfirm,
@@ -46,14 +48,32 @@ export const ConversionConfirmationModal: FC<
                 })}
             </ModalTitle>
             <ModalContent>
-                {discardedDimensionNames.length > 0 && (
+                {discardedProgramIndicatorNames.length > 0 && (
                     <p>
                         {i18n.t(
                             '{{- names}} will be removed from the layout because program indicators are not supported in pivot tables.',
                             {
                                 names: listFormatter.format(
-                                    discardedDimensionNames
+                                    discardedProgramIndicatorNames
                                 ),
+                            }
+                        )}
+                    </p>
+                )}
+                {discardedUserDimensionNames.length > 0 && (
+                    <p>
+                        {i18n.t(
+                            '{{- names}} will be removed from the layout because it is not supported in pivot tables.',
+                            {
+                                names: listFormatter.format(
+                                    discardedUserDimensionNames
+                                ),
+                                count: discardedUserDimensionNames.length,
+                                nsSeparator: '^^',
+                                defaultValue:
+                                    '{{- names}} will be removed from the layout because it is not supported in pivot tables.',
+                                defaultValue_plural:
+                                    '{{- names}} will be removed from the layout because they are not supported in pivot tables.',
                             }
                         )}
                     </p>

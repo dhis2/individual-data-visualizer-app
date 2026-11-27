@@ -25,10 +25,16 @@ const DERIVED_LAYOUT_FIELDS: ReadonlySet<string> = new Set([
 
 const DIMENSION_AXES = new Set<string>(AXES)
 
-/* An option left out and an option set to its own default mean the same thing. */
-export const isDefaultOptionValue = (key: string, value: unknown): boolean =>
-    value === undefined ||
-    deepEqual(value, (DEFAULT_OPTIONS as Record<string, unknown>)[key])
+/* The API leaves an empty title or subtitle out, where the app stores an empty
+ * string for an "Auto generated" title. */
+const isUnset = (value: unknown): boolean =>
+    value === undefined || value === null || value === ''
+
+/* An unset option and an option set to its own default mean the same thing. */
+export const isDefaultOptionValue = (key: string, value: unknown): boolean => {
+    const defaultValue = (DEFAULT_OPTIONS as Record<string, unknown>)[key]
+    return isUnset(value) || deepEqual(value, defaultValue)
+}
 
 /* The API returns more per dimension than the app can rebuild from visUiConfig,
  * and none of that extra detail is an edit: option sets and legend sets come

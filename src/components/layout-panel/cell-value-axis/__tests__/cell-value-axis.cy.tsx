@@ -90,7 +90,7 @@ describe('CellValueAxis', () => {
         })
     })
 
-    /* There are over twenty aggregation types, so the menu has to scroll. */
+    /* The menu has more aggregation types than fit in its height, so it scrolls. */
     it('caps the aggregation menu height and scrolls', () => {
         cy.mount(
             <MockAppWrapper

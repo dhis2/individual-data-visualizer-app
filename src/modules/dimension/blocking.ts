@@ -10,6 +10,13 @@ import type {
  * disable cards and individual chips, and by the conversion strategy to
  * decide which dimensions to discard when switching vis types. */
 
+/* Analytics can't aggregate program indicators in a pivot table. The user
+ * dimensions (created by, last updated by) hold plain text, which can't be
+ * aggregated either, and they can't be filtered, so they are of no use on the
+ * filter axis. */
+const PIVOT_TABLE_UNSUPPORTED_DIMENSION_TYPES: ReadonlySet<DimensionType> =
+    new Set(['PROGRAM_INDICATOR', 'USER'])
+
 export const isDimensionTypeUnsupportedByVisType = (
     dimensionType: DimensionType,
     visType: VisualizationType
@@ -17,7 +24,7 @@ export const isDimensionTypeUnsupportedByVisType = (
     if (visType === 'LINE_LIST') {
         return false
     }
-    return dimensionType === 'PROGRAM_INDICATOR'
+    return PIVOT_TABLE_UNSUPPORTED_DIMENSION_TYPES.has(dimensionType)
 }
 
 export const isDimensionUnsupportedByVisType = (

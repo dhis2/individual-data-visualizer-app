@@ -9,9 +9,17 @@ name: 'deploy: netlify production'
 #       NETLIFY_SITE_ID
 
 on:
-    push:
-        branches:
-            - master
+    workflow_dispatch:
+    # The release workflow calls this after a release, with the release commit
+    # as ref. A plain checkout would get the merge commit that started the
+    # release, which predates the version bump. Checking out master instead
+    # could pick up a commit merged while the release was building.
+    workflow_call:
+        inputs:
+            ref:
+                description: 'The commit to deploy'
+                type: string
+                required: true
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}
@@ -20,9 +28,12 @@ concurrency:
 jobs:
     deploy:
         runs-on: ubuntu-latest
-        if: '!github.event.push.repository.fork'
+        if: ${{ !github.event.repository.fork && github.ref == 'refs/heads/master' }}
         steps:
+            # Without a ref (a manual run) this checks out master
             - uses: actions/checkout@v7
+              with:
+                  ref: ${{ inputs.ref }}
             - uses: pnpm/action-setup@v6
             - uses: actions/setup-node@v7
               with:

@@ -9,7 +9,7 @@ import {
     getVisUiConfigLayout,
     getVisUiConfigVisualizationType,
 } from '@store/vis-ui-config-slice'
-import type { Layout, VisualizationType } from '@types'
+import type { DimensionType, Layout, VisualizationType } from '@types'
 import { useState } from 'react'
 
 type Conversion = {
@@ -19,7 +19,8 @@ type Conversion = {
 }
 
 type PendingConversion = Conversion & {
-    discardedNames: string[]
+    discardedProgramIndicatorNames: string[]
+    discardedUserDimensionNames: string[]
     emptyDimensionNames: string[]
     defaultItemNames: string[]
 }
@@ -85,11 +86,20 @@ export const useVisTypeConversion = () => {
         const defaultItemIds = [
             ...new Set(Object.values(defaultItemsByDimension).flat()),
         ]
+        const discardedDimensions = invalidDimensionIds.map(
+            metadataStore.getDimensionMetadataItemOrThrow
+        )
+        const getDiscardedNames = (dimensionType: DimensionType) =>
+            discardedDimensions
+                .filter(
+                    (dimension) => dimension.dimensionType === dimensionType
+                )
+                .map((dimension) => dimension.name)
         setPendingConversion({
             ...conversion,
-            discardedNames: invalidDimensionIds.map(
-                (id) => metadataStore.getDimensionMetadataItemOrThrow(id).name
-            ),
+            discardedProgramIndicatorNames:
+                getDiscardedNames('PROGRAM_INDICATOR'),
+            discardedUserDimensionNames: getDiscardedNames('USER'),
             emptyDimensionNames: emptyDimensionIdsWithDefaults.map(
                 (id) => metadataStore.getDimensionMetadataItemOrThrow(id).name
             ),

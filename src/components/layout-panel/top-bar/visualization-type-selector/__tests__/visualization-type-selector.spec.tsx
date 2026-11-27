@@ -71,6 +71,20 @@ const programIndicator = {
     dimensionType: 'PROGRAM_INDICATOR' as const,
 }
 
+const createdBy = {
+    id: 'createdBy',
+    name: 'Created by',
+    dimensionId: 'createdBy',
+    dimensionType: 'USER' as const,
+}
+
+const lastUpdatedBy = {
+    id: 'lastUpdatedBy',
+    name: 'Last updated by',
+    dimensionId: 'lastUpdatedBy',
+    dimensionType: 'USER' as const,
+}
+
 describe('VisualizationTypeSelector', () => {
     it('renders the Line list item by default', async () => {
         await renderWithAppWrapper(<VisualizationTypeSelector />)
@@ -188,6 +202,87 @@ describe('VisualizationTypeSelector', () => {
             rows: [],
             filters: ['numericDe'],
         })
+    })
+
+    it('lists text dimensions and program indicators in separate paragraphs', async () => {
+        const user = userEvent.setup()
+
+        const { store } = await renderWithAppWrapper(
+            <VisualizationTypeSelector />,
+            {
+                metadata: {
+                    numericDe: numericDataElement,
+                    pi: programIndicator,
+                    createdBy,
+                    lastUpdatedBy,
+                },
+            }
+        )
+
+        act(() => {
+            store.dispatch(
+                setVisUiConfigLayout({
+                    columns: ['createdBy', 'pi', 'numericDe'],
+                    rows: [],
+                    filters: ['lastUpdatedBy'],
+                })
+            )
+        })
+
+        await switchToPivotTable(user)
+
+        const modal = await screen.findByTestId('conversion-confirmation-modal')
+        expect(
+            within(modal).getByText(
+                'My PI will be removed from the layout because program indicators are not supported in pivot tables.'
+            )
+        ).toBeInTheDocument()
+        expect(
+            within(modal).getByText(
+                'Last updated by and Created by will be removed from the layout because they are not supported in pivot tables.'
+            )
+        ).toBeInTheDocument()
+
+        await user.click(within(modal).getByText('Convert'))
+
+        expect(getVisUiConfigLayout(store.getState())).toEqual({
+            columns: [],
+            rows: [],
+            filters: ['numericDe'],
+        })
+    })
+
+    it('uses the singular for one discarded text dimension', async () => {
+        const user = userEvent.setup()
+
+        const { store } = await renderWithAppWrapper(
+            <VisualizationTypeSelector />,
+            {
+                metadata: { numericDe: numericDataElement, createdBy },
+            }
+        )
+
+        act(() => {
+            store.dispatch(
+                setVisUiConfigLayout({
+                    columns: ['createdBy', 'numericDe'],
+                    rows: [],
+                    filters: [],
+                })
+            )
+        })
+
+        await switchToPivotTable(user)
+
+        const modal = await screen.findByTestId('conversion-confirmation-modal')
+        expect(
+            within(modal).getByText(
+                'Created by will be removed from the layout because it is not supported in pivot tables.'
+            )
+        ).toBeInTheDocument()
+        expect(
+            within(modal).queryByText(/program indicators/)
+        ).not.toBeInTheDocument()
     })
 
     it('leaves state unchanged when the confirmation modal is cancelled', async () => {

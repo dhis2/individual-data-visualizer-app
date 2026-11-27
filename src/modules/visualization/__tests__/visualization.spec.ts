@@ -1001,12 +1001,45 @@ describe('normalizeApiSavedVisualization', () => {
         expect(result.aggregationType).toBe('MAX')
     })
 
-    it('keeps a saved aggregation type', () => {
+    it.each(['SUM', 'LAST'] as const)(
+        'keeps a saved %s aggregation type',
+        (aggregationType) => {
+            const result = normalizeApiSavedVisualization(
+                buildCellValueVis({ aggregationType })
+            )
+
+            expect(result.aggregationType).toBe(aggregationType)
+        }
+    )
+
+    /* ER let users save types that analytics rejects or gets wrong. */
+    it.each([
+        'LAST_IN_PERIOD',
+        'LAST_IN_PERIOD_AVERAGE_ORG_UNIT',
+        'AVERAGE_SUM_ORG_UNIT',
+        'MIN_SUM_ORG_UNIT',
+        'MAX_SUM_ORG_UNIT',
+        'CUSTOM',
+    ] as const)('turns a saved %s into AVERAGE', (aggregationType) => {
         const result = normalizeApiSavedVisualization(
-            buildCellValueVis({ aggregationType: 'SUM' })
+            buildCellValueVis({ aggregationType })
         )
 
-        expect(result.aggregationType).toBe('SUM')
+        expect(result.aggregationType).toBe('AVERAGE')
+    })
+
+    it('turns DEFAULT into AVERAGE when the item aggregates by an unsupported type', () => {
+        const result = normalizeApiSavedVisualization(
+            buildCellValueVis({
+                aggregationType: 'DEFAULT',
+                dataElementValueDimension: {
+                    id: UID,
+                    aggregationType: 'LAST_IN_PERIOD',
+                },
+            })
+        )
+
+        expect(result.aggregationType).toBe('AVERAGE')
     })
 
     it('leaves the aggregation type unset when there is no cell value', () => {
@@ -1177,6 +1210,23 @@ describe('getVisualizationState treats default-valued options as unchanged', () 
         expect(getVisualizationState(savedVis, currentVis)).toBe('SAVED')
     })
 
+    /* Reloading after a save merges the loaded vis into the options it was
+     * saved from. The API leaves an empty title or subtitle out, so the empty
+     * string stays in those options. */
+    it.each(['title', 'subtitle'] as const)(
+        'stays SAVED when reloaded over options with an empty %s',
+        (key) => {
+            const savedVis = normalizeApiSavedVisualization(buildApiVis())
+
+            const currentVis = rebuildCurrentVis(savedVis, {
+                ...DEFAULT_OPTIONS,
+                [key]: '',
+            })
+
+            expect(getVisualizationState(savedVis, currentVis)).toBe('SAVED')
+        }
+    )
+
     it('hides an empty subtitle when rebuilding', () => {
         const savedVis = normalizeApiSavedVisualization(buildApiVis())
 
@@ -1274,6 +1324,15 @@ describe('isDefaultOptionValue', () => {
             true
         )
         expect(isDefaultOptionValue('digitGroupSeparator', 'SPACE')).toBe(false)
+    })
+
+    it.each([null, ''])('treats %j as default', (value) => {
+        expect(isDefaultOptionValue('title', value)).toBe(true)
+        expect(isDefaultOptionValue('showDimensionLabels', value)).toBe(true)
+    })
+
+    it('treats a populated text option as non-default', () => {
+        expect(isDefaultOptionValue('title', 'My title')).toBe(false)
     })
 
     it('treats a populated legend as non-default (default legend is undefined)', () => {
