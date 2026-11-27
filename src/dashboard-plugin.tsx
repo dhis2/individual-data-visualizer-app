@@ -1,5 +1,6 @@
 import { getVisualizationQueryFields } from '@api/event-visualizations-api'
 import { parseEngineError } from '@api/parse-engine-error'
+import { useCurrentUser } from '@components/app-wrapper/cached-data/cached-data-provider'
 import { PluginCachedDataProvider } from '@components/app-wrapper/cached-data/plugin-cached-data-provider'
 import {
     PluginMetadataProvider,
@@ -28,6 +29,7 @@ const DashboardPluginContent: FC<DashboardPluginProps> = (props) => {
     logger.debug('vis id', props.visualizationId)
 
     const metadataStore = useMetadataStore()
+    const { displayNameProperty } = useCurrentUser().settings
 
     /* A dashboard item is bound to a fixed visualization id, so we only fetch
      * on mount. */
@@ -36,13 +38,7 @@ const DashboardPluginContent: FC<DashboardPluginProps> = (props) => {
             resource: 'eventVisualizations',
             id: props.visualizationId,
             params: {
-                fields: getVisualizationQueryFields(
-                    // derive displayNameProperty from displayProperty
-                    // this depends on user settings and we only receive displayProperty in props
-                    props.displayProperty === 'name'
-                        ? 'displayName'
-                        : 'displayShortName'
-                ),
+                fields: getVisualizationQueryFields(displayNameProperty),
             },
         },
     })
@@ -95,7 +91,6 @@ const DashboardPluginContent: FC<DashboardPluginProps> = (props) => {
         <DashboardPluginWrapper {...props}>
             {(pluginProps: DashboardPluginProps) => (
                 <PluginWrapper
-                    displayProperty={pluginProps.displayProperty}
                     filters={pluginProps.filters}
                     visualization={currentVisualization}
                     visualizationLoadError={visualizationLoadError}

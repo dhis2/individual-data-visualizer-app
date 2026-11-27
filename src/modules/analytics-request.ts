@@ -31,18 +31,18 @@ export const headersMap: Record<DimensionId, string> = {
     lastUpdated: 'lastupdated',
 }
 
+const OU_NAME_HIERARCHY_HEADER = 'ounamehierarchy'
+
 export const getHeadersMap = (
     visualization: CurrentVisualization
 ): Record<DimensionId, string> => {
-    const { outputType, showHierarchy, type } = visualization
+    const { outputType, type } = visualization
 
     const map = { ...headersMap }
 
     if (type === 'PIVOT_TABLE') {
         map['ou'] = 'ou'
         map['enrollmentOu'] = outputType === 'EVENT' ? 'enrollmentou' : 'ou'
-    } else if (showHierarchy) {
-        map['ou'] = 'ounamehierarchy'
     } else if (outputType === 'ENROLLMENT') {
         map['enrollmentOu'] = 'ouname'
     }
@@ -64,7 +64,7 @@ const reversedHeadersMap: Record<string, string> = {
         },
         {}
     ),
-    ounamehierarchy: 'ou',
+    [OU_NAME_HIERARCHY_HEADER]: 'ou',
 }
 
 /* The analytics API returns tracked entity attribute headers unprefixed, so
@@ -167,6 +167,24 @@ const isRegistrationOu = ({
 }: DimensionContext): boolean =>
     dimensionId === 'ou' && !programId && !programStageId
 
+/* A line list shows the hierarchy only for the org unit its analytics endpoint
+ * is built on: the event's, the enrollment's or the registration's. */
+const supportsHierarchyHeader = (
+    context: DimensionContext,
+    outputType: OutputType
+): boolean => {
+    const { dimensionId, programStageId } = context
+
+    switch (outputType) {
+        case 'EVENT':
+            return dimensionId === 'ou' && Boolean(programStageId)
+        case 'ENROLLMENT':
+            return dimensionId === 'enrollmentOu' && !programStageId
+        case 'TRACKED_ENTITY_INSTANCE':
+            return isRegistrationOu(context)
+    }
+}
+
 const getRequestDimensionWireName = (
     context: DimensionContext,
     outputType: OutputType
@@ -232,9 +250,18 @@ export const getAnalyticsRequestHeaderName = ({
 }: DimensionContext & {
     visualization: CurrentVisualization
 }): string => {
-    const { outputType } = visualization
-    const map = getHeadersMap(visualization)
-    const wireDim = map[dimensionId as DimensionId] ?? dimensionId
+    const { outputType, showHierarchy, type } = visualization
+    const showsHierarchy =
+        type !== 'PIVOT_TABLE' &&
+        showHierarchy &&
+        supportsHierarchyHeader(
+            { dimensionId, programId, programStageId },
+            outputType
+        )
+    const wireDim = showsHierarchy
+        ? OU_NAME_HIERARCHY_HEADER
+        : (getHeadersMap(visualization)[dimensionId as DimensionId] ??
+          dimensionId)
 
     if (programStageId) {
         return repetitionIndex === undefined

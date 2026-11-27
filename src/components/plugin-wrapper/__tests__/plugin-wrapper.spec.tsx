@@ -1,4 +1,4 @@
-import { useCurrentUser, useAppSelector, useAppDispatch } from '@hooks'
+import { useAppSelector, useAppDispatch } from '@hooks'
 import { isVisualizationEmpty } from '@modules/visualization/guards'
 import type { Store } from '@reduxjs/toolkit'
 import { getCurrentVis, setCurrentVis } from '@store/current-vis-slice'
@@ -71,7 +71,6 @@ describe('PluginWrapper', () => {
     } as MockOptions
     const TestComponent = () => {
         const dispatch = useAppDispatch()
-        const currentUser = useCurrentUser()
         const currentVis = useAppSelector(getCurrentVis)
         const isVisualizationLoading = useAppSelector(getIsVisualizationLoading)
         mockOnDataSorted.mockImplementation((sorting: Sorting) => {
@@ -92,7 +91,6 @@ describe('PluginWrapper', () => {
             <PluginWrapper
                 isVisualizationLoading={isVisualizationLoading}
                 visualization={currentVis}
-                displayProperty={currentUser.settings.displayProperty}
                 onDataSorted={mockOnDataSorted}
             />
         )

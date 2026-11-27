@@ -1,3 +1,4 @@
+import { useCurrentUser } from '@components/app-wrapper/cached-data/cached-data-provider'
 import type { LayoutDimension } from '@components/layout-panel/axis/chip'
 import { useMetadataItems } from '@hooks'
 import type { Conditions, FormatValueOptions } from '@modules/conditions'
@@ -5,7 +6,6 @@ import {
     getDimensionValueMetadataIds,
     getDimensionValueTexts,
 } from '@modules/dimension/value-texts'
-import { useLocalizedStartEndDateFormatter } from '@modules/utils/dates'
 import { useMemo } from 'react'
 
 type UseDimensionValueTextsParams = {
@@ -21,7 +21,7 @@ export const useDimensionValueTexts = ({
     conditions,
     formatValueOptions,
 }: UseDimensionValueTextsParams): string[] => {
-    const formatStartEndDate = useLocalizedStartEndDateFormatter()
+    const locale = useCurrentUser().settings.uiLocale
     const metadataIds = useMemo(
         () => getDimensionValueMetadataIds({ dimension, itemIds, conditions }),
         [dimension, itemIds, conditions]
@@ -36,7 +36,7 @@ export const useDimensionValueTexts = ({
                 conditions,
                 metadataItems,
                 formatValueOptions,
-                formatStartEndDate,
+                locale,
             }),
         [
             dimension,
@@ -44,7 +44,7 @@ export const useDimensionValueTexts = ({
             conditions,
             metadataItems,
             formatValueOptions,
-            formatStartEndDate,
+            locale,
         ]
     )
 }

@@ -3,7 +3,6 @@ import {
     getDimensionValueMetadataIds,
     getDimensionValueTexts,
 } from '@modules/dimension/value-texts'
-import { getStartEndDateFormatter } from '@modules/utils/dates'
 import type { MetadataItem } from '@types'
 import { describe, expect, it } from 'vitest'
 
@@ -34,7 +33,7 @@ const textsFor = (
             OU1: { id: 'OU1', name: 'Sierra Leone' } as MetadataItem,
         },
         formatValueOptions: {},
-        formatStartEndDate: getStartEndDateFormatter('en'),
+        locale: 'en',
     })
 
 describe('getDimensionValueTexts', () => {

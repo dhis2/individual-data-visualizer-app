@@ -82,7 +82,6 @@ export const PluginHostApp: FC = () => {
                         pluginSource="/plugin.html"
                         height={400}
                         visualizationId={trimmedVisualizationId}
-                        displayProperty="name"
                         forDashboard
                         isVisualizationLoaded
                         cacheId={`plugin-host-${trimmedVisualizationId}`}

@@ -457,14 +457,13 @@ In addition to being available via hooks, you can also access the metadata store
 
 Data that stays the same for the app's lifecycle is loaded once, before anything else renders, by a cached data provider. The app and the dashboard plugin each have one, because the plugin needs less data:
 
-- `AppCachedDataProvider` (inside `AppWrapper`) loads system settings, root org units, org unit levels and the relative period names. The current user is not fetched here; it is taken from the `/api/me` response the app-shell already loads, via `useCurrentUserInfo` from `@dhis2/app-runtime`. Read it with `useAppCachedData`, or with these hooks for single properties:
-    - `useCurrentUser`
+- `AppCachedDataProvider` (inside `AppWrapper`) loads system settings, root org units, org unit levels and the relative period names. The current user is not fetched here; it is taken from the `/api/me` response the app-shell already loads, via `toCurrentUser`, which also converts the user's locales to a form `Intl` accepts. Read it with `useAppCachedData`, or with these hooks for single properties:
     - `useSystemSettings`
     - `useRootOrgUnits`
     - `useOrgUnitLevels`
-- `PluginCachedDataProvider` (in `src/dashboard-plugin.tsx`) loads only the relative period names. Read it with `usePluginCachedData`.
+- `PluginCachedDataProvider` (in `src/dashboard-plugin.tsx`) provides only the relative period names and the current user.
 
-Each one calls its own hooks (an app-runtime query, `useRelativePeriodsNames` from `@dhis2/analytics`, …), transforms the results, and passes the transformed data, plus any error, to `CachedDataProvider` (`src/components/app-wrapper/cached-data/`). That component shows a loader while the data is `undefined`, an error instead of the app if loading failed, and otherwise puts the data in a context shared by the app and the plugin. The typed hooks read from that context. `useAppCachedData` throws when the data comes from the plugin, so the plugin can't use the app's data by mistake.
+Each one calls its own hooks (an app-runtime query, `useRelativePeriodsNames` from `@dhis2/analytics`, …), transforms the results, and passes the transformed data, plus any error, to `CachedDataProvider` (`src/components/app-wrapper/cached-data/`). That component shows a loader while the data is `undefined`, an error instead of the app if loading failed, and otherwise puts the data in a context shared by the app and the plugin. That context is typed as `CachedData`: the fields both providers fill, read with `useCachedData` or `useCurrentUser`. Both providers build the current user the same way (`toCurrentUser`), so the app and the plugin read the same settings, including the user's locale and display property. The app's `AppCachedData` is `CachedData` plus its own fields, read with `useAppCachedData` and the hooks above. `useAppCachedData` throws when the data comes from the plugin, so the plugin can't use the app's data by mistake.
 
 The relative period names end up in the metadata store, so components read them from there, not from the cached data.
 

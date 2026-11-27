@@ -1,10 +1,10 @@
+import i18n from '@dhis2/d2-i18n'
 import { toLayoutDimension } from '@modules/dimension/layout-dimension'
 import { getDimensionLabel, getSuffixContext } from '@modules/dimension/suffix'
 import {
     getDimensionValueMetadataIds,
     getDimensionValueTexts,
 } from '@modules/dimension/value-texts'
-import { getStartEndDateFormatter } from '@modules/utils/dates'
 import { getVisualizationUiConfig } from '@modules/visualization/ui-config'
 import type { CurrentVisualization, MetadataStore } from '@types'
 
@@ -14,9 +14,6 @@ const FRAGMENT_SEPARATOR = ' - '
 /**
  * The text of the filter line shown beneath the title and subtitle, for both
  * the line list and the pivot table.
- *
- * `locale` is only used to format custom start/end dates, and falls back to
- * the runtime default when the user's locale has not resolved yet.
  */
 export const getVisualizationFilterText = ({
     visualization,
@@ -25,7 +22,7 @@ export const getVisualizationFilterText = ({
 }: {
     visualization: CurrentVisualization
     metadataStore: MetadataStore
-    locale?: string
+    locale: string
 }): string => {
     const { layout, itemsByDimension, conditionsByDimension } =
         getVisualizationUiConfig(visualization, metadataStore)
@@ -37,7 +34,7 @@ export const getVisualizationFilterText = ({
         [...layout.columns, ...layout.rows, ...layout.filters],
         metadataStore
     )
-    const formatStartEndDate = getStartEndDateFormatter(locale)
+    const listFormatter = new Intl.ListFormat(locale, { style: 'narrow' })
 
     return layout.filters
         .flatMap((dimensionId) => {
@@ -59,12 +56,19 @@ export const getVisualizationFilterText = ({
                 formatValueOptions: {
                     digitGroupSeparator: visualization.digitGroupSeparator,
                 },
-                formatStartEndDate,
+                locale,
             })
 
             return valueTexts.length
                 ? [
-                      `${getDimensionLabel(dimension.name, dimension.suffix)}: ${valueTexts.join(', ')}`,
+                      i18n.t('{{- label}}: {{- value}}', {
+                          label: getDimensionLabel(
+                              dimension.name,
+                              dimension.suffix
+                          ),
+                          value: listFormatter.format(valueTexts),
+                          nsSeparator: '^^',
+                      }),
                   ]
                 : []
         })

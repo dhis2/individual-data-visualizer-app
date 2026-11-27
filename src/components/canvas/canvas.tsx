@@ -1,7 +1,7 @@
 import { useHasUnappliedChanges } from '@components/layout-panel/bottom-bar/use-has-unapplied-changes'
 import { PluginWrapper } from '@components/plugin-wrapper/plugin-wrapper'
 import { StartScreen } from '@components/start-screen/start-screen'
-import { useAppDispatch, useAppSelector, useCurrentUser } from '@hooks'
+import { useAppDispatch, useAppSelector } from '@hooks'
 import { isVisualizationEmpty } from '@modules/visualization/guards'
 import { getCurrentVis } from '@store/current-vis-slice'
 import {
@@ -16,7 +16,6 @@ import { UnappliedChangesOverlay } from './unapplied-changes-overlay'
 
 export const Canvas: FC = () => {
     const dispatch = useAppDispatch()
-    const currentUser = useCurrentUser()
     const currentVis = useAppSelector(getCurrentVis)
     const isVisualizationLoading = useAppSelector(getIsVisualizationLoading)
     const visualizationLoadError = useAppSelector(getVisualizationLoadError)
@@ -72,7 +71,6 @@ export const Canvas: FC = () => {
                 visualization={currentVis}
                 visualizationLoadError={visualizationLoadError ?? undefined}
                 onRetryLoad={onRetryLoad}
-                displayProperty={currentUser.settings.displayProperty}
                 onColumnHeaderClick={onColumnHeaderClick}
                 onDataSorted={onDataSorted}
             />

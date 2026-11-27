@@ -1,7 +1,7 @@
 import { ouIdHelper } from '@dhis2/analytics'
 import i18n from '@dhis2/d2-i18n'
 import { extractPlainDimensionId } from '@modules/dimension/ids'
-import { isStartEndDate } from '@modules/utils/dates'
+import { getStartEndDateFormatter, isStartEndDate } from '@modules/utils/dates'
 import type { MetadataItem } from '@types'
 
 type ItemMetadataItems = Record<string, MetadataItem | undefined>
@@ -20,24 +20,27 @@ export const getItemMetadataIds = (itemIds: string[]): string[] => {
     return Array.from(ids)
 }
 
-const getNameList = (
-    ids: string[],
-    label: string,
-    metadataItems: ItemMetadataItems
-): string =>
-    `${label}: ${ids.map((id) => metadataItems[id]?.name ?? id).join(', ')}`
-
 /* Org unit levels and groups are collapsed into one "Levels: a, b" entry each,
  * rather than listed alongside the individually selected org units. */
 export const getItemDisplayNames = ({
     itemIds,
     metadataItems,
-    formatStartEndDate,
+    locale,
 }: {
     itemIds: string[]
     metadataItems: ItemMetadataItems
-    formatStartEndDate: (startEndDate: string) => string
+    locale: string
 }): string[] => {
+    const formatStartEndDate = getStartEndDateFormatter(locale)
+    const listFormatter = new Intl.ListFormat(locale, { style: 'narrow' })
+    const getNameList = (ids: string[], label: string) =>
+        i18n.t('{{- label}}: {{- value}}', {
+            label,
+            value: listFormatter.format(
+                ids.map((id) => metadataItems[id]?.name ?? id)
+            ),
+            nsSeparator: '^^',
+        })
     const levelIds: string[] = []
     const groupIds: string[] = []
     const displayNames: string[] = []
@@ -58,14 +61,10 @@ export const getItemDisplayNames = ({
     }
 
     if (levelIds.length > 0) {
-        displayNames.push(
-            getNameList(levelIds, i18n.t('Levels'), metadataItems)
-        )
+        displayNames.push(getNameList(levelIds, i18n.t('Levels')))
     }
     if (groupIds.length > 0) {
-        displayNames.push(
-            getNameList(groupIds, i18n.t('Groups'), metadataItems)
-        )
+        displayNames.push(getNameList(groupIds, i18n.t('Groups')))
     }
 
     return displayNames

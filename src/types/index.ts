@@ -1,7 +1,6 @@
 /* ONLY PLACE GENERAL TYPES HERE WHICH ARE USED THROUGHOUT THE APP
  * Types exported from here can be imported as follows:
  * `import type { MyType } from '@types'` */
-import type { TransformedAppCachedData } from '@components/app-wrapper/cached-data/app-cached-data-provider'
 /* We have an ESLint rule in place to only allows imports from
  * `src/types/dhis2-openapi-schemas` from the `src/types` dir.
  * The reason for this is so that we can apply manual overrides
@@ -50,8 +49,8 @@ export type SingleQuery = {
 }
 export type { AppStore, AppDispatch, RootState } from '@store/store'
 export type { UseMetadataStoreReturnValue as MetadataStore } from '../components/app-wrapper/metadata-provider/metadata-provider'
-export type AppCachedData = TransformedAppCachedData
-export type CurrentUser = TransformedAppCachedData['currentUser']
+export type { AppCachedData } from '@components/app-wrapper/cached-data/app-cached-data-provider'
+export type { CurrentUser } from '@components/app-wrapper/cached-data/current-user'
 
 export type * from './axis'
 export type * from './dashboard-plugin'

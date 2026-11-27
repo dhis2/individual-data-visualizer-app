@@ -1,4 +1,4 @@
-import { useCurrentUser, useAppSelector } from '@hooks'
+import { useAppSelector } from '@hooks'
 import { getCurrentVis } from '@store/current-vis-slice'
 import { getIsVisualizationLoading } from '@store/loader-slice'
 import { setNavigationState } from '@store/navigation-slice'
@@ -18,7 +18,6 @@ import { PluginWrapper } from '../plugin-wrapper'
 const eventVisualization1Id = 'TIuOzZ0ID0V'
 
 const TestHarness = () => {
-    const currentUser = useCurrentUser()
     const currentVis = useAppSelector(getCurrentVis)
     const isVisualizationLoading = useAppSelector(getIsVisualizationLoading)
     const [filters, setFilters] = useState<
@@ -36,7 +35,6 @@ const TestHarness = () => {
                 isVisualizationLoading={isVisualizationLoading}
                 visualization={currentVis}
                 filters={filters}
-                displayProperty={currentUser.settings.displayProperty}
             />
         </>
     )

@@ -1,6 +1,3 @@
-import { useCurrentUser } from '@hooks'
-import { useCallback, useMemo } from 'react'
-
 export const getStartEndDate = (startEndDate: string): Array<string> => {
     const parts = startEndDate.split('_')
     return parts.length === 2 &&
@@ -13,33 +10,16 @@ export const getStartEndDate = (startEndDate: string): Array<string> => {
 export const isStartEndDate = (id: string): boolean =>
     getStartEndDate(id).length === 2
 
-type UseLocalizedStartEndDateFormatterResult = (startEndDate: string) => string
-
-/* `locale` undefined resolves to the runtime default, which is what the
- * dashboard plugin gets: it has no access to the user's settings. */
 export const getStartEndDateFormatter = (
-    locale?: string
-): UseLocalizedStartEndDateFormatterResult => {
+    locale: string
+): ((startEndDate: string) => string) => {
     const formatter = new Intl.DateTimeFormat(locale, { dateStyle: 'long' })
 
-    return (startEndDate) =>
-        getStartEndDate(startEndDate)
-            .map((dateStr: string) => formatter.format(new Date(dateStr)))
-            .join(' - ')
-}
+    return (startEndDate) => {
+        const [startDate, endDate] = getStartEndDate(startEndDate)
 
-export const useLocalizedStartEndDateFormatter =
-    (): UseLocalizedStartEndDateFormatterResult => {
-        const currentUser = useCurrentUser()
-        const uiLocale = currentUser.settings.uiLocale
-
-        const formatter = useMemo(
-            () => getStartEndDateFormatter(uiLocale),
-            [uiLocale]
-        )
-
-        return useCallback(
-            (startEndDate) => formatter(startEndDate),
-            [formatter]
-        )
+        return startDate && endDate
+            ? formatter.formatRange(new Date(startDate), new Date(endDate))
+            : ''
     }
+}

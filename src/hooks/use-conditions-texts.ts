@@ -1,3 +1,4 @@
+import { useCurrentUser } from '@components/app-wrapper/cached-data/cached-data-provider'
 import type { LayoutDimension } from '@components/layout-panel/axis/chip'
 import { useMetadataItems } from '@hooks'
 import {
@@ -19,6 +20,7 @@ export const useConditionsTexts = ({
     dimension,
     formatValueOptions,
 }: UseConditionsTextsParams): string[] => {
+    const locale = useCurrentUser().settings.uiLocale
     const metadataIds = useMemo(
         () => getConditionsMetadataIds({ conditions, dimension }),
         [conditions, dimension]
@@ -32,7 +34,8 @@ export const useConditionsTexts = ({
                 dimension,
                 formatValueOptions,
                 metadataItems,
+                locale,
             }),
-        [conditions, dimension, formatValueOptions, metadataItems]
+        [conditions, dimension, formatValueOptions, metadataItems, locale]
     )
 }

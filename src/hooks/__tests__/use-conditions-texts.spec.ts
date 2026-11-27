@@ -31,6 +31,17 @@ vi.mock(
     })
 )
 
+vi.mock(
+    '@components/app-wrapper/cached-data/cached-data-provider',
+    async (importOriginal) => {
+        const { stubCachedData } = await import('@test-utils/cached-data-stub')
+        return {
+            ...(await importOriginal<object>()),
+            useCurrentUser: () => stubCachedData().currentUser,
+        }
+    }
+)
+
 type WrapperProps = { children: ReactNode }
 const DefaultWrapper = ({ children }: WrapperProps) =>
     createElement(MockMetadataProvider, undefined, children)

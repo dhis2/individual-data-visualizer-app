@@ -1,3 +1,4 @@
+import i18n from '@dhis2/d2-i18n'
 import { resolveLayoutContext } from '@modules/layout'
 import type { DimensionMetadataItem, MetadataItem, MetadataStore } from '@types'
 
@@ -65,7 +66,10 @@ const getStageSuffix = (
 
     if (context.collidingStageIds.has(stageId) && programId) {
         const programName = context.programNameById.get(programId)
-        return `${programName}, ${stageName}`
+        return i18n.t('{{- programName}}, {{- stageName}}', {
+            programName,
+            stageName,
+        })
     }
     return stageName
 }

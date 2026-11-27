@@ -1,5 +1,7 @@
 import { useMetadataStore } from '@components/app-wrapper/metadata-provider/metadata-provider'
+import { UserProvider } from '@dhis2/app-service-user'
 import { getVisualizationTitle } from '@modules/visualization/title'
+import meData from '@test-utils/__fixtures__/me.json'
 import { render, screen, waitFor } from '@testing-library/react'
 import type { CurrentVisualization, DashboardPluginProps } from '@types'
 import { useEffect, type FC } from 'react'
@@ -42,8 +44,7 @@ vi.mock('@dhis2/app-runtime', async (importOriginal) => ({
 }))
 
 vi.mock('@dhis2/analytics', async (importOriginal) => {
-    const { stubPluginCachedData } =
-        await import('@test-utils/cached-data-stub')
+    const { stubCachedData } = await import('@test-utils/cached-data-stub')
     return {
         ...(await importOriginal<object>()),
         DashboardPluginWrapper: ({
@@ -52,7 +53,7 @@ vi.mock('@dhis2/analytics', async (importOriginal) => {
             children: (props: object) => unknown
         }) => children({ displayProperty: 'name' }),
         useRelativePeriodsNames: () => ({
-            ...stubPluginCachedData(),
+            ...stubCachedData(),
             loading: false,
             error: null,
         }),
@@ -97,12 +98,11 @@ vi.mock('@components/plugin-wrapper/plugin-wrapper', () => {
 describe('DashboardPlugin', () => {
     const renderDashboardPlugin = () =>
         render(
-            <DashboardPlugin
-                {...({
-                    visualizationId: 'vis1',
-                    displayProperty: 'name',
-                } as DashboardPluginProps)}
-            />
+            <UserProvider userInfo={meData}>
+                <DashboardPlugin
+                    {...({ visualizationId: 'vis1' } as DashboardPluginProps)}
+                />
+            </UserProvider>
         )
 
     it("registers the visualization's metadata before the plugin uses it", async () => {

@@ -1,7 +1,7 @@
 import { useLoadVisualizationOnMount } from '@components/app/use-load-visualization-on-mount'
 import type { ColumnHeaderClickFn } from '@components/line-list/types'
 import { PluginWrapper } from '@components/plugin-wrapper/plugin-wrapper'
-import { useAppDispatch, useAppSelector, useCurrentUser } from '@hooks'
+import { useAppDispatch, useAppSelector } from '@hooks'
 import { isVisualizationEmpty } from '@modules/visualization/guards'
 import { getCurrentVis, setCurrentVis } from '@store/current-vis-slice'
 import {
@@ -25,7 +25,6 @@ export const VisualizationTestHost: FC<VisualizationTestHostProps> = (
 ) => {
     useLoadVisualizationOnMount()
     const dispatch = useAppDispatch()
-    const currentUser = useCurrentUser()
     const currentVis = useAppSelector(getCurrentVis)
     const isVisualizationLoading = useAppSelector(getIsVisualizationLoading)
     const visualizationLoadError = useAppSelector(getVisualizationLoadError)
@@ -52,7 +51,6 @@ export const VisualizationTestHost: FC<VisualizationTestHostProps> = (
             visualization={currentVis}
             isVisualizationLoading={isVisualizationLoading}
             visualizationLoadError={visualizationLoadError ?? undefined}
-            displayProperty={currentUser.settings.displayProperty}
             onDataSorted={onDataSorted}
             {...props}
         />

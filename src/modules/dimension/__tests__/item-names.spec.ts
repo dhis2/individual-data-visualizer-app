@@ -2,11 +2,8 @@ import {
     getItemDisplayNames,
     getItemMetadataIds,
 } from '@modules/dimension/item-names'
-import { getStartEndDateFormatter } from '@modules/utils/dates'
 import type { MetadataItem } from '@types'
 import { describe, expect, it } from 'vitest'
-
-const formatStartEndDate = getStartEndDateFormatter('en')
 
 const named = (names: Record<string, string>) =>
     Object.fromEntries(
@@ -30,7 +27,7 @@ describe('getItemDisplayNames', () => {
             getItemDisplayNames({
                 itemIds: ['OU1', 'OU2'],
                 metadataItems: named({ OU1: 'Sierra Leone', OU2: 'Bo' }),
-                formatStartEndDate,
+                locale: 'en',
             })
         ).toEqual(['Sierra Leone', 'Bo'])
     })
@@ -40,7 +37,7 @@ describe('getItemDisplayNames', () => {
             getItemDisplayNames({
                 itemIds: ['OU1'],
                 metadataItems: {},
-                formatStartEndDate,
+                locale: 'en',
             })
         ).toEqual(['OU1'])
     })
@@ -55,7 +52,7 @@ describe('getItemDisplayNames', () => {
                     lvl2: 'District',
                     grp1: 'Group One',
                 }),
-                formatStartEndDate,
+                locale: 'en',
             })
         ).toEqual([
             'Sierra Leone',
@@ -64,13 +61,23 @@ describe('getItemDisplayNames', () => {
         ])
     })
 
+    it('lists the levels the way the locale writes a list', () => {
+        expect(
+            getItemDisplayNames({
+                itemIds: ['LEVEL-lvl1', 'LEVEL-lvl2'],
+                metadataItems: named({ lvl1: '国家', lvl2: '地区' }),
+                locale: 'zh',
+            })
+        ).toEqual(['Levels: 国家、地区'])
+    })
+
     it('formats a custom start and end date', () => {
         expect(
             getItemDisplayNames({
                 itemIds: ['2023-01-01_2023-12-31'],
                 metadataItems: {},
-                formatStartEndDate,
+                locale: 'en',
             })
-        ).toEqual(['January 1, 2023 - December 31, 2023'])
+        ).toEqual(['January 1\u2009–\u2009December 31, 2023'])
     })
 })

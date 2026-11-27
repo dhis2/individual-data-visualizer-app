@@ -144,6 +144,15 @@ describe('analyticsHeaderToCanonicalDimensionId', () => {
         ).toBe(`${PID}.enrollmentOu`)
     })
 
+    it('injects programId for bare `ounamehierarchy` in ENR', () => {
+        expect(
+            analyticsHeaderToCanonicalDimensionId(
+                'ounamehierarchy',
+                buildVis({ outputType: 'ENROLLMENT', showHierarchy: true })
+            )
+        ).toBe(`${PID}.enrollmentOu`)
+    })
+
     it('injects programId for bare enrollment-scoped dims in EVENT', () => {
         expect(
             analyticsHeaderToCanonicalDimensionId('enrollmentdate', buildVis())
@@ -394,6 +403,19 @@ describe('getAnalyticsRequestHeaderName', () => {
         ).toBe('ouname')
     })
 
+    it('emits `ounamehierarchy` for the ENR `enrollmentOu` when showHierarchy is on', () => {
+        expect(
+            getAnalyticsRequestHeaderName({
+                dimensionId: 'enrollmentOu',
+                programId: PID,
+                visualization: buildVis({
+                    outputType: 'ENROLLMENT',
+                    showHierarchy: true,
+                }),
+            })
+        ).toBe('ounamehierarchy')
+    })
+
     it.each(['EVENT', 'ENROLLMENT'] as const)(
         'emits `registrationou` for the registration org unit in a %s pivot table',
         (outputType) => {
@@ -449,6 +471,58 @@ describe('getAnalyticsRequestHeaderName', () => {
             })
         ).toBe(`${SID}.ounamehierarchy`)
     })
+
+    it.each([
+        {
+            outputType: 'EVENT',
+            dimensionId: 'enrollmentOu',
+            programId: PID,
+            header: 'enrollmentouname',
+        },
+        {
+            outputType: 'EVENT',
+            dimensionId: 'ou',
+            header: 'registrationouname',
+        },
+        {
+            outputType: 'ENROLLMENT',
+            dimensionId: 'ou',
+            programStageId: SID,
+            header: `${SID}.ouname`,
+        },
+        {
+            outputType: 'ENROLLMENT',
+            dimensionId: 'ou',
+            header: 'registrationouname',
+        },
+        {
+            outputType: 'TRACKED_ENTITY_INSTANCE',
+            dimensionId: 'ou',
+            programId: PID,
+            programStageId: SID,
+            header: `${SID}.ouname`,
+        },
+        {
+            outputType: 'TRACKED_ENTITY_INSTANCE',
+            dimensionId: 'enrollmentOu',
+            programId: PID,
+            header: `${PID}.enrollmentouname`,
+        },
+    ] as const)(
+        'emits $header for a $outputType $dimensionId that is not the endpoint org unit when showHierarchy is on',
+        ({ outputType, header, ...context }) => {
+            expect(
+                getAnalyticsRequestHeaderName({
+                    ...context,
+                    visualization: buildVis({
+                        outputType,
+                        showHierarchy: true,
+                    }),
+                })
+            ).toBe(header)
+        }
+    )
+
     it('renders a repetition index on the stage segment', () => {
         expect(
             getAnalyticsRequestHeaderName({
