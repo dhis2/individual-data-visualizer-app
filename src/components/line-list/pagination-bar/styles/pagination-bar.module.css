@@ -4,7 +4,7 @@
     text-align: start;
     inline-size: auto;
     background-color: var(--colors-white);
-    border-block-start: 1px solid var(--colors-grey300);
+    border-block-start: 1px solid var(--line-list-border-color);
 }
 
 .stickyContainer {

@@ -12,6 +12,7 @@ const BodyCell: FC<BodyCellProps & { tooltipProps?: object }> = ({
     value,
     backgroundColor,
     isUndefined,
+    isRightAligned,
     isUrl,
     shouldNotWrap,
     textColor,
@@ -23,12 +24,14 @@ const BodyCell: FC<BodyCellProps & { tooltipProps?: object }> = ({
             classes.cell,
             {
                 [classes.emptyCell]: !value,
+                [classes.plainBackground]: !backgroundColor,
                 [classes.nowrap]: shouldNotWrap,
                 [classes.undefinedCell]: isUndefined,
             },
             'bordered'
         )}
         backgroundColor={backgroundColor}
+        align={isRightAligned ? 'right' : 'left'}
         dataTest="table-cell"
     >
         <div style={textColor ? { color: textColor } : undefined}>

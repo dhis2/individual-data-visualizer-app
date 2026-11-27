@@ -1,5 +1,5 @@
-.headingCell :global(.top) {
-    justify-content: center;
+th.headingCell {
+    background-color: var(--line-list-title-background-color) !important;
 }
 
 .heading {

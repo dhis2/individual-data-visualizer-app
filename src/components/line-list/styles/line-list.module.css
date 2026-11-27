@@ -6,7 +6,15 @@
     inline-size: 100%;
 }
 
+/* The line list looks like the pivot table from @dhis2/analytics, so these
+ * values are copied from its PivotTable.style.js and pivotTableConstants.js. */
 .grid {
+    --line-list-border-color: #b2b2b2;
+    --line-list-header-background-color: #dae6f8;
+    --line-list-title-background-color: #cddaed;
+    --line-list-cell-hover-background-color: #f3f3f3;
+    --line-list-sort-icon-active-color: var(--colors-grey900);
+
     display: grid;
     block-size: 100%;
     inline-size: 100%;
@@ -50,6 +58,37 @@
 
 .grid .dataTable {
     border: none;
+    color: var(--colors-grey900);
+}
+
+.dataTable,
+.dataTable:global(.font-size-normal) {
+    --line-list-font-size: 11px;
+}
+.dataTable:global(.font-size-large) {
+    --line-list-font-size: 13px;
+}
+.dataTable:global(.font-size-small) {
+    --line-list-font-size: 10px;
+}
+
+.dataTable,
+.dataTable:global(.size-normal) {
+    --line-list-cell-padding: 5px;
+}
+.dataTable:global(.size-comfortable) {
+    --line-list-cell-padding: 7px;
+}
+.dataTable:global(.size-compact) {
+    --line-list-cell-padding: 4px;
+}
+
+/* A table cell grows past its block size, so this is the height of a
+ * single-line cell, as in the pivot table. */
+.dataTable {
+    --line-list-cell-block-size: calc(
+        var(--line-list-font-size) + 2 * var(--line-list-cell-padding) + 2px
+    );
 }
 .fixedHead {
     position: sticky;

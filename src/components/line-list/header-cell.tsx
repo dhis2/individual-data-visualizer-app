@@ -76,10 +76,7 @@ export const HeaderCell: FC<HeaderCellProps> = ({
             dataTest="data-table-header"
         >
             <span
-                className={cx(
-                    classes.headerCell,
-                    classes.dimensionModalHandler
-                )}
+                className={classes.dimensionModalHandler}
                 onClick={
                     onColumnHeaderClick
                         ? () => {

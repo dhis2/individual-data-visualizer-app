@@ -8,6 +8,7 @@ import type {
     DimensionMetadataItem,
     MetadataItem,
     Program,
+    ValueType,
 } from '@types'
 import { describe, it, expect } from 'vitest'
 import {
@@ -417,5 +418,51 @@ describe('transformLineListData', () => {
 
         expect(result.legendSets).toEqual([])
         expect(result.rows[0][1].backgroundColor).toBeUndefined()
+    })
+
+    describe('right alignment', () => {
+        const transformSingleColumn = (
+            header: Partial<LineListAnalyticsDataHeader>,
+            rawValue: string
+        ) =>
+            transformLineListData({
+                analyticsData: buildAnalyticsData({
+                    headers: [
+                        { name: 'col', dimensionId: 'col', ...header },
+                    ] as LineListAnalyticsDataHeader[],
+                    rows: [[rawValue]],
+                }),
+                visualization,
+                metadataStore: createMetadataStoreStub(),
+            }).rows[0][0]
+
+        it.each<ValueType>([
+            'NUMBER',
+            'INTEGER_POSITIVE',
+            'PERCENTAGE',
+            'BOOLEAN',
+        ])('right-aligns a %s value', (valueType) => {
+            expect(
+                transformSingleColumn({ valueType }, '1').isRightAligned
+            ).toBe(true)
+        })
+
+        it.each<ValueType>(['TEXT', 'DATE', 'AGE'])(
+            'left-aligns a %s value',
+            (valueType) => {
+                expect(
+                    transformSingleColumn({ valueType }, 'x').isRightAligned
+                ).toBe(false)
+            }
+        )
+
+        it('left-aligns a numeric value that shows an option name', () => {
+            expect(
+                transformSingleColumn(
+                    { valueType: 'INTEGER', optionSet: 'os1' },
+                    '1'
+                ).isRightAligned
+            ).toBe(false)
+        })
     })
 })

@@ -43,6 +43,7 @@ export type LineListCellData = {
     value: string
     backgroundColor?: string
     isUndefined?: boolean
+    isRightAligned?: boolean
     isUrl?: boolean
     shouldNotWrap?: boolean
     textColor?: string
@@ -240,6 +241,11 @@ const isValueUndefined = (
 
 const cellValueShouldNotWrap = (header: TransformedLineListHeader) =>
     NON_WRAPPING_VALUE_TYPES_LOOKUP.has(header.valueType) && !header.optionSet
+
+/* Right-aligned like the pivot table's value cells. A column grouped by legend
+ * comes back as TEXT, so its legend names stay left-aligned. */
+const cellValueIsRightAligned = (header: TransformedLineListHeader) =>
+    isValueTypeNumeric(header.valueType) && !header.optionSet
 
 /* Analytics types the time dimensions (event/enrollment/incident/scheduledDate)
  * as DATETIME, but they only carry a date (DHIS2-17855). */
@@ -441,6 +447,7 @@ export const transformLineListData = ({
                         ? getColorByValueFromLegendSet(header.legendSet, value)
                         : undefined,
                 isUndefined,
+                isRightAligned: cellValueIsRightAligned(header),
                 isUrl: header.valueType === 'URL',
                 shouldNotWrap: cellValueShouldNotWrap(header),
                 textColor:

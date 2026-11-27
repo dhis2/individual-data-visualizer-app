@@ -1,26 +1,27 @@
-:global(table.font-size-large) .cell {
-    font-size: 14px;
-    line-height: 15px;
-}
-.cell,
-:global(table.font-size-normal) .cell {
-    font-size: 12px;
-    line-height: 13px;
-}
-:global(table.font-size-small) .cell {
-    font-size: 11px;
-    line-height: 12px;
+/* `!important` beats the styled-jsx rules of the DHIS2 UI table cell. */
+.cell {
+    block-size: var(--line-list-cell-block-size);
+    padding: var(--line-list-cell-padding) !important;
+    font-size: var(--line-list-font-size) !important;
+    line-height: var(--line-list-font-size);
 }
 
-:global(table.size-comfortable) .cell {
-    padding: 10px 8px 8px;
+.cell:not(:last-child) {
+    border-inline-end-color: var(--line-list-border-color) !important;
 }
-.cell,
-:global(table.size-normal) .cell {
-    padding: 7px 6px 5px;
+
+:global(tr:not(:last-child)) > .cell {
+    border-block-end-color: var(--line-list-border-color) !important;
 }
-:global(table.size-compact) .cell {
-    padding: 6px 6px 4px;
+
+/* The pivot table highlights the hovered cell, not the row. A cell with a
+ * legend colour keeps it. */
+.plainBackground {
+    background-color: var(--colors-white) !important;
+}
+
+.plainBackground:hover {
+    background-color: var(--line-list-cell-hover-background-color) !important;
 }
 
 .emptyCell::after {
